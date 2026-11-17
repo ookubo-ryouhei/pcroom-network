@@ -127,11 +127,11 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 </style></head><body>
 <header class="appbar"><a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>情報Ⅰ　ネットワーク</span></div></a></header>
 <main>
- <section class="card hero"><div><div class="eyebrow">業務案内</div><h1 style="margin-top:4px">ネットワーク工事の担当者として、PC教室の配線を整える</h1><p class="sub" style="margin-top:8px">ある学校のPC教室（架空の教室）が舞台です。図面を読んで施工し、工事に合わせて作り替えます。</p></div>
+ <section class="card hero"><div><div class="eyebrow">業務案内</div><h1 style="margin-top:4px">ネットワーク工事の担当者として、PC教室の配線を整える</h1><p class="sub" style="margin-top:8px">ある学校のPC教室（架空の教室）が舞台です。図面を読んで施工し、工事に合わせて作り替えます。どちらからでも、何回に分けても取り組めます。</p></div>
   <div class="layouts" id="lay"></div></section>
  <div class="cards">
-  <a class="card lesson" href="sekou.html"><div class="eyebrow">第1時</div><h2>施工と検査</h2><div class="pics"><img src="images/blueprint.svg" alt=""><img src="images/desk4.svg" alt=""><img src="images/clipboard.svg" alt=""></div><p class="sub">図面どおりにケーブルをつなぐ。他の業者の施工を検査する。つながらない原因を調べて直す。</p><span class="go">始める<span id="g1"></span></span></a>
-  <a class="card lesson" href="kaishuu.html"><div class="eyebrow">第2時</div><h2>改修の設計</h2><div class="pics"><img src="images/cone.svg" alt=""><img src="images/hubtop.svg" alt=""><img src="images/reel.svg" alt=""></div><p class="sub">床の工事と机の移動に合わせて、配線を設計し直す。故障の影響を調べ、工事の順番を決める。</p><span class="go">始める<span id="g2"></span></span></a>
+  <a class="card lesson" href="sekou.html"><div class="eyebrow">図面を読む</div><h2>施工と検査</h2><div class="pics"><img src="images/blueprint.svg" alt=""><img src="images/desk4.svg" alt=""><img src="images/clipboard.svg" alt=""></div><p class="sub">図面どおりにケーブルをつなぐ。他の業者の施工を検査する。つながらない原因を調べて直す。</p><span class="go">始める<span id="g1"></span></span></a>
+  <a class="card lesson" href="kaishuu.html"><div class="eyebrow">作り替える</div><h2>改修の設計</h2><div class="pics"><img src="images/cone.svg" alt=""><img src="images/hubtop.svg" alt=""><img src="images/reel.svg" alt=""></div><p class="sub">床の工事と机の移動に合わせて、配線を設計し直す。故障の影響を調べ、工事の順番を決める。</p><span class="go">始める<span id="g2"></span></span></a>
  </div>
 </main>
 <script>'use strict';
@@ -303,6 +303,6 @@ function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img
  counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="0" fill="${on?(isH?'#C8851A':'#FFFFFF'):'none'}" stroke="${on?(isH?'#8A5200':'#9AA3AD'):'#C9CED4'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
  return h+'</svg>';}
 
-$('lay').innerHTML=`<figure>${miniLayout([3,2,3,2],null,'第1時の机の並び 3・2・3・2')}<figcaption>第1時：前から3・2・3・2</figcaption></figure><figure>${miniLayout([3,3,3,1],null,'第2時の机の並び 3・3・3・1')}<figcaption>第2時：前から3・3・3・1</figcaption></figure>`;
+$('lay').innerHTML=`<figure>${miniLayout([3,2,3,2],null,'施工と検査の机の並び 3・2・3・2')}<figcaption>施工と検査：前から3・2・3・2</figcaption></figure><figure>${miniLayout([3,3,3,1],null,'改修の設計の机の並び 3・3・3・1')}<figcaption>改修の設計：前から3・3・3・1</figcaption></figure>`;
 $('g1').innerHTML=icon('arrow');$('g2').innerHTML=icon('arrow');
 </script></body></html>

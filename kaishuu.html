@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>第2時　改修の設計｜PC教室の配線</title>
+<title>改修の設計｜PC教室の配線</title>
 <style>:root{--ink:#1B2430;--sub:#566070;--muted:#7D8693;--line:#E3E6EA;--line2:#CDD3DA;--bg:#F4F5F7;--card:#fff;--navy:#17324E;--teal:#0E7C7B;--teal-bg:#E3F1F0;--amber:#C8851A;--amber-t:#8A5200;--amber-bg:#FBF0DC;--red:#B3261E;--red-bg:#FBEAE8;--green:#2C7A4B;--green-bg:#E4F2E9;--r:0;--sh:none}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -157,7 +157,7 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .log .t{font-size:12px;color:var(--sub)}
 </style></head><body>
 <header class="appbar">
- <a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>第2時　改修の設計</span></div></a>
+ <a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>改修の設計</span></div></a>
  <nav class="steps" id="steps" aria-label="ステップの一覧"></nav>
  <a class="btn ghost" href="index.html">一覧に戻る</a>
 </header>
@@ -498,7 +498,7 @@ $('run3').onclick=()=>{if(K.seq.length<8){toast(`作業は8つすべて選んで
 /* ---- 共通 ---- */
 function record(){const n=K.done.filter(d=>d).length,st=i=>K.done[i]?'完了':'未完了',d=K.design;
  $('doneh').textContent=n===3?'3つのステップをすべて終えました':`ステップ ${n}／3 が完了しています`;
- $('rec').textContent=`第2時　改修の設計（PC教室の配線）\n1　弱点の調査：${st(0)}（解答 ${K.tries1}回）\n2　配線の設計：${st(1)}${d?`（列ハブ ${d.hubs}台／列ハブ1台の故障で最大 ${d.maxHub}台停止／ケーブル約 ${d.len}m）`:''}（通電テスト ${K.tests2}回）\n3　作業の順番：${st(2)}（実行 ${K.runs}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
+ $('rec').textContent=`改修の設計（PC教室の配線）\n1　弱点の調査：${st(0)}（解答 ${K.tries1}回）\n2　配線の設計：${st(1)}${d?`（列ハブ ${d.hubs}台／列ハブ1台の故障で最大 ${d.maxHub}台停止／ケーブル約 ${d.len}m）`:''}（通電テスト ${K.tests2}回）\n3　作業の順番：${st(2)}（実行 ${K.runs}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
  $('q').classList.toggle('hidden',n<3);}
 $('copy').innerHTML=icon('copy')+'記録をコピー';$('copy').onclick=()=>copyText($('rec').textContent,$('rec'));
 function steps(){$('steps').innerHTML=STEPS.map((s,i)=>{const dn=i<3&&K.done[i];return `<button data-s="${i}" class="${dn?'done':''}"${K.step===i?' aria-current="step"':''}><span class="n">${dn?icon('check'):i+1}</span>${s}${dn?'<span class="sr">（完了）</span>':''}</button>`;}).join('');record();}
