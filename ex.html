@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EXモード｜PC教室の配線</title>
+<style>:root{--ink:#1B2430;--sub:#566070;--muted:#7D8693;--line:#E3E6EA;--line2:#CDD3DA;--bg:#F4F5F7;--card:#fff;--navy:#17324E;--teal:#0E7C7B;--teal-bg:#E3F1F0;--amber:#C8851A;--amber-t:#8A5200;--amber-bg:#FBF0DC;--red:#B3261E;--red-bg:#FBEAE8;--green:#2C7A4B;--green-bg:#E4F2E9;--r:0;--sh:none}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;font-size:15px;line-height:1.75;font-feature-settings:"palt" 1}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--navy)}
+.appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none;color:inherit}
+.brand img{width:34px;height:34px;flex:none}
+.brand b{display:block;font-size:16px;color:var(--navy);line-height:1.3;letter-spacing:.02em}
+.brand span{font-size:12px;color:var(--sub)}
+.steps{display:flex;gap:0;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.steps button{margin-left:-1px;display:flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:0;padding:5px 14px 5px 5px;min-height:42px;font-size:14px;color:var(--ink)}
+.steps .n{width:28px;height:28px;border-radius:0;display:grid;place-items:center;background:#EEF0F2;color:var(--sub);font-size:13px;font-weight:600}
+.steps .n svg{width:16px;height:16px}
+.steps button.done .n{background:var(--green);color:#fff}
+.steps button[aria-current=step]{border-color:var(--navy);background:var(--navy);color:#fff}
+.steps button[aria-current=step] .n{background:#fff;color:var(--navy)}
+main{max-width:1280px;margin:0 auto;padding:18px 20px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:0;box-shadow:var(--sh);padding:18px 20px}
+h1,h2,h3{margin:0;line-height:1.45}
+h1{font-size:22px;color:var(--navy)}
+h2{font-size:16px;color:var(--navy);font-weight:600}
+h3{font-size:14px;color:var(--navy);font-weight:600}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--teal);font-weight:600}
+.sub{color:var(--sub);font-size:13px}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
+@media(max-width:960px){.work{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:14px}
+.mapcard{padding:10px}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 10px;margin-bottom:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.map svg{display:block;width:100%;height:auto;border-radius:0;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px;border-radius:0;background:#F1F3F5;border-top:1px solid var(--line2)}
+.toolbar .hint{flex:1 1 220px;font-size:13px;color:var(--sub);padding:0 6px;min-height:1.7em}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding:0 6px;font-size:12px;color:var(--sub)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:0;vertical-align:-1px;margin-right:4px;border:1.5px solid}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:2px;border:1px solid var(--line2);background:#fff;color:var(--ink);font-size:14px;font-weight:500;text-decoration:none}
+.btn:hover:not(:disabled){border-color:var(--navy)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover:not(:disabled){background:#0F2740}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--navy)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn svg{width:18px;height:18px;flex:none}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:0;background:#EEF0F3;color:var(--sub)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.result{border-radius:0;padding:14px 16px;margin-top:14px;border:1px solid;border-left-width:4px}
+.result.ok{background:var(--green-bg);border-color:#BFDFCB;border-left-color:var(--green)}
+.result.ng{background:var(--red-bg);border-color:#F0C9C4;border-left-color:var(--red)}
+.result .rh{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.result .rh svg{width:20px;height:20px;flex:none}
+.result.ok .rh{color:var(--green)}
+.result.ng .rh{color:var(--red)}
+.result .rb{margin-top:4px;font-size:14px}
+.result .btn{margin-top:12px}
+.point{margin-top:10px;padding:10px 12px;border-radius:0;background:rgba(255,255,255,.8);font-size:13.5px}
+.point b{color:var(--navy)}
+.list{list-style:none;margin:10px 0 0;padding:0}
+.list li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #EEF0F3;font-size:13.5px}
+.list li:last-child{border-bottom:0}
+.list .lock{color:var(--muted);font-size:12px;white-space:nowrap}
+.list .btn{min-height:38px;padding:4px 12px;border-radius:0;font-size:13px}
+.list .btn[aria-pressed=true]{background:var(--amber-bg);border-color:var(--amber);color:var(--amber-t)}
+details.card>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:32px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin:0 4px 4px auto}
+details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
+.question{margin-top:18px;border-left:6px solid #0E7C7B;border-radius:0;padding:22px 24px;background:var(--navy);color:#fff}
+.question .lb{font-size:12px;letter-spacing:.1em;opacity:.8}
+.question .q{font-size:19px;font-weight:600;margin-top:4px;line-height:1.6}
+.record{white-space:pre-wrap;font-family:inherit;font-size:13px;background:#F6F7F9;border-radius:0;padding:12px 14px;border:1px solid var(--line);margin:10px 0 12px}
+.dg{width:100%;height:auto;display:block;margin-top:8px}
+.dg .dl path{fill:none;stroke:#5A6472;stroke-width:1.3}
+.dg rect{fill:#fff;stroke:#5A6472;stroke-width:1.2}
+.dg rect.hb{fill:#E3F1F0;stroke:#0E7C7B}
+.dg text{font-size:11px;text-anchor:middle;fill:#1B2430}
+.dg .ann{text-anchor:start;fill:#566070;font-size:10.5px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:0;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* 見取り図 */
+.cabcase{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:butt;stroke-linejoin:round}
+.cab{fill:none;stroke:#0E7C7B;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.cab.locked{stroke:#6E7986}
+.cab.mark{stroke:#C8851A;stroke-width:7}
+.cab.bad{stroke:#B3261E;stroke-width:6;stroke-dasharray:10 7}
+.flowline{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:2 16;animation:flow 1.4s linear infinite;opacity:.95;pointer-events:none}
+@keyframes flow{to{stroke-dashoffset:-36}}
+.cabhit{fill:none;stroke:transparent;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+.node{cursor:pointer;outline:none}
+.node .hit{fill:transparent}
+.node .ring{fill:none;stroke:transparent;stroke-width:3}
+.node.cand .ring{stroke:#0E7C7B;stroke-dasharray:7 5;fill:rgba(14,124,123,.06)}
+.node.sel .ring{stroke:#C8851A;stroke-dasharray:none;stroke-width:4;fill:rgba(200,133,26,.12)}
+.node.failed .ring{stroke:#B3261E}
+.node:focus-visible .ring{stroke:#0E7C7B;stroke-width:4}
+.node.fixed{cursor:default}
+.lbl{font-size:19px;font-weight:600;fill:#1B2430;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}
+.lbl.sm{font-size:16px}
+.pill rect{fill:#fff;stroke:#C4CBD3}
+.pill text{font-size:17px;font-weight:700;fill:#1B2430}
+.lamp{stroke:#fff;stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:pop .35s both;animation-delay:var(--d,0ms)}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+.dimmed{fill:#F6F7F9;opacity:.82}
+.stoptag rect{fill:#B3261E}
+.stoptag text{fill:#fff;font-size:16px;font-weight:700}
+@media(prefers-reduced-motion:reduce){.flowline,.lamp{animation:none}#toast{transition:none}}
+
+.guide{border:1px solid var(--line2);margin-bottom:10px;background:#fff}
+.guide ol{display:flex;margin:0;padding:0;list-style:none;border-bottom:1px solid var(--line2)}
+.guide li{flex:1 1 0;display:flex;gap:8px;align-items:center;padding:8px 10px;font-size:13px;line-height:1.45;color:var(--sub);border-left:1px solid var(--line2)}
+.guide li:first-child{border-left:0}
+.guide li .k{flex:none;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--line2);font-weight:700;font-size:12px;background:#fff}
+.guide li.on{background:var(--navy);color:#fff;font-weight:600}
+.guide li.on .k{color:var(--navy);border-color:#fff}
+.guide .hint{padding:9px 12px;font-size:14px;color:var(--ink);min-height:calc(3.2em + 18px);box-sizing:border-box;background:#F8F9FA;line-height:1.6}
+.todo{margin:8px 0 0;padding-left:0;list-style:none;counter-reset:t}
+.todo li{counter-increment:t;position:relative;padding:6px 0 6px 34px;border-top:1px solid var(--line);font-size:14px;line-height:1.6}
+.todo li:first-child{border-top:0}
+.todo li::before{content:counter(t);position:absolute;left:0;top:7px;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--navy);color:var(--navy);font-weight:700;font-size:12px}
+
+/* 1画面に収める工夫 */
+.narrow-only{display:none}
+@media(min-width:961px){.stack.sticky{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto;scrollbar-width:thin}}
+@media(max-width:960px){.narrow-only{display:inline-flex;margin-left:auto}
+ body.m-mark #dgcard{order:-1}
+ .stack .dg{max-width:460px;margin-left:auto;margin-right:auto}}
+.list.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));column-gap:16px}
+.list.cols li:last-child{border-bottom:1px solid #EEF0F3}
+@media(min-width:961px){.guide .hint{min-height:calc(1.6em + 18px)}
+ .mapcard .map svg{max-height:calc(100vh - 340px);min-height:420px;width:auto;max-width:100%;margin:0 auto}}
+body.m-mark .legend{display:none}
+body.m-mark .guide .hint{min-height:0}
+@media(max-width:960px){body.m-mark .mapcard .map svg{max-height:calc(100vh - 680px);min-height:440px;width:auto;max-width:100%;margin:0 auto}}
+/* 練習中は、次にタップする機器をゆっくり点滅させて強調する */
+body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in-out infinite}
+@keyframes candblink{50%{stroke-opacity:.25}}
+@media(prefers-reduced-motion:reduce){body.m-practice .node.cand .ring{animation:none}}
+/* 設計完了などのポップアップ */
+dialog.pop{border:1px solid #C9CED6;border-top:4px solid #16324F;border-radius:0;padding:24px;max-width:520px;width:calc(100% - 40px);color:inherit;box-shadow:0 12px 40px rgba(20,30,45,.18)}
+dialog.pop::backdrop{background:rgba(20,30,45,.45)}
+.popstep{display:flex;align-items:center;gap:10px;font-weight:700}
+.popstep span{padding:6px 12px;border:1px solid #C9CED6;color:#5A6472}
+.popstep span.on{background:#16324F;border-color:#16324F;color:#fff}
+.popstep .ar{border:none;padding:0}
+.popbtns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+ul.bul{margin:6px 0 0;padding-left:1.2em;font-size:14px;line-height:1.7}
+ul.bul li+li{margin-top:2px}
+.map.ex .lbl{font-size:15px}
+
+.exlist{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--line);background:#fff}
+@media(max-width:720px){.exlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.exlist button{display:flex;align-items:center;gap:10px;padding:10px 12px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;font:inherit;text-align:left;cursor:pointer;color:inherit;min-height:52px}
+.exlist button .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid #C9CED6;font-size:13px;font-weight:700;flex:none}
+.exlist button .n svg{width:16px;height:16px}
+.exlist button b{display:block;font-size:14px}
+.exlist button small{display:block;font-size:11.5px;color:var(--sub)}
+.exlist button[aria-current]{background:#16324F;color:#fff}
+.exlist button[aria-current] small{color:#C9D3DE}
+.exlist button[aria-current] .n{border-color:#fff}
+.exlist button.done .n{background:#2C7A4B;border-color:#2C7A4B;color:#fff}
+.equip{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.equip span{border:1px solid var(--line);padding:3px 8px;font-size:13px;background:#F8F9FA}
+.qbox{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.qbox .row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.qbox input{width:90px;font:inherit;font-size:18px;padding:6px 8px;border:1px solid #9AA3AD;border-radius:0;text-align:right}
+.lockcard{max-width:720px;margin:24px auto}
+.lockcard ul{margin-top:10px;padding-left:1.2em}
+</style></head><body>
+<header class="appbar">
+ <a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>EXモード　身近な場所の配線</span></div></a>
+ <nav class="steps" aria-hidden="true"></nav>
+ <a class="btn ghost" href="index.html">一覧に戻る</a>
+</header>
+<main id="app">
+ <nav class="exlist" id="exlist" aria-label="場面の一覧"></nav>
+ <div class="work" style="margin-top:16px">
+  <section class="card mapcard" aria-labelledby="maph">
+   <div class="cardhead"><h2 id="maph"></h2><div class="chips" id="stats"></div></div>
+   <div class="guide"><div id="guideSteps"></div><p class="hint" id="hint" aria-live="polite"></p></div>
+   <div id="room" class="map"></div>
+   <div class="toolbar">
+    <button class="btn" id="undo"></button>
+    <button class="btn hidden" id="desel">選択を解除</button>
+    <button class="btn hidden" id="cut"></button>
+    <button class="btn primary narrow-only" id="act2"></button>
+   </div>
+   <div class="legend"><span><i style="background:#0E7C7B;border-color:#0E7C7B"></i>使用中のポート</span><span><i style="background:#fff;border-color:#9AA3AD"></i>空きポート</span><span><i style="background:#6E7986;border-color:#6E7986"></i>既に敷設済みのケーブル</span><span>点線の枠の機器は無線（Wi-Fi）で接続するので、ケーブルは不要です。</span></div>
+  </section>
+  <div class="stack sticky">
+   <section class="card" id="mission"></section>
+  </div>
+ </div>
+ <section class="card" style="margin-top:16px" aria-labelledby="rech"><div class="eyebrow">学習の記録</div><h2 id="rech"></h2><pre class="record" id="rec"></pre><button class="btn primary" id="copy"></button></section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const key=(a,b)=>a<b?a+'|'+b:b+'|'+a;
+const SEATX=[310,510,710],LINEY=[298,428,558,688],HUBX=110,VH=790,M_PER_PX=12/940;
+const ICONS={
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+ alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+ cut:'<path d="M6 6l12 12M18 6L6 18"/>',
+ bolt:'<path d="M13 3L5 13.5h6L10 21l9-11.5h-6L13 3z"/>',
+ reset:'<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/>',
+ copy:'<rect x="8" y="8" width="12" height="12" rx="0"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ back:'<path d="M15 6l-6 6 6 6"/>'};
+const icon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
+let toastTimer;
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3400);}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+function resultHTML(ok,title,body,point,extra){return `<div class="result ${ok?'ok':'ng'}" role="status"><div class="rh">${icon(ok?'check':'alert')}<span>${title}</span></div><div class="rb">${body}</div>${point?`<div class="point">${point}</div>`:''}${extra||''}</div>`;}
+async function copyText(text,el){try{await navigator.clipboard.writeText(text);toast('記録をコピーしました。');}catch(e){try{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('記録を選択しました。長押しでコピーしてください。');}catch(e2){toast('コピーできませんでした。記録を長押ししてコピーしてください。');}}}
+
+/* ---- 機器の配置 ---- */
+function makeNodes(counts,rack){
+ const N={
+  R:{x:915,y:rack?54:74,type:'router',name:'ルータ',ports:4,w:84,h:51,img:'router'},
+  M:rack?{x:915,y:116,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'}:{x:480,y:166,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'},
+  T:{x:480,y:86,type:'teacher',name:'教師用PC',ports:1,w:150,h:46,img:'teacherdesk'},
+  P:{x:92,y:84,type:'printer',name:'プリンタ',ports:1,w:76,h:57,img:'printer'}};
+ counts.forEach((n,i)=>{const c=i+1,y=LINEY[i];N['H'+c]={x:HUBX,y,type:'hub',name:c+'列目ハブ',ports:5,w:60,h:20,img:'hubtop',line:c};
+  for(let s=1;s<=n;s++)N['D'+c+s]={x:SEATX[s-1],y,type:'desk',name:'机'+c+'-'+s,label:c+'-'+s,ports:1,w:150,h:96,img:'desk4',seat:s-1,line:c,pcs:4};});
+ return N;}
+function portPos(n,i){
+ if(n.type==='dev')return[n.x,n.y+n.h/2];
+ if(n.type==='desk')return[n.x,n.y+41];
+ if(n.type==='teacher')return[n.x,n.y+23];
+ if(n.type==='printer')return[n.x+28,n.y+6];
+ const sp=n.type==='main'?7.5:9,x0=n.x-(n.ports-1)*sp/2;return[x0+Math.min(i,n.ports-1)*sp,n.y+n.h/2+6];}
+const FRONT=t=>t==='router'||t==='main'||t==='teacher'||t==='printer';
+function portMap(N,edges){const P={},cnt={};for(const id in N){P[id]={};cnt[id]=0;}edges.forEach(k=>k.split('|').forEach(id=>{P[id][k]=portPos(N[id],cnt[id]++);}));return{P,cnt};}
+function route(N,k,P){const[a,b]=k.split('|'),A=N[a],B=N[b],pa=P[a][k],pb=P[b][k];
+ if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI],on=N[oI];if(on.type==='desk')return[pa,pb];
+  const o=oI===a?pa:pb,lane=d.y+52+d.seat*9,end=[d.x,d.y+41];
+  if(on.type==='hub')return[o,[o[0],lane],[d.x,lane],end];
+  const rx=864+d.seat*10;return[o,[o[0],240],[rx,240],[rx,lane],[d.x,lane],end];}
+ const ts=[A.type,B.type];
+ if(ts.includes('router')&&ts.includes('main')){const pm=A.type==='main'?pa:pb,pr=A.type==='main'?pb:pa,mn=A.type==='main'?A:B;
+  if(mn.x>800)return[pa,pb];const y=pm[1]+9;return[pm,[pm[0],y],[pr[0],y],pr];}
+ if(FRONT(A.type)&&FRONT(B.type))return[pa,[pa[0],146],[pb[0],146],pb];
+ if(A.type==='hub'&&B.type==='hub')return[pa,[pa[0],pb[1]],pb];
+ const h=A.type==='hub'?A:B,ph=A.type==='hub'?pa:pb,pf=A.type==='hub'?pb:pa,tx=32+h.line*10,L=198+h.line*8;
+ return[pf,[pf[0],L],[tx,L],[tx,ph[1]],ph];}
+function routes(N,edges){const{P}=portMap(N,edges),R={};edges.forEach(k=>R[k]=route(N,k,P));return R;}
+const polyLen=pts=>pts.reduce((s,p,i)=>i?s+Math.hypot(p[0]-pts[i-1][0],p[1]-pts[i-1][1]):0,0);
+function sortKeys(N,keys){const ix=Object.keys(N);const f=k=>k.split('|').map(id=>ix.indexOf(id)).sort((x,y)=>x-y);return keys.slice().sort((a,b)=>{const A=f(a),B=f(b);return A[0]-B[0]||A[1]-B[1];});}
+function cableName(N,k){const ix=Object.keys(N);const p=k.split('|').sort((a,b)=>ix.indexOf(a)-ix.indexOf(b));return N[p[0]].name+' ─ '+N[p[1]].name;}
+
+/* ---- 見取り図の描画 ---- */
+function roomSVG(o){let h='<rect x="20" y="20" width="960" height="750" rx="0" fill="#F6F7F9"/>';
+ for(let y=64;y<770;y+=44)h+=`<line x1="22" y1="${y}" x2="978" y2="${y}" stroke="#ECEEF1"/>`;
+ if(o.hatch)h+='<rect x="30" y="226" width="930" height="536" rx="0" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
+ h+='<rect x="832" y="22" width="146" height="126" fill="#ECEEF1"/><path d="M830 20V150H980" fill="none" stroke="#5A6472" stroke-width="4"/>';
+ h+='<text x="820" y="44" text-anchor="end" class="lbl" style="font-size:15px;fill:#566070">準備室 ▸</text>';
+ [256,386,516,646].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="0" fill="#D7E6EE" stroke="#A9C3D1"/>`);
+ h+='<rect x="330" y="24" width="300" height="22" rx="0" fill="#4A5A63"/><rect x="342" y="46" width="276" height="4" rx="0" fill="#B9C1C9"/><text x="480" y="40" text-anchor="middle" style="font-size:14px;fill:#E7F0EC;font-weight:600">黒板</text>';
+ h+='<rect x="975" y="682" width="8" height="66" rx="0" fill="#9AA3AD"/><text x="966" y="762" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
+ h+='<rect x="20" y="20" width="960" height="750" rx="0" fill="none" stroke="#5A6472" stroke-width="6"/>';
+ if(o.hatch)h+='<text x="42" y="246" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
+ return h;}
+const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80,52],printer:[80,64]};
+function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type]&&n.img?HIT[n.type]:[n.w+14,n.h+(n.type==='hub'?30:14)];
+ const tap=o.nodeTap&&(!o.tapTypes||o.tapTypes.includes(n.type));
+ const free=n.ports-used;
+ const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'')+(st.cand&&st.cand.has(id)?(st.sel?'（接続先にできます）':'（接続元にできます）'):'');
+ const pressed=o.pressed?` aria-pressed="${st.failed===id}"`:(o.mode==='wire'?` aria-pressed="${st.sel===id}"`:'');
+ let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.cand&&st.cand.has(id)?' cand':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
+ h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="0"/>`;
+ h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="0"/>`;
+ if(n.img)h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
+ else if(n.type==='hub')h+=`<rect x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}" fill="#2F3A45"/><text x="${n.x}" y="${n.y+4}" text-anchor="middle" style="font-size:11px;fill:#E7ECEF">${n.ports}ポート</text>`;
+ else if(n.type==='wl')h+=`<rect x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}" fill="#fff" stroke="#9AA3AD" stroke-dasharray="4 3"/><text x="${n.x}" y="${n.y+4}" text-anchor="middle" style="font-size:12px;fill:#566070">${n.name}</text>`;
+ else h+=`<rect x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}" fill="#fff" stroke="${n.never?'#B8BEC6':'#5A6472'}" stroke-width="1.5"${n.never?' stroke-dasharray="6 4"':''}/><text x="${n.x}" y="${n.y+5}" text-anchor="middle" style="font-size:14px;font-weight:600;fill:${n.never?'#8A929C':'#1F2A36'}">${n.name}</text>`;
+ if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<rect x="${px-3.4}" y="${py-3.4}" width="6.8" height="6.8" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
+ if(n.type==='dev'||n.type==='wl'){}
+ else if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="0"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
+ else{let lx=n.x,ly=n.y+n.h/2+19,an='middle';
+  if(n.type==='hub'){lx=n.x;ly=n.y-20;an='middle';}
+  else if(n.type==='main'&&n.x<800){lx=n.x+38;ly=n.y+5;an='start';}
+  else if(n.type==='main'||n.type==='router'){lx=n.x-n.w/2-6;ly=n.y+5;an='end';}
+  h+=`<text class="lbl${an==='end'?' sm':''}" x="${lx}" y="${ly+(an==='end'?1:2)}" text-anchor="${an}">${n.name}</text>`;}
+ if(st.dim&&st.dim.has(id))h+=`<rect class="dimmed" x="${n.x-n.w/2-3}" y="${n.y-n.h/2-3}" width="${n.w+6}" height="${n.h+6}" rx="0"/>`+(n.type==='desk'?`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-13}" width="60" height="26" rx="0"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">停止</text></g>`:'');
+ if(st.failed===id)h+=`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-n.h/2-32}" width="60" height="26" rx="0"/><text x="${n.x}" y="${n.y-n.h/2-13.5}" text-anchor="middle">故障</text></g>`;
+ if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<rect class="lamp" x="${n.x+n.w/2-12}" y="${n.y-n.h/2-6}" width="18" height="18" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
+ return h+'</g>';}
+function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
+ let h=`<svg viewBox="0 0 1000 ${o.vh||VH}" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+(o.bg!=null?o.bg:roomSVG(o));
+ const R={},RT=o.route||route;st.edges.forEach(k=>R[k]=RT(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
+ st.edges.forEach(k=>h+=`<polyline class="cabcase" points="${R[k]}"/>`);
+ st.edges.forEach(k=>{let c=st.locked.has(k)?'locked':'';if(st.bad.has(k))c='bad';if(st.marks.has(k)||st.selCable===k)c+=' mark';h+=`<polyline class="cab ${c}" points="${R[k]}"/>`;});
+ if(st.flow)st.edges.forEach(k=>{if(!st.bad.has(k))h+=`<polyline class="flowline" points="${R[k]}"/>`;});
+ if(o.cableTap)st.edges.forEach(k=>{if(!st.locked.has(k))h+=`<polyline class="cabhit" data-k="${k}" points="${R[k]}"><title>${esc(cableName(N,k))}</title></polyline>`;});
+ for(const id in N)h+=nodeSVG(N,id,st,o,cnt[id]);
+ return h+'</svg>';}
+
+/* ---- 接続の分析 ---- */
+function analyze(N,edges,failed){const adj={};for(const id in N)adj[id]=[];
+ edges.forEach(k=>{const[a,b]=k.split('|');if(a===failed||b===failed)return;adj[a].push(b);adj[b].push(a);});
+ const depth={};if(failed!=='R'){depth.R=0;const q=['R'];while(q.length){const n=q.shift();for(const m of adj[n])if(!(m in depth)){depth[m]=depth[n]+1;q.push(m);}}}
+ const reach=new Set(Object.keys(depth));let e=0;
+ edges.forEach(k=>{const[a,b]=k.split('|');if(reach.has(a)&&reach.has(b))e++;});
+ const loop=reach.size>0&&e>reach.size-1;
+ const seen=new Set();let loopAny=false;
+ for(const s in N){if(seen.has(s)||s===failed)continue;const comp=[s];seen.add(s);for(let i=0;i<comp.length;i++)for(const m of adj[comp[i]])if(!seen.has(m)){seen.add(m);comp.push(m);}
+  const cs=new Set(comp);let ce=0;edges.forEach(k=>{const[a,b]=k.split('|');if(cs.has(a)&&cs.has(b))ce++;});if(ce>comp.length-1)loopAny=true;}
+ return{reach,depth,loop,loopAny};}
+function stopped(N,reach){let pcs=0,desks=0;for(const id in N)if(N[id].type==='desk'&&!reach.has(id)){pcs+=4;desks++;}return{pcs,desks,T:!reach.has('T'),P:!reach.has('P')};}
+function stopText(s){const a=[];if(s.pcs)a.push(`生徒用PC ${s.pcs}台（机${s.desks}台）`);if(s.T)a.push('教師用PC');if(s.P)a.push('プリンタ');return a.join('、');}
+
+/* ---- 操作できる見取り図 ---- */
+function Editor(el,N,o){
+ const st={edges:new Set(),locked:new Set(o.locked||[]),sel:null,selCable:null,marks:new Set(),bad:new Set(),lamps:null,flow:false,failed:null,dim:null};
+ const hist=[];let focusId=null;
+ const deg=id=>{let n=0;st.edges.forEach(k=>{const[a,b]=k.split('|');if(a===id||b===id)n++;});return n;};
+ const fire=n=>o[n]&&o[n]();
+ function clearTest(){st.lamps=null;st.flow=false;st.bad=new Set();}
+ function snap(){hist.push([...st.edges]);if(hist.length>80)hist.shift();}
+ // 机と列ハブは同じ横列どうしだけを候補として示す（接続そのものは制限しない）
+ function offRow(A,B){const d=A.type==='desk'?A:B.type==='desk'?B:null,h=A.type==='hub'&&A.line?A:B.type==='hub'&&B.line?B:null;return !!(d&&h&&d!==h&&d.line!==h.line);}
+ function cands(){const s=new Set();if(o.mode!=='wire'||!o.nodeTap)return s;for(const id in N){if(st.sel){if(id!==st.sel&&!check(st.sel,id,key(st.sel,id))&&!(o.sameRow&&offRow(N[st.sel],N[id])))s.add(id);}else if(N[id].ports>1&&deg(id)<N[id].ports)s.add(id);}if(o.only)for(const id of [...s])if(!o.only(id))s.delete(id);return s;}
+ function render(){st.cand=cands();el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
+ function hint(t){o.onHint&&o.onHint(t);}
+ function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}。点線の枠の中から、接続先をタップしてください。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}。「選んだケーブルを外す」で外せます。`);else hint(o.defaultHint||'');}
+ function check(a,b,k){const A=N[a],B=N[b];
+  if(st.edges.has(k))return 'その2台は、既にケーブルで接続されています。';
+  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを経由して接続しましょう。`;
+  if(deg(a)>=A.ports)return `${A.name}には、空いている差し込み口（ポート）がありません。`;
+  if(deg(b)>=B.ports)return `${B.name}には、空いている差し込み口（ポート）がありません。`;
+  return '';}
+ function onNode(id){
+  if(o.mode==='fail'){o.onFail&&o.onFail(id);return;}
+  if(o.mode!=='wire')return;
+  if(o.only&&id!==st.sel&&!o.only(id)){toast(o.onlyMsg||'点線の枠の機器をタップしてください。');return;}
+  st.selCable=null;
+  if(!st.sel)st.sel=id;
+  else if(st.sel===id)st.sel=null;
+  else{const a=st.sel,k=key(a,id);st.sel=null;const err=check(a,id,k);
+   if(err)toast(err);else{snap();st.edges.add(k);clearTest();const keep=N[a].ports>1&&deg(a)<N[a].ports;if(keep)st.sel=a;toast(`${N[a].name} と ${N[id].name} を接続しました。`+(keep?`続けて${N[a].name}の接続先を選べます。`:''));fire('onChange');}}
+  render();hintSel();fire('onSelect');}
+ function onCable(k){
+  if(o.mode==='mark'){st.marks.has(k)?st.marks.delete(k):st.marks.add(k);render();fire('onChange');return;}
+  if(o.mode==='wire'){st.sel=null;st.selCable=st.selCable===k?null:k;render();hintSel();fire('onSelect');}}
+ function clearSel(){if(!st.sel&&!st.selCable)return;st.sel=null;st.selCable=null;render();hintSel();fire('onSelect');}
+ el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){onNode(g.dataset.id);return;}if(!g&&o.mode==='wire')clearSel();});
+ el.addEventListener('keydown',e=>{if(e.key==='Escape')clearSel();});
+ el.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){e.preventDefault();focusId=g.dataset.id;onNode(g.dataset.id);}});
+ return{st,N,render,deg,hintSel,clearTest,clearSel,
+  canUndo:()=>hist.length>0,
+  undo(){if(!hist.length)return;st.edges=new Set(hist.pop());st.sel=null;st.selCable=null;clearTest();render();hintSel();fire('onChange');fire('onSelect');},
+  remove(k){if(st.locked.has(k)){toast('工事で敷設済みのケーブルは外せません。');return;}if(!st.edges.has(k))return;snap();st.edges.delete(k);if(st.selCable===k)st.selCable=null;st.marks.delete(k);clearTest();render();hintSel();fire('onChange');fire('onSelect');},
+  toggleMark(k){onCable(k);},
+  setEdges(e,keepHist){if(keepHist)snap();else hist.length=0;st.edges=new Set([...st.locked,...e]);st.sel=null;st.selCable=null;st.marks=new Set();clearTest();render();hintSel();},
+  setTest(a,x){x=x||{};st.lamps={};for(const id in N){const n=N[id];if(n.type==='hub'&&deg(id)===0)continue;st.lamps[id]={on:a.reach.has(id)&&!a.loop,d:(a.depth[id]||0)*90};}
+   st.bad=new Set(x.bad||[]);st.flow=!!x.flow;st.sel=null;st.selCable=null;render();}};
+}
+
+/* ---- ネットワーク図（図面） ---- */
+function diagramSVG(counts,edges,label){
+ const HX=[62,172,282,392],pos={R:[220,22],M:[220,66],T:[70,66],P:[370,66]};
+ HX.forEach((x,i)=>{pos['H'+(i+1)]=[x,116];for(let r=1;r<=counts[i];r++)pos['D'+(i+1)+r]=[x+12,154+(r-1)*30];});
+ const nm=id=>id==='R'?'ルータ':id==='M'?'主ハブ':id==='T'?'教師用PC':id==='P'?'プリンタ':id[0]==='H'?id[1]+'列目ハブ':id[1]+'-'+id[2];
+ const w=id=>({R:64,M:64,T:72,P:64})[id]||(id[0]==='H'?80:44);
+ let lines='',boxes='';
+ edges.forEach(k=>{const[a,b]=k.split('|'),da=a[0]==='D',db=b[0]==='D';
+  if(da||db){const d=da?a:b,h=da?b:a,[dx,dy]=pos[d],[hx,hy]=pos[h];lines+=h==='H'+d[1]?`<path d="M${hx-30} ${hy+11}V${dy}H${dx-22}"/>`:`<path d="M${hx} ${hy}L${dx} ${dy}"/>`;}
+  else{const[x1,y1]=pos[a],[x2,y2]=pos[b];lines+=`<path d="M${x1} ${y1}L${x2} ${y2}"/>`;}});
+ for(const id in pos){const[x,y]=pos[id],ww=w(id),hb=id==='M'||id[0]==='H';boxes+=`<rect x="${x-ww/2}" y="${y-11}" width="${ww}" height="22" rx="0"${hb?' class="hb"':''}/><text x="${x}" y="${y+4}">${nm(id)}</text>`;}
+ return `<svg class="dg" viewBox="0 0 440 ${146+30*Math.max(...counts)}" role="img" aria-label="${esc(label||'ネットワーク図')}"><g class="dl">${lines}</g>${boxes}<text x="258" y="26" class="ann">→ インターネット</text></svg>`;}
+function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="116" rx="0" fill="#F6F7F9" stroke="#5A6472" stroke-width="2"/><rect x="45" y="6" width="60" height="5" rx="0" fill="#4A5A63"/>`;
+ counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="0" fill="${on?(isH?'#C8851A':'#FFFFFF'):'none'}" stroke="${on?(isH?'#8A5200':'#9AA3AD'):'#C9CED4'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
+ return h+'</svg>';}
+
+function guideHTML(steps,on){return '<ol>'+steps.map((s,i)=>`<li class="${i===on?'on':''}"${i===on?' aria-current="step"':''}><span class="k">${i+1}</span><span>${s}</span></li>`).join('')+'</ol>';}
+
+/* ===== 部品 ===== */
+const wOf=t=>Math.max(96,[...t].length*15+22);
+const Rt=(x,y,ports=4)=>({id:'R',type:'router',name:'ルータ',x,y,w:84,h:51,img:'router',ports});
+const D=(id,name,x,y,ex)=>Object.assign({id,type:'dev',name,x,y,w:wOf(name),h:40,ports:1},ex||{});
+const H=(id,name,x,y,ports)=>({id,type:'hub',name,x,y,w:ports*9+16,h:22,ports});
+const W=(id,name,x,y,ap)=>({id,type:'wl',name,x,y,w:wOf(name),h:34,ports:0,ap});
+
+/* ===== 10の場面 ===== */
+const EX=[
+{place:'カフェ',title:'駅前のカフェ',vh:560,
+ scene:'駅前に新しくカフェが開店します。ルータの差し込み口は4つだけですが、ケーブルで接続する機器は5台あります。',
+ zones:[[20,20,480,520,'客席'],[520,20,460,160,'カウンター'],[520,200,460,160,'厨房'],[520,380,460,160,'バックヤード']],
+ nodes:[D('AP','Wi-Fi親機',260,90),W('W1','客のスマホ',130,260,'AP'),W('W2','客のスマホ',390,260,'AP'),
+  D('POS','レジ',620,80),H('H1','カウンターハブ',850,120,5),D('KP','キッチンプリンタ',660,260),
+  Rt(910,440),D('PC','店長PC',590,430),D('CAM','録画機',720,430)],
+ rules:[],
+ q:{t:'free',text:'客席に、注文用の端末を有線で増やすことになりました。あなたの配線のまま（ハブは増やさない）で、あと何台まで接続できますか。',why:'ルータとハブの空いている差し込み口を数えます。ハブ同士・ルータとハブの接続にも、両側で1つずつ差し込み口を使います。'}},
+{place:'自宅',title:'2階建ての家',vh:600,
+ scene:'家族で家の配線を見直します。1階と2階をつなぐ配管には、ケーブルが1本しか通りません。',
+ zones:[[20,20,470,560,'1階'],[30,50,450,310,'リビング'],[30,380,450,190,'書斎'],[510,20,470,560,'2階'],[520,50,450,250,'自分の部屋'],[520,320,450,250,'兄の部屋']],
+ nodes:[Rt(400,110),D('TV','テレビ',90,110),D('REC','レコーダー',220,110),D('GM1','ゲーム機',160,230),H('H1','リビングハブ',300,250,5),W('W1','スマホ',380,200,'R'),
+  D('PR','プリンタ',100,440),D('PC1','父のPC',240,440),
+  D('PC2','自分のPC',600,120),H('H2','2階ハブ',850,150,5),D('GM2','ゲーム機',600,400),D('PC3','兄のPC',740,400)],
+ up:['PC2','H2','GM2','PC3'],
+ rules:[{t:'cross',max:1,msg:'1階と2階をつなぐケーブルは1本だけです（配管に1本しか通りません）。'}],
+ q:{t:'fail',fail:'H2',count:'all',text:'2階ハブが故障すると、インターネットに接続できなくなる機器は何台ですか。',why:'2階の機器は、配管を通る1本のケーブルと2階ハブを経由しているはずです。'}},
+{place:'コンビニ',title:'24時間営業のコンビニ',vh:600,
+ scene:'コンビニの機器を接続します。ATMは銀行の専用回線を使うので、お店のネットワークには接続しません。',
+ zones:[[20,20,620,560,'売場'],[30,360,600,210,'レジカウンター'],[660,20,320,560,'事務所']],
+ nodes:[D('AP','Wi-Fi親機',190,90),W('W1','客のスマホ',110,230,'AP'),D('MFP','マルチコピー機',380,90),D('ATM','ATM',540,90,{never:true}),
+  D('POS1','レジ1',90,430),D('POS2','レジ2',230,430),H('H2','レジハブ',440,450,5),
+  Rt(900,80),D('SPC','ストアPC',720,200),D('ORD','発注端末',870,200),D('CAM','録画機',790,330),H('H1','事務所ハブ',860,450,8)],
+ rules:[{t:'never',id:'ATM',msg:'ATMは銀行の専用回線を使うため、お店のネットワークに接続してはいけません。'}],
+ q:{t:'free',text:'レジの横にセルフレジを増やします。あなたの配線のまま（ハブは増やさない）で、あと何台まで有線で接続できますか。',why:'接続に使っているルータ・ハブの空いている差し込み口の合計です。使っていない予備のハブは数えません。'}},
+{place:'図書室',title:'学校の図書室',vh:560,
+ scene:'図書室に蔵書検索用のPCを4台置きます。検索コーナーのハブは、差し込み口が4つしかありません。',
+ zones:[[20,20,300,240,'カウンター'],[340,20,640,240,'蔵書検索コーナー'],[20,280,600,260,'閲覧席'],[640,280,340,260,'司書室']],
+ nodes:[D('L1','貸出PC1',90,90),D('L2','貸出PC2',230,90),H('H1','カウンターハブ',160,200,5),
+  D('S1','検索PC1',410,90),D('S2','検索PC2',540,90),D('S3','検索PC3',670,90),D('S4','検索PC4',800,90),H('H2','検索ハブ',610,200,4),
+  D('AP','Wi-Fi親機',300,340),W('W1','タブレット',130,470,'AP'),W('W2','タブレット',460,470,'AP'),D('PR','プリンタ',520,340),
+  Rt(900,340),D('PC','司書PC',720,330)],
+ rules:[],
+ q:{t:'free',text:'検索PCをもう1台増やしたいと言われました。ハブを増やさずに、あと何台接続できますか。',why:'差し込み口の数は、ルータ4＋ハブ5＋ハブ4＝13。ハブ2台をつなぐのに2×2＝4を使うので、機器に使えるのは9。機器はちょうど9台です。'}},
+{place:'ファミレス',title:'ファミリーレストラン',vh:600,
+ scene:'客席では、注文用のタブレットがWi-Fiで注文を送ります。Wi-Fi親機は客席A・Bに1台ずつあります。',
+ zones:[[20,20,400,300,'客席A'],[440,20,280,300,'客席B'],[740,20,240,560,'厨房'],[20,340,300,240,'レジ'],[340,340,380,240,'事務所']],
+ nodes:[D('APA','Wi-Fi親機A',220,80),W('WA1','注文タブレット',110,230,'APA'),W('WA2','注文タブレット',320,230,'APA'),D('APB','Wi-Fi親機B',580,80),W('WB1','注文タブレット',580,230,'APB'),
+  D('KP1','キッチンプリンタ1',860,90),D('KP2','キッチンプリンタ2',860,210),H('H1','厨房ハブ',860,400,5),
+  D('POS','レジ',110,420),Rt(640,410),D('PC','店長PC',430,420),H('H2','客席ハブ',520,530,4)],
+ rules:[],
+ q:{t:'fail',fail:'H2',count:'wl',text:'客席ハブが故障すると、注文できなくなるタブレットは何台ですか（あなたの配線で答えましょう）。',why:'タブレットは無線で親機に接続し、親機からケーブルでルータへつながります。故障したハブを経由している親機を探します。'}},
+{place:'スーパー',title:'地域のスーパーマーケット',vh:620,
+ scene:'スーパーのレジ4台を接続します。レジハブが故障しても、レジが全部止まって会計できなくなるのは避けたいところです。',
+ zones:[[20,20,640,580,'売場'],[30,410,620,180,'レジ列'],[30,40,260,140,'サービスカウンター'],[680,20,300,280,'バックヤード'],[680,320,300,280,'事務所']],
+ nodes:[D('SV','サービスPC',120,100),D('AP','Wi-Fi親機',430,150),W('W1','客のスマホ',330,300,'AP'),
+  D('P1','レジ1',90,460),D('P2','レジ2',220,460),D('P3','レジ3',350,460),D('P4','レジ4',480,460),H('H2','レジハブ',590,540,5),
+  D('LB','ラベルプリンタ',760,90),D('OR','発注PC',910,90),H('H3','バックヤードハブ',830,220,5),
+  Rt(900,380),D('OF','事務所PC',740,390),H('H1','事務所ハブ',800,530,8)],
+ rules:[{t:'survive',fail:'H2',ids:['P1','P2','P3','P4'],min:1,msg:'レジハブが故障すると、全てのレジが止まってしまいます。レジハブが故障しても、少なくとも1台のレジは動くようにしましょう。'}],
+ q:{t:'fail',fail:'H2',count:'all',text:'あなたの配線で、レジハブが故障すると止まる機器は何台ですか。',why:'故障したハブの先につながっている機器を数えます。'}},
+{place:'病院',title:'クリニックの外来',vh:620,
+ scene:'診察室のハブは人の出入りが多い場所にあり、故障しやすいと言われています。診察室のハブが故障しても、受付と会計は止められません。電子カルテのサーバは、サーバ室のハブに直接接続します。',
+ zones:[[20,20,460,260,'受付・会計'],[500,20,480,260,'診察室'],[20,300,300,300,'薬局'],[340,300,640,300,'サーバ室']],
+ nodes:[D('RC1','受付PC1',90,90),D('RC2','受付PC2',230,90),D('PAY','会計機',370,90),H('H1','受付ハブ',230,210,5),
+  D('DR1','診察PC1',570,90),D('DR2','診察PC2',700,90),D('DR3','診察PC3',830,90),H('H2','診察室ハブ',700,210,5),
+  D('PH1','薬局プリンタ',110,380),D('PH2','薬局PC',240,460),
+  D('SV','電子カルテサーバ',450,380),Rt(900,360),H('H3','サーバ室ハブ',660,520,8)],
+ rules:[{t:'keep',fail:'H2',ids:['RC1','RC2','PAY'],msg:'診察室ハブが故障すると、受付や会計も止まってしまいます。受付・会計は、診察室ハブを経由しないようにしましょう。'},
+  {t:'direct',a:'SV',b:'H3',msg:'電子カルテサーバは、サーバ室ハブに直接接続しましょう。'}],
+ q:{t:'fail',fail:'H1',count:'all',text:'あなたの配線で、受付ハブが故障すると止まる機器は何台ですか。',why:'受付ハブの先につながっている機器を数えます。'}},
+{place:'百貨店',title:'百貨店の売場',vh:640,
+ scene:'百貨店の1階と2階の売場をつなぎます。階をまたぐケーブルは、防火区画の都合で1本だけにします。',
+ zones:[[20,20,470,600,'1階'],[30,420,450,190,'事務所'],[510,20,470,600,'2階']],
+ nodes:[D('INF','案内所PC',90,90),D('SG','サイネージ',230,90),D('A1','レジA1',160,230),D('A2','レジA2',300,230),H('H1','1階売場ハブ',390,270,5),
+  D('OF','事務所PC',100,480),Rt(400,470),H('H0','事務所ハブ',230,570,8),
+  D('B1','レジB1',580,90),D('B2','レジB2',710,90),D('ST','在庫端末',850,90),D('AP','Wi-Fi親機',620,400),W('W1','客のスマホ',780,530,'AP'),H('H2','2階売場ハブ',860,260,5)],
+ up:['B1','B2','ST','AP','H2'],
+ rules:[{t:'cross',max:1,msg:'1階と2階をつなぐケーブルは1本だけにしましょう。'}],
+ q:{t:'free',ids:['H2'],text:'セールに向けて、2階にレジを増やしたいと言われました。2階売場ハブには、あと何台接続できますか。',why:'2階売場ハブの差し込み口のうち、1つは1階へ向かうケーブルに使っています。'}},
+{place:'駅',title:'駅の改札と駅務室',vh:600,
+ scene:'駅の改札機4台を接続します。改札ハブは差し込み口が4つしかありません。改札機が1台も動かなくなると、駅が大混乱します。',
+ zones:[[20,20,600,260,'改札'],[20,300,300,300,'券売機'],[340,300,280,300,'コンコース'],[640,20,340,580,'駅務室']],
+ nodes:[D('G1','改札機1',90,90),D('G2','改札機2',220,90),D('G3','改札機3',350,90),D('G4','改札機4',480,90),H('H2','改札ハブ',300,220,4),
+  D('T1','券売機1',90,380),D('T2','券売機2',220,380),
+  D('SG','案内サイネージ',430,380),D('AP','Wi-Fi親機',540,470),W('W1','利用者のスマホ',440,550,'AP'),
+  Rt(920,80),D('PC','駅務PC',700,200),D('CAM','録画機',840,300),H('H1','駅務室ハブ',800,420,8)],
+ rules:[{t:'survive',fail:'H2',ids:['G1','G2','G3','G4'],min:1,msg:'改札ハブが故障すると、全ての改札機が止まります。改札ハブが故障しても、1台は動くようにしましょう。'}],
+ q:{t:'free',text:'あなたの配線のまま（ハブは増やさない）で、あと何台の機器を有線で接続できますか。',why:'使っているルータ・ハブの差し込み口の合計から、使用中の差し込み口を引きます。'}},
+{place:'文化祭',title:'文化祭の配信室・写真編集室',vh:600,
+ scene:'文化祭で、配信室・写真編集室・受付のPCを校内LANに追加します。情報室には、既にハブA（8ポート）に6本のケーブルが接続されています（灰色の線）。追加用に、ハブB（4ポート）とハブC（8ポート）があります。',
+ zones:[[20,20,560,300,'情報室（既存のLAN）'],[600,20,380,280,'配信室'],[600,320,380,280,'写真編集室'],[20,340,560,260,'受付']],
+ nodes:[Rt(420,190),D('PRN','プリンタ',85,80),D('E1','PC',140,180),D('E2','PC',200,80),D('E3','PC',315,80),D('EAP','Wi-Fi親機',470,80),W('W1','スマホ',530,260,'EAP'),H('HA','ハブA',250,270,8),
+  D('V1','配信PC1',680,90),D('V2','配信PC2',820,90),H('HB','ハブB',900,220,4),
+  D('P1','編集PC1',670,390),D('P2','編集PC2',790,390),D('P3','編集PC3',910,390),H('HC','ハブC',790,540,8),
+  D('U1','受付PC1',90,420),D('U2','受付PC2',230,420)],
+ locked:[['R','HA'],['HA','PRN'],['HA','E1'],['HA','E2'],['HA','E3'],['HA','EAP']],
+ rules:[],
+ q:{t:'free',text:'全て接続した後、既存の機器とは別に、あと何台の端末を有線で接続できますか（今の配線のまま）。',why:'ルータ・ハブA・B・Cの空いている差し込み口の合計です。ハブ同士の接続には、両側で1つずつ差し込み口を使います。'}}
+];
+
+/* ===== 状態 ===== */
+const KEY='pcroom.ex.v1';
+const X=Object.assign({cur:0,e:{},done:[],ok:[],tests:[],ans:{}},store.get(KEY,{}));
+const save=()=>store.set(KEY,X);
+const sDone=(store.get('pcroom.sekou.v2',{}).done||[]),kDone=(store.get('pcroom.kaishuu.v2',{}).done||[]);
+const unlocked=[0,1,2].every(i=>sDone[i])&&[0,1,2].every(i=>kDone[i]);
+let N={},ed=null,sc=null,opts=null;
+
+function exRoute(N,k,P){const[a,b]=k.split('|'),pa=P[a][k],pb=P[b][k];let h=0;for(const c of k)h=(h*31+c.charCodeAt(0))%997;
+ const y=Math.max(pa[1],pb[1])+12+(h%4)*7;return[pa,[pa[0],y],[pb[0],y],pb];}
+function bgSVG(s){let h=`<rect x="0" y="0" width="1000" height="${s.vh}" fill="#F6F7F9"/>`;
+ s.zones.forEach(([x,y,w,hh,l],i)=>{const outer=!s.zones.some((z,j)=>j!==i&&z[0]<=x&&z[1]<=y&&z[0]+z[2]>=x+w&&z[1]+z[3]>=y+hh&&(z[2]>w||z[3]>hh));
+  h+=`<rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="${outer?'#fff':'#FAFBFC'}" stroke="${outer?'#5A6472':'#B8BEC6'}" stroke-width="${outer?3:1.5}"/><text x="${x+10}" y="${y+20}" style="font-size:14px;font-weight:700;fill:#566070">${l}</text>`;});
+ s.nodes.filter(n=>n.type==='wl').forEach(n=>{const a=s.nodes.find(m=>m.id===n.ap);h+=`<line x1="${n.x}" y1="${n.y-n.h/2}" x2="${a.x}" y2="${a.y+a.h/2}" stroke="#9AA3AD" stroke-width="1.5" stroke-dasharray="3 5"/>`;});
+ return h;}
+
+/* ===== 判定 ===== */
+const infra=n=>n.type==='router'||n.type==='hub';
+function reachWith(edges,failed){const a=analyze(N,edges,failed),r=new Set(a.reach);for(const id in N)if(N[id].type==='wl'&&r.has(N[id].ap))r.add(id);return{a,r};}
+function stopCount(edges,failed,count){const {r}=reachWith(edges,failed);let c=0;
+ for(const id in N){const n=N[id];if(id===failed||n.never||infra(n))continue;if(count==='wl'&&n.type!=='wl')continue;if(count==='wired'&&n.type!=='dev')continue;if(!r.has(id))c++;}return c;}
+function freePorts(edges,ids){const {r}=reachWith(edges);let c=0;for(const id in N){const n=N[id];if(!infra(n)||!r.has(id))continue;if(ids&&!ids.includes(id))continue;c+=n.ports-ed.deg(id);}return c;}
+function ruleErr(edges){const msgs=[];
+ for(const u of sc.rules){
+  if(u.t==='cross'){const up=new Set(sc.up);const n=edges.filter(k=>{const[a,b]=k.split('|');return up.has(a)!==up.has(b);}).length;if(n>u.max)msgs.push(u.msg+`（今は${n}本）`);}
+  if(u.t==='never'&&ed.deg(u.id)>0)msgs.push(u.msg);
+  if(u.t==='survive'){const {r}=reachWith(edges,u.fail);if(u.ids.filter(i=>r.has(i)).length<u.min)msgs.push(u.msg);}
+  if(u.t==='keep'){const {r}=reachWith(edges,u.fail);if(!u.ids.every(i=>r.has(i)))msgs.push(u.msg);}
+  if(u.t==='direct'&&!edges.includes(key(u.a,u.b)))msgs.push(u.msg);}
+ return msgs;}
+function answer(){const q=sc.q,e=[...ed.st.edges];return q.t==='free'?freePorts(e,q.ids):stopCount(e,q.fail,q.count);}
+
+/* ===== 画面 ===== */
+function list(){$('exlist').innerHTML=EX.map((s,i)=>`<button data-i="${i}" class="${X.done[i]?'done':''}"${i===X.cur?' aria-current="step"':''}><span class="n">${X.done[i]?icon('check'):i+1}</span><span><b>${s.place}</b><small>${s.title}</small></span></button>`).join('');}
+function equip(){const hubs=sc.nodes.filter(n=>n.type==='hub'),r=sc.nodes.find(n=>n.type==='router');
+ const devs=sc.nodes.filter(n=>n.type==='dev'&&!n.never).length,wls=sc.nodes.filter(n=>n.type==='wl').length;
+ return `<div class="equip"><span>ルータ ${r.ports}ポート</span>${hubs.map(h=>`<span>${h.name} ${h.ports}ポート</span>`).join('')}<span>有線の機器 ${devs}台</span>${wls?`<span>無線の機器 ${wls}台</span>`:''}</div>`;}
+function guide(){const st=ed.st,need=sc.nodes.filter(n=>n.type==='dev'&&!n.never),all=need.every(n=>ed.deg(n.id)>0);
+ const on=st.sel?1:(all?2:0),h=all?'全ての有線の機器にケーブルが接続されました。「通電テスト」を押しましょう。':'見取り図で、接続元のルータやハブ（点線の枠）をタップしてください。';
+ opts.defaultHint=h;$('guideSteps').innerHTML=guideHTML(['接続元を選ぶ','接続先を選ぶ','通電テストを押す'],on);if(!st.sel&&!st.selCable)$('hint').textContent=h;}
+function toolbar(){$('undo').disabled=!ed.canUndo();$('cut').classList.toggle('hidden',!ed.st.selCable);$('desel').classList.toggle('hidden',!ed.st.sel);guide();stats();}
+function stats(){const n=[...ed.st.edges].filter(k=>!ed.st.locked.has(k)).length;$('stats').innerHTML=`<span class="chip num">敷いたケーブル ${n}本</span><span class="chip num">通電テスト ${X.tests[X.cur]||0}回</span>`;}
+function changed(){X.e[X.cur]=[...ed.st.edges].filter(k=>!ed.st.locked.has(k));X.ok[X.cur]=false;$('result').innerHTML='';save();toolbar();}
+function card(){const i=X.cur;
+ $('mission').innerHTML=`<div class="eyebrow">EX ${i+1}／${EX.length}　${sc.place}</div><h2>${sc.title}</h2><p style="margin-top:6px">${sc.scene}</p>${equip()}
+ <h3 style="margin-top:12px">条件</h3><ul class="bul"><li>全ての機器をインターネットに接続する（無線の機器は、親機が接続されていれば使えます）</li><li>ハブ同士を輪の形（ループ）に接続しない</li><li>使わないハブがあってもよい</li>${sc.rules.map(u=>`<li>${u.msg.replace(/。.*$/,'。')}</li>`).join('')}</ul>
+ <div class="actions" style="margin-top:12px"><button class="btn primary block" id="act">${icon('bolt')}通電テスト</button><button class="btn block" id="reset">${icon('reset')}最初からやり直す</button></div><div id="result" aria-live="polite"></div>`;
+ $('act').onclick=test;$('reset').onclick=()=>{ed.setEdges([],true);changed();toast('最初の状態に戻しました。「元に戻す」で取り消せます。');};}
+function load(i){X.cur=i;sc=EX[i];N={};sc.nodes.forEach(n=>N[n.id]=Object.assign({},n));
+ const old=$('room'),el=old.cloneNode(false);el.classList.add('ex');old.replaceWith(el);
+ opts={mode:'wire',nodeTap:true,cableTap:true,tapTypes:['router','hub','dev'],vh:sc.vh,bg:bgSVG(sc),route:exRoute,title:sc.title+'の見取り図',locked:(sc.locked||[]).map(([a,b])=>key(a,b)),
+  onHint:t=>$('hint').textContent=t,onChange:changed,onSelect:toolbar,defaultHint:''};
+ sc.nodes.filter(n=>n.never).forEach(n=>{});
+ ed=Editor(el,N,opts);ed.setEdges(X.e[i]||[]);
+ $('maph').textContent=sc.title+'（見取り図）';$('act2').innerHTML=icon('bolt')+'通電テスト';
+ card();list();toolbar();save();if(X.ok[i])test(true);window.scrollTo({top:0});}
+function test(silent){const i=X.cur,e=[...ed.st.edges],{a,r}=reachWith(e);if(silent!==true)X.tests[i]=(X.tests[i]||0)+1;
+ const un=sc.nodes.filter(n=>!n.never&&!infra(n)&&!r.has(n.id)),errs=ruleErr(e);let html;
+ ed.setTest(a,{flow:!a.loopAny&&!un.length&&!errs.length});
+ for(const id in N){if(N[id].type==='wl')ed.st.lamps[id]={on:r.has(id)&&!a.loop,d:((a.depth[N[id].ap]||0)+1)*90};if(N[id].never)delete ed.st.lamps[id];}
+ ed.render();
+ if(a.loopAny)html=resultHTML(false,'通信が止まりました','ハブ同士が輪の形（ループ）に接続されている区間があります。輪を作っているケーブルを外しましょう。');
+ else if(un.length)html=resultHTML(false,'接続できない機器があります',`${un.map(n=>n.name).join('、')}がインターネットに接続できません。ランプが赤の機器から、ルータまでの経路をたどりましょう。`);
+ else if(errs.length)html=resultHTML(false,'全て接続できましたが、条件を満たしていません',errs.join('<br>'));
+ else{X.ok[i]=true;const q=sc.q;
+  html=resultHTML(true,'通電テスト合格','全ての機器がインターネットに接続できました。最後に、あなたの配線について答えましょう。','',
+   `<div class="qbox"><p><b>問い</b>　${q.text}</p><div class="row"><input id="qa" type="number" inputmode="numeric" min="0" aria-label="答え（台数）" value="${X.ans[i]!=null?X.ans[i]:''}"><span>台</span><button class="btn primary" id="qb">答え合わせ</button></div><div id="qr" aria-live="polite"></div></div>`);}
+ $('result').innerHTML=html;stats();save();
+ if(X.ok[i]){$('qb').onclick=check;if(X.done[i]&&X.ans[i]!=null)check(true);}}
+function check(silent){const i=X.cur,v=$('qa').value.trim(),ans=answer();
+ if(v===''){toast('台数を数字で入力しましょう。');return;}
+ X.ans[i]=+v;const ok=+v===ans;
+ $('qr').innerHTML=ok?`<div class="point" style="margin-top:10px"><b>正解です（${ans}台）。</b>${sc.q.why}</div>`:`<div class="point" style="margin-top:10px;border-left-color:#B3261E"><b>もう一度数えてみましょう。</b>${sc.q.why}</div>`;
+ if(ok&&!X.done[i]){X.done[i]=true;list();if(silent!==true){const nx=EX.findIndex((_,j)=>!X.done[j]);
+  $('qr').insertAdjacentHTML('beforeend',nx<0?'<p style="margin-top:8px"><b>全ての場面をクリアしました。</b></p>':`<button class="btn primary block" style="margin-top:10px" id="nx">${icon('arrow')}次の場面へ（${EX[nx].place}）</button>`);
+  if(nx>=0)$('nx').onclick=()=>load(nx);}}
+ save();record();}
+function record(){const n=X.done.filter(Boolean).length;$('rech').textContent=`クリアした場面 ${n}／${EX.length}`;
+ $('rec').textContent=`EXモード（PC教室の配線）\n`+EX.map((s,i)=>`${String(i+1).padStart(2,' ')}　${s.place}：${X.done[i]?'クリア':'未クリア'}（通電テスト ${X.tests[i]||0}回）`).join('\n');}
+
+if(!unlocked){
+ $('app').innerHTML=`<section class="card lockcard"><div class="eyebrow">EXモード</div><h2>まだ挑戦できません</h2><p style="margin-top:8px">「施工と検査」と「改修の設計」を全て完了すると、EXモードに挑戦できます。</p>
+ <ul class="bul"><li>施工と検査：仕事1〜3 ${[0,1,2].filter(i=>sDone[i]).length}／3 完了</li><li>改修の設計：ステップ1〜3 ${[0,1,2].filter(i=>kDone[i]).length}／3 完了</li></ul>
+ <div class="actions" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="sekou.html">施工と検査へ</a><a class="btn" href="kaishuu.html">改修の設計へ</a></div></section>`;
+}else{
+ $('undo').innerHTML=icon('undo')+'元に戻す';$('cut').innerHTML=icon('cut')+'選んだケーブルを外す';
+ $('undo').onclick=()=>ed.undo();$('desel').onclick=()=>ed.clearSel();$('cut').onclick=()=>ed.remove(ed.st.selCable);
+ $('act2').onclick=()=>{$('act').click();$('result').scrollIntoView({behavior:'smooth',block:'nearest'});};
+ $('exlist').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(b)load(+b.dataset.i);});
+ $('copy').innerHTML=icon('copy')+'記録をコピー';$('copy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($('rec').textContent);toast('記録をコピーしました。');};
+ load(Math.min(X.cur,EX.length-1));record();
+ window.__app={get ed(){return ed},EX,X,answer,load,get N(){return N}};
+}
+</script></body></html>

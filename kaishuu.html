@@ -153,6 +153,9 @@ dialog.pop::backdrop{background:rgba(20,30,45,.45)}
 .popstep span.on{background:#16324F;border-color:#16324F;color:#fff}
 .popstep .ar{border:none;padding:0}
 .popbtns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+ul.bul{margin:6px 0 0;padding-left:1.2em;font-size:14px;line-height:1.7}
+ul.bul li+li{margin-top:2px}
+.map.ex .lbl{font-size:15px}
 
 .brief{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-top:10px}
 @media(max-width:760px){.brief{grid-template-columns:1fr}}
@@ -302,6 +305,7 @@ function makeNodes(counts,rack){
   for(let s=1;s<=n;s++)N['D'+c+s]={x:SEATX[s-1],y,type:'desk',name:'机'+c+'-'+s,label:c+'-'+s,ports:1,w:150,h:96,img:'desk4',seat:s-1,line:c,pcs:4};});
  return N;}
 function portPos(n,i){
+ if(n.type==='dev')return[n.x,n.y+n.h/2];
  if(n.type==='desk')return[n.x,n.y+41];
  if(n.type==='teacher')return[n.x,n.y+23];
  if(n.type==='printer')return[n.x+28,n.y+6];
@@ -338,7 +342,7 @@ function roomSVG(o){let h='<rect x="20" y="20" width="960" height="750" rx="0" f
  if(o.hatch)h+='<text x="42" y="246" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
  return h;}
 const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80,52],printer:[80,64]};
-function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
+function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type]&&n.img?HIT[n.type]:[n.w+14,n.h+(n.type==='hub'?30:14)];
  const tap=o.nodeTap&&(!o.tapTypes||o.tapTypes.includes(n.type));
  const free=n.ports-used;
  const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'')+(st.cand&&st.cand.has(id)?(st.sel?'（接続先にできます）':'（接続元にできます）'):'');
@@ -346,9 +350,13 @@ function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.cand&&st.cand.has(id)?' cand':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
  h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="0"/>`;
  h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="0"/>`;
- h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
+ if(n.img)h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
+ else if(n.type==='hub')h+=`<rect x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}" fill="#2F3A45"/><text x="${n.x}" y="${n.y+4}" text-anchor="middle" style="font-size:11px;fill:#E7ECEF">${n.ports}ポート</text>`;
+ else if(n.type==='wl')h+=`<rect x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}" fill="#fff" stroke="#9AA3AD" stroke-dasharray="4 3"/><text x="${n.x}" y="${n.y+4}" text-anchor="middle" style="font-size:12px;fill:#566070">${n.name}</text>`;
+ else h+=`<rect x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}" fill="#fff" stroke="${n.never?'#B8BEC6':'#5A6472'}" stroke-width="1.5"${n.never?' stroke-dasharray="6 4"':''}/><text x="${n.x}" y="${n.y+5}" text-anchor="middle" style="font-size:14px;font-weight:600;fill:${n.never?'#8A929C':'#1F2A36'}">${n.name}</text>`;
  if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<rect x="${px-3.4}" y="${py-3.4}" width="6.8" height="6.8" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
- if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="0"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
+ if(n.type==='dev'||n.type==='wl'){}
+ else if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="0"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
  else{let lx=n.x,ly=n.y+n.h/2+19,an='middle';
   if(n.type==='hub'){lx=n.x;ly=n.y-20;an='middle';}
   else if(n.type==='main'&&n.x<800){lx=n.x+38;ly=n.y+5;an='start';}
@@ -359,8 +367,8 @@ function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<rect class="lamp" x="${n.x+n.w/2-12}" y="${n.y-n.h/2-6}" width="18" height="18" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
  return h+'</g>';}
 function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
- let h=`<svg viewBox="0 0 1000 ${VH}" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
- const R={};st.edges.forEach(k=>R[k]=route(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
+ let h=`<svg viewBox="0 0 1000 ${o.vh||VH}" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+(o.bg!=null?o.bg:roomSVG(o));
+ const R={},RT=o.route||route;st.edges.forEach(k=>R[k]=RT(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
  st.edges.forEach(k=>h+=`<polyline class="cabcase" points="${R[k]}"/>`);
  st.edges.forEach(k=>{let c=st.locked.has(k)?'locked':'';if(st.bad.has(k))c='bad';if(st.marks.has(k)||st.selCable===k)c+=' mark';h+=`<polyline class="cab ${c}" points="${R[k]}"/>`;});
  if(st.flow)st.edges.forEach(k=>{if(!st.bad.has(k))h+=`<polyline class="flowline" points="${R[k]}"/>`;});
