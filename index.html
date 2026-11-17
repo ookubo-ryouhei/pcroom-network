@@ -145,6 +145,14 @@ body.m-mark .guide .hint{min-height:0}
 body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in-out infinite}
 @keyframes candblink{50%{stroke-opacity:.25}}
 @media(prefers-reduced-motion:reduce){body.m-practice .node.cand .ring{animation:none}}
+/* 設計完了などのポップアップ */
+dialog.pop{border:1px solid #C9CED6;border-top:4px solid #16324F;border-radius:0;padding:24px;max-width:520px;width:calc(100% - 40px);color:inherit;box-shadow:0 12px 40px rgba(20,30,45,.18)}
+dialog.pop::backdrop{background:rgba(20,30,45,.45)}
+.popstep{display:flex;align-items:center;gap:10px;font-weight:700}
+.popstep span{padding:6px 12px;border:1px solid #C9CED6;color:#5A6472}
+.popstep span.on{background:#16324F;border-color:#16324F;color:#fff}
+.popstep .ar{border:none;padding:0}
+.popbtns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
 
 .hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
 @media(max-width:720px){.hero{grid-template-columns:1fr}}

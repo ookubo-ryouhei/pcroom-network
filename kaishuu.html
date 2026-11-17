@@ -145,6 +145,14 @@ body.m-mark .guide .hint{min-height:0}
 body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in-out infinite}
 @keyframes candblink{50%{stroke-opacity:.25}}
 @media(prefers-reduced-motion:reduce){body.m-practice .node.cand .ring{animation:none}}
+/* 設計完了などのポップアップ */
+dialog.pop{border:1px solid #C9CED6;border-top:4px solid #16324F;border-radius:0;padding:24px;max-width:520px;width:calc(100% - 40px);color:inherit;box-shadow:0 12px 40px rgba(20,30,45,.18)}
+dialog.pop::backdrop{background:rgba(20,30,45,.45)}
+.popstep{display:flex;align-items:center;gap:10px;font-weight:700}
+.popstep span{padding:6px 12px;border:1px solid #C9CED6;color:#5A6472}
+.popstep span.on{background:#16324F;border-color:#16324F;color:#fff}
+.popstep .ar{border:none;padding:0}
+.popbtns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
 
 .brief{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-top:10px}
 @media(max-width:760px){.brief{grid-template-columns:1fr}}
@@ -234,7 +242,7 @@ body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in
      <li>列ハブは横列ごとのハブです。差し込み口は、列ハブが5つ、主ハブが8つです。<b>列ハブは使わなくてもかまいません。</b></li>
      <li>全ての机をインターネットに接続しましょう。接続の仕方は一つではありません。</li>
     </ul>
-    <h3 style="margin-top:12px">やること</h3><ol class="todo"><li>見取り図で<b>接続元</b>（主ハブ・列ハブなど、点線の枠の機器）をタップする</li><li><b>接続先</b>（机やハブ）をタップする。同じハブから続けて接続できる</li><li>全ての机を接続したら「通電テスト」を押す</li></ol>
+    <h3 style="margin-top:12px">やること</h3><ol class="todo"><li>見取り図で<b>接続元</b>（主ハブ・列ハブなど、点線の枠の機器）をタップする</li><li><b>接続先</b>（机やハブ）をタップする。同じハブから続けて接続できる</li><li>全ての机を接続したら「設計を確認する」を押す</li></ol>
     <div class="actions"><button class="btn primary block" id="test2"></button><button class="btn block" id="reset2"></button></div><div id="res2" aria-live="polite"></div>
    </section>
    <details class="card"><summary><h2>ケーブル一覧</h2><span class="chip num" id="cabcount2"></span></summary><ul class="list" id="cables2"></ul></details></div>
@@ -256,9 +264,9 @@ body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in
 
  <section id="s3" class="hidden">
   <section class="card" aria-labelledby="doneh"><div class="eyebrow">学習の記録</div><h2 id="doneh"></h2><pre class="record" id="rec"></pre><button class="btn primary" id="copy"></button></section>
-  <section class="question hidden" id="q"><div class="lb">最後の問い</div><div class="q" style="margin-top:4px;display:block">将来の変更に備えて、最初から余裕を持たせて作るべきだろうか。それとも、必要になってから作り替えるべきだろうか。</div></section>
  </section>
 </main>
+<dialog class="pop" id="pop" aria-labelledby="popTitle"><div id="popBody"></div><div class="popbtns"><button class="btn" id="popBack">設計を見直す</button><button class="btn primary" id="popGo">工事開始（ステップ3へ）</button></div></dialog>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>'use strict';
 const $=id=>document.getElementById(id);
@@ -469,13 +477,13 @@ $('check1').onclick=()=>{let bad=false;const v=[1,2].map(i=>{const el=$('a'+i),x
 const N2=makeNodes([3,3,3,1],true),LOCK2=[key('R','M'),key('M','T'),key('M','P')];
 const o2={mode:'wire',nodeTap:true,cableTap:true,locked:LOCK2,title:'工事後のPC教室の見取り図',defaultHint:'見取り図で、接続元のハブ（点線の枠）をタップしてください。',onHint:t=>$('hint2').textContent=t,onChange:ch2,onSelect:tb2};
 const E2=Editor($('map2'),N2,o2);E2.setEdges(K.e2||[]);
-$('undo2').innerHTML=icon('undo')+'元に戻す';$('cut2').innerHTML=icon('cut')+'選んだケーブルを外す';$('test2').innerHTML=icon('bolt')+'通電テスト';$('reset2').innerHTML=icon('reset')+'最初からやり直す';
+$('undo2').innerHTML=icon('undo')+'元に戻す';$('cut2').innerHTML=icon('cut')+'選んだケーブルを外す';$('test2').innerHTML=icon('check')+'設計を確認する';$('reset2').innerHTML=icon('reset')+'最初からやり直す';
 function ch2(){K.e2=[...E2.st.edges].filter(k=>!E2.st.locked.has(k));$('res2').innerHTML='';save();side2();}
 function tb2(){$('undo2').disabled=!E2.canUndo();$('cut2').classList.toggle('hidden',!E2.st.selCable);$('desel2').classList.toggle('hidden',!E2.st.sel);
- const all=Object.keys(N2).filter(id=>N2[id].type==='desk').every(d=>E2.deg(d)>0),on=E2.st.sel?1:(all?2:0),h=all?'全ての机が接続されました。「通電テスト」を押しましょう。':'見取り図で、接続元のハブ（点線の枠）をタップしてください。';
- o2.defaultHint=h;$('guide2').innerHTML=guideHTML(['接続元を選ぶ','接続先を選ぶ','通電テストを押す'],on);if(!E2.st.sel&&!E2.st.selCable)$('hint2').textContent=h;}
+ const all=Object.keys(N2).filter(id=>N2[id].type==='desk').every(d=>E2.deg(d)>0),on=E2.st.sel?1:(all?2:0),h=all?'全ての机が接続されました。「設計を確認する」を押しましょう。':'見取り図で、接続元のハブ（点線の枠）をタップしてください。';
+ o2.defaultHint=h;$('guide2').innerHTML=guideHTML(['接続元を選ぶ','接続先を選ぶ','設計を確認する'],on);if(!E2.st.sel&&!E2.st.selCable)$('hint2').textContent=h;}
 function side2(){const ks=sortKeys(N2,[...E2.st.edges]);$('cabcount2').textContent=ks.length+'本';
- $('stats2').innerHTML=`<span class="chip num">敷いたケーブル ${ks.length-LOCK2.length}本</span><span class="chip num">通電テスト ${K.tests2}回</span>`;
+ $('stats2').innerHTML=`<span class="chip num">敷いたケーブル ${ks.length-LOCK2.length}本</span><span class="chip num">確認 ${K.tests2}回</span>`;
  $('cables2').innerHTML=ks.map(k=>{const nm=esc(cableName(N2,k));return `<li><span>${nm}</span>${E2.st.locked.has(k)?'<span class="lock">敷設済み</span>':`<button class="btn" data-cut="${k}" aria-label="${nm}を外す">外す</button>`}</li>`;}).join('');tb2();}
 function evaluate(edges){const es=new Set(edges),deg=id=>[...es].filter(k=>k.split('|').includes(id)).length;
  const used=['H1','H2','H3','H4'].filter(h=>deg(h)>0);
@@ -492,17 +500,23 @@ function evaluate(edges){const es=new Set(edges),deg=id=>[...es].filter(k=>k.spl
  if(lone.length)notes.push(lone.map(h=>N2[h].name).join('、')+'には机が1台だけです。空いている差し込み口は、将来の増設に使えます。');
  if(!notes.length)notes.push('各列の机を、その列の列ハブにまとめています。');
  return{hubs:used.length,maxHub,len:Math.round(len*M_PER_PX),rows,notes};}
-$('test2').onclick=()=>{const a=analyze(N2,E2.st.edges),s=stopped(N2,a.reach),un=s.pcs||s.T||s.P;K.tests2++;let html,ok=false;
+$('test2').onclick=()=>{const a=analyze(N2,E2.st.edges),s=stopped(N2,a.reach),un=s.pcs||s.T||s.P;K.tests2++;let html,ok=false,v;
  if(a.loop)html=resultHTML(false,'通信が止まりました','ハブ同士が輪の形（ループ）に接続されている区間があります。輪を作っているケーブルを外しましょう。');
  else if(un)html=resultHTML(false,'接続できない机があります',`${stopText(s)}がインターネットに接続できません。ランプが赤の机から、主ハブまでの経路を考えましょう。`);
  else if(a.loopAny)html=resultHTML(false,'輪の形が残っています','どこにも接続されていない機器同士で、輪の形（ループ）ができています。');
- else{ok=true;const v=evaluate([...E2.st.edges]);K.design={hubs:v.hubs,maxHub:v.maxHub,len:v.len};K.done[1]=true;
-  html=resultHTML(true,'開通しました','全ての机がインターネットに接続できました。あなたの設計の特徴です。',
+ else{ok=true;v=evaluate([...E2.st.edges]);K.design={hubs:v.hubs,maxHub:v.maxHub,len:v.len};K.done[1]=true;
+  html=resultHTML(true,'設計完了','全ての机を接続する図面ができました。あなたの設計の特徴です。',
    `<div class="tiles"><div class="tile"><span class="k">使った列ハブ</span><span class="v num">${v.hubs}<small>台</small></span></div><div class="tile"><span class="k">列ハブ1台の故障で止まる<br>生徒用PC（最大）</span><span class="v num">${v.maxHub}<small>台</small></span></div><div class="tile"><span class="k">敷いたケーブルの長さ（概算）</span><span class="v num">約${v.len}<small>m</small></span></div></div>
    <table class="tbl"><thead><tr><th>故障したハブ</th><th style="text-align:right">止まる生徒用PC</th></tr></thead><tbody>${v.rows.map(r=>`<tr class="${r.h!=='M'&&r.pcs===v.maxHub&&v.maxHub>0?'max':''}"><td>${N2[r.h].name}</td><td class="n num">${r.pcs}台</td></tr>`).join('')}</tbody></table>
    <ul class="notes">${v.notes.map(t=>`<li>${t}</li>`).join('')}</ul><p style="margin-top:8px"><b>隣の人の設計と比べてみましょう。</b>ハブの台数、故障の影響、ケーブルの長さはどう違いますか。</p>`,
-   `<button class="btn primary block" data-go="2">${icon('arrow')}ステップ3へ</button>`);}
- E2.setTest(a,{flow:ok});K.res[1]=ok?html:'';$('res2').innerHTML=html;save();side2();steps();};
+   `<button class="btn primary block" data-go="2">${icon('arrow')}工事開始（ステップ3へ）</button>`);}
+ if(ok){E2.clearTest();E2.render();popDone(v);}else E2.setTest(a);K.res[1]=ok?html:'';$('res2').innerHTML=html;save();side2();steps();};
+function popDone(v){const d=$('pop');$('popBody').innerHTML=`<div class="popstep"><span class="on">設計完了</span><span class="ar">→</span><span>工事開始</span></div>
+ <h2 style="margin-top:14px">設計が完了しました</h2><p style="margin-top:6px">全ての机を接続する図面ができました。まだ工事はしていないので、ケーブルに電気は流れていません。次は、この図面をもとに<b>工事の順番</b>を決めます。</p>
+ <p class="sub" style="margin-top:8px">使った列ハブ ${v.hubs}台／列ハブ1台の故障で止まる生徒用PC 最大${v.maxHub}台／ケーブル 約${v.len}m</p>`;
+ d.showModal();}
+$('popGo').onclick=()=>{$('pop').close();go(2);};
+$('popBack').onclick=()=>$('pop').close();
 $('reset2').onclick=()=>{E2.setEdges([],true);ch2();toast('最初の状態に戻しました。「元に戻す」で取り消せます。');};
 $('undo2').onclick=()=>E2.undo();
 $('desel2').onclick=()=>E2.clearSel();
@@ -545,8 +559,7 @@ $('run3').onclick=()=>{if(K.seq.length<8){toast(`作業は8つすべて選んで
 /* ---- 共通 ---- */
 function record(){const n=K.done.filter(d=>d).length,st=i=>K.done[i]?'完了':'未完了',d=K.design;
  $('doneh').textContent=n===3?'3つのステップをすべて終えました':`ステップ ${n}／3 が完了しています`;
- $('rec').textContent=`改修の設計（PC教室の配線）\n1　弱点の調査：${st(0)}（解答 ${K.tries1}回）\n2　配線の設計：${st(1)}${d?`（列ハブ ${d.hubs}台／列ハブ1台の故障で最大 ${d.maxHub}台停止／ケーブル約 ${d.len}m）`:''}（通電テスト ${K.tests2}回）\n3　作業の順番：${st(2)}（実行 ${K.runs}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
- $('q').classList.toggle('hidden',n<3);}
+ $('rec').textContent=`改修の設計（PC教室の配線）\n1　弱点の調査：${st(0)}（解答 ${K.tries1}回）\n2　配線の設計：${st(1)}${d?`（列ハブ ${d.hubs}台／列ハブ1台の故障で最大 ${d.maxHub}台停止／ケーブル約 ${d.len}m）`:''}（通電テスト ${K.tests2}回）\n3　作業の順番：${st(2)}（実行 ${K.runs}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;}
 $('copy').innerHTML=icon('copy')+'記録をコピー';$('copy').onclick=()=>copyText($('rec').textContent,$('rec'));
 function steps(){$('steps').innerHTML=STEPS.map((s,i)=>{const dn=i<3&&K.done[i];return `<button data-s="${i}" class="${dn?'done':''}"${K.step===i?' aria-current="step"':''}><span class="n">${dn?icon('check'):i+1}</span>${s}${dn?'<span class="sr">（完了）</span>':''}</button>`;}).join('');record();}
 function go(i){K.step=i;[0,1,2,3].forEach(j=>$('s'+j).classList.toggle('hidden',j!==i));$('briefCard').classList.toggle('hidden',i===3);save();steps();window.scrollTo({top:0});}

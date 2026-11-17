@@ -145,6 +145,14 @@ body.m-mark .guide .hint{min-height:0}
 body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in-out infinite}
 @keyframes candblink{50%{stroke-opacity:.25}}
 @media(prefers-reduced-motion:reduce){body.m-practice .node.cand .ring{animation:none}}
+/* 設計完了などのポップアップ */
+dialog.pop{border:1px solid #C9CED6;border-top:4px solid #16324F;border-radius:0;padding:24px;max-width:520px;width:calc(100% - 40px);color:inherit;box-shadow:0 12px 40px rgba(20,30,45,.18)}
+dialog.pop::backdrop{background:rgba(20,30,45,.45)}
+.popstep{display:flex;align-items:center;gap:10px;font-weight:700}
+.popstep span{padding:6px 12px;border:1px solid #C9CED6;color:#5A6472}
+.popstep span.on{background:#16324F;border-color:#16324F;color:#fff}
+.popstep .ar{border:none;padding:0}
+.popbtns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
 </style></head><body>
 <header class="appbar">
  <a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>施工と検査</span></div></a>
@@ -174,7 +182,6 @@ body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in
   </div>
  </div>
  <section class="card" id="done" style="margin-top:16px" aria-labelledby="doneh"><div class="eyebrow">学習の記録</div><h2 id="doneh"></h2><pre class="record" id="rec"></pre><button class="btn primary" id="copy"></button></section>
- <section class="question hidden" id="q"><div class="lb">最後の問い</div><div class="q">図面が正しいかどうかは、誰がどうやって確かめればよいのだろうか。</div></section>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>'use strict';
@@ -450,8 +457,7 @@ function submit(){const mk=ed.st.marks;if(!mk.size){toast('図面と違うと思
  side();}
 function record(){const n=S.done.filter(d=>d).length;$('doneh').textContent=n===3?'3つの仕事をすべて終えました':`仕事 ${n}／3 が完了しています`;
  const st=i=>S.done[i]?'完了':'未完了';
- $('rec').textContent=`施工と検査（PC教室の配線）\n操作の練習：${S.practiced?(S.pskip?'スキップ':'完了'):'未実施'}\n仕事1　施工：${st(0)}（通電テスト ${S.tests[0]}回）\n仕事2　検査：${st(1)}（提出 ${S.submits}回）\n仕事3　不具合の調査：${st(2)}（通電テスト ${S.tests[2]}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
- $('q').classList.toggle('hidden',n<3);}
+ $('rec').textContent=`施工と検査（PC教室の配線）\n操作の練習：${S.practiced?(S.pskip?'スキップ':'完了'):'未実施'}\n仕事1　施工：${st(0)}（通電テスト ${S.tests[0]}回）\n仕事2　検査：${st(1)}（提出 ${S.submits}回）\n仕事3　不具合の調査：${st(2)}（通電テスト ${S.tests[2]}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;}
 $('steps').addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(b)load(+b.dataset.m);});
 $('cables').addEventListener('click',e=>{const c=e.target.closest('[data-cut]');if(c){ed.remove(c.dataset.cut);return;}const m=e.target.closest('[data-mark]');if(m)ed.toggleMark(m.dataset.mark);});
 $('undo').onclick=()=>ed.undo();
