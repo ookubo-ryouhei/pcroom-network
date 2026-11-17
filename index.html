@@ -88,7 +88,8 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .hidden{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* 見取り図 */
-.cab{fill:none;stroke:#0E7C7B;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.cabcase{fill:none;stroke:#fff;stroke-width:8;stroke-linecap:butt;stroke-linejoin:round}
+.cab{fill:none;stroke:#0E7C7B;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
 .cab.locked{stroke:#6E7986}
 .cab.mark{stroke:#C8851A;stroke-width:7}
 .cab.bad{stroke:#B3261E;stroke-width:6;stroke-dasharray:10 7}
@@ -208,14 +209,15 @@ const FRONT=t=>t==='router'||t==='main'||t==='teacher'||t==='printer';
 function portMap(N,edges){const P={},cnt={};for(const id in N){P[id]={};cnt[id]=0;}edges.forEach(k=>k.split('|').forEach(id=>{P[id][k]=portPos(N[id],cnt[id]++);}));return{P,cnt};}
 function route(N,k,P){const[a,b]=k.split('|'),A=N[a],B=N[b],pa=P[a][k],pb=P[b][k];
  if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI],on=N[oI];if(on.type==='desk')return[pa,pb];
-  const o=oI===a?pa:pb,lane=d.y+52+d.seat*6,end=[d.x,d.y+41];
+  const o=oI===a?pa:pb,lane=d.y+52+d.seat*9,end=[d.x,d.y+41];
   if(on.type==='hub')return[o,[o[0],lane],[d.x,lane],end];
-  const rx=872+d.seat*6;return[o,[o[0],222],[rx,222],[rx,lane],[d.x,lane],end];}
+  const rx=864+d.seat*10;return[o,[o[0],240],[rx,240],[rx,lane],[d.x,lane],end];}
  const ts=[A.type,B.type];
- if(ts.includes('router')&&ts.includes('main'))return[pa,pb];
+ if(ts.includes('router')&&ts.includes('main')){const pm=A.type==='main'?pa:pb,pr=A.type==='main'?pb:pa,mn=A.type==='main'?A:B;
+  if(mn.x>800)return[pa,pb];const y=pm[1]+9;return[pm,[pm[0],y],[pr[0],y],pr];}
  if(FRONT(A.type)&&FRONT(B.type))return[pa,[pa[0],146],[pb[0],146],pb];
  if(A.type==='hub'&&B.type==='hub')return[pa,[pa[0],pb[1]],pb];
- const h=A.type==='hub'?A:B,ph=A.type==='hub'?pa:pb,pf=A.type==='hub'?pb:pa,tx=34+h.line*6,L=198+h.line*4;
+ const h=A.type==='hub'?A:B,ph=A.type==='hub'?pa:pb,pf=A.type==='hub'?pb:pa,tx=32+h.line*10,L=198+h.line*8;
  return[pf,[pf[0],L],[tx,L],[tx,ph[1]],ph];}
 function routes(N,edges){const{P}=portMap(N,edges),R={};edges.forEach(k=>R[k]=route(N,k,P));return R;}
 const polyLen=pts=>pts.reduce((s,p,i)=>i?s+Math.hypot(p[0]-pts[i-1][0],p[1]-pts[i-1][1]):0,0);
@@ -258,6 +260,7 @@ function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
 function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
  let h=`<svg viewBox="0 0 1000 ${VH}" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
  const R={};st.edges.forEach(k=>R[k]=route(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
+ st.edges.forEach(k=>h+=`<polyline class="cabcase" points="${R[k]}"/>`);
  st.edges.forEach(k=>{let c=st.locked.has(k)?'locked':'';if(st.bad.has(k))c='bad';if(st.marks.has(k)||st.selCable===k)c+=' mark';h+=`<polyline class="cab ${c}" points="${R[k]}"/>`;});
  if(st.flow)st.edges.forEach(k=>{if(!st.bad.has(k))h+=`<polyline class="flowline" points="${R[k]}"/>`;});
  if(o.cableTap)st.edges.forEach(k=>{if(!st.locked.has(k))h+=`<polyline class="cabhit" data-k="${k}" points="${R[k]}"><title>${esc(cableName(N,k))}</title></polyline>`;});
