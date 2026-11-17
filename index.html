@@ -160,15 +160,15 @@ async function copyText(text,el){try{await navigator.clipboard.writeText(text);t
 /* ---- 機器の配置 ---- */
 function makeNodes(counts,rack){
  const N={
-  R:{x:915,y:rack?56:74,type:'router',name:'ルータ',ports:4,w:56,h:34,img:'router'},
+  R:{x:915,y:rack?54:74,type:'router',name:'ルータ',ports:4,w:84,h:51,img:'router'},
   M:rack?{x:915,y:116,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'}:{x:480,y:166,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'},
   T:{x:480,y:86,type:'teacher',name:'教師用PC',ports:1,w:150,h:46,img:'teacherdesk'},
-  P:{x:92,y:86,type:'printer',name:'プリンタ',ports:1,w:56,h:42,img:'printer'}};
+  P:{x:92,y:84,type:'printer',name:'プリンタ',ports:1,w:76,h:57,img:'printer'}};
  counts.forEach((n,i)=>{const c=i+1,y=LINEY[i];N['H'+c]={x:HUBX,y,type:'hub',name:c+'列目ハブ',ports:5,w:60,h:20,img:'hubtop',line:c};
   for(let s=1;s<=n;s++)N['D'+c+s]={x:SEATX[s-1],y,type:'desk',name:'机'+c+'-'+s,label:c+'-'+s,ports:1,w:150,h:96,img:'desk4',seat:s-1,line:c,pcs:4};});
  return N;}
 function portPos(n,i){
- if(n.type==='desk')return[n.x,n.y+48];
+ if(n.type==='desk')return[n.x,n.y+41];
  if(n.type==='teacher')return[n.x,n.y+23];
  if(n.type==='printer')return[n.x+28,n.y+6];
  const sp=n.type==='main'?7.5:9,x0=n.x-(n.ports-1)*sp/2;return[x0+Math.min(i,n.ports-1)*sp,n.y+n.h/2+6];}
@@ -176,7 +176,7 @@ const FRONT=t=>t==='router'||t==='main'||t==='teacher'||t==='printer';
 function portMap(N,edges){const P={},cnt={};for(const id in N){P[id]={};cnt[id]=0;}edges.forEach(k=>k.split('|').forEach(id=>{P[id][k]=portPos(N[id],cnt[id]++);}));return{P,cnt};}
 function route(N,k,P){const[a,b]=k.split('|'),A=N[a],B=N[b],pa=P[a][k],pb=P[b][k];
  if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI],on=N[oI];if(on.type==='desk')return[pa,pb];
-  const o=oI===a?pa:pb,lane=d.y+56+d.seat*6,end=[d.x,d.y+48];
+  const o=oI===a?pa:pb,lane=d.y+52+d.seat*6,end=[d.x,d.y+41];
   if(on.type==='hub')return[o,[o[0],lane],[d.x,lane],end];
   const rx=872+d.seat*6;return[o,[o[0],222],[rx,222],[rx,lane],[d.x,lane],end];}
  const ts=[A.type,B.type];
