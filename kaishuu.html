@@ -165,9 +165,9 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
  <details class="card" id="briefCard" open style="margin-bottom:16px"><summary><h2>工事の依頼書</h2><span class="chip">PC教室（架空の教室）</span></summary>
   <div class="brief">
    <ul>
-    <li>来月、PC教室の<b>床を張り替え</b>、机の並びを<b>「3・2・3・2」から「3・3・3・1」</b>に変えます（4列目の後ろの机を、2列目の後ろへ移します）。</li>
+    <li>来月、PC教室の<b>床を張り替え</b>、机の並びを<b>「3・2・3・2」から「3・3・3・1」</b>に変えます（いちばん後ろの4列目の右の机を、2列目の右へ移します）。</li>
     <li>床下のケーブルはすべて撤去し、新しい床に敷き直します。</li>
-    <li>今の主ハブは床の上（2列目と3列目の間）にあるため、<b>準備室のラックへ移します。</b></li>
+    <li>今の主ハブは床の上（教卓の前）にあるため、<b>準備室のラックへ移します。</b></li>
     <li><b>教師用PCとプリンタは、工事の間も止めてはいけません</b>（職員が使います）。生徒用PCは、工事の間は止まってもかまいません。</li>
    </ul>
    <div class="layouts" id="layouts"></div>
@@ -182,7 +182,7 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
    <div class="stack"><section class="card">
     <div class="eyebrow">ステップ1</div><h2>今のネットワークの弱点を調べる</h2>
     <p class="sub" style="margin-top:4px">工事の前に、今のネットワークで機器が故障したときの影響を確かめます。見取り図を見て答えましょう。</p>
-    <div class="q"><label for="a1">問1　列ハブ2が故障すると、止まる生徒用PCは何台か。</label><div class="in"><input id="a1" type="text" inputmode="numeric" autocomplete="off" aria-describedby="e1"><span>台</span></div><div class="qe" id="e1"></div></div>
+    <div class="q"><label for="a1">問1　2列目ハブが故障すると、止まる生徒用PCは何台か。</label><div class="in"><input id="a1" type="text" inputmode="numeric" autocomplete="off" aria-describedby="e1"><span>台</span></div><div class="qe" id="e1"></div></div>
     <div class="q"><label for="a2">問2　主ハブが故障すると、止まる機器は何台か。（生徒用PC、教師用PC、プリンタの合計）</label><div class="in"><input id="a2" type="text" inputmode="numeric" autocomplete="off" aria-describedby="e2"><span>台</span></div><div class="qe" id="e2"></div></div>
     <div class="actions"><button class="btn primary block" id="check1"></button></div><div id="res1" aria-live="polite"></div>
    </section></div>
@@ -198,7 +198,7 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
     <div class="eyebrow">ステップ2</div><h2>新しい配線を設計する</h2>
     <ul class="notes" style="margin-top:6px">
      <li>主ハブは準備室のラックへ移しました。ルータ、教師用PC、プリンタとのケーブルは敷設済みです。</li>
-     <li>差し込み口は、列ハブが5つ、主ハブが8つです。<b>列ハブは使わなくてもかまいません。</b></li>
+     <li>列ハブは横列ごとのハブです。差し込み口は、列ハブが5つ、主ハブが8つです。<b>列ハブは使わなくてもかまいません。</b></li>
      <li>すべての机をインターネットにつなぎましょう。つなぎ方は一つではありません。</li>
     </ul>
     <div class="actions"><button class="btn primary block" id="test2"></button><button class="btn block" id="reset2"></button></div><div id="res2" aria-live="polite"></div>
@@ -230,7 +230,7 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const key=(a,b)=>a<b?a+'|'+b:b+'|'+a;
-const COLS=[140,345,615,820],ROWS=[305,445,585],HUBY=206,M_PER_PX=12/940;
+const SEATX=[310,510,710],LINEY=[298,428,558,688],HUBX=110,VH=790,M_PER_PX=12/940;
 const ICONS={
  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
  alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
@@ -256,39 +256,43 @@ function makeNodes(counts,rack){
   M:rack?{x:915,y:116,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'}:{x:480,y:166,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'},
   T:{x:480,y:86,type:'teacher',name:'教師用PC',ports:1,w:150,h:46,img:'teacherdesk'},
   P:{x:92,y:86,type:'printer',name:'プリンタ',ports:1,w:56,h:42,img:'printer'}};
- COLS.forEach((cx,i)=>{const c=i+1;N['H'+c]={x:cx,y:HUBY,type:'hub',name:'列ハブ'+c,ports:5,w:60,h:20,img:'hubtop',col:c};
-  for(let r=1;r<=counts[i];r++)N['D'+c+r]={x:cx,y:ROWS[r-1],type:'desk',name:'机'+c+'-'+r,label:c+'-'+r,ports:1,w:150,h:96,img:'desk4',row:r-1,col:c,pcs:4};});
+ counts.forEach((n,i)=>{const c=i+1,y=LINEY[i];N['H'+c]={x:HUBX,y,type:'hub',name:c+'列目ハブ',ports:5,w:60,h:20,img:'hubtop',line:c};
+  for(let s=1;s<=n;s++)N['D'+c+s]={x:SEATX[s-1],y,type:'desk',name:'机'+c+'-'+s,label:c+'-'+s,ports:1,w:150,h:96,img:'desk4',seat:s-1,line:c,pcs:4};});
  return N;}
 function portPos(n,i){
- if(n.type==='desk')return[n.x-75,n.y];
+ if(n.type==='desk')return[n.x,n.y+48];
  if(n.type==='teacher')return[n.x,n.y+23];
  if(n.type==='printer')return[n.x+28,n.y+6];
  const sp=n.type==='main'?7.5:9,x0=n.x-(n.ports-1)*sp/2;return[x0+Math.min(i,n.ports-1)*sp,n.y+n.h/2+6];}
 const FRONT=t=>t==='router'||t==='main'||t==='teacher'||t==='printer';
 function portMap(N,edges){const P={},cnt={};for(const id in N){P[id]={};cnt[id]=0;}edges.forEach(k=>k.split('|').forEach(id=>{P[id][k]=portPos(N[id],cnt[id]++);}));return{P,cnt};}
 function route(N,k,P){const[a,b]=k.split('|'),A=N[a],B=N[b],pa=P[a][k],pb=P[b][k];
- if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI];if(N[oI].type==='desk')return[pa,pb];
-  const o=oI===a?pa:pb,r=d.row,ax=d.x-84-r*7,cy=230+r*6;return[o,[o[0],cy],[ax,cy],[ax,d.y],[d.x-75,d.y]];}
+ if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI],on=N[oI];if(on.type==='desk')return[pa,pb];
+  const o=oI===a?pa:pb,lane=d.y+56+d.seat*6,end=[d.x,d.y+48];
+  if(on.type==='hub')return[o,[o[0],lane],[d.x,lane],end];
+  const rx=872+d.seat*6;return[o,[o[0],222],[rx,222],[rx,lane],[d.x,lane],end];}
  const ts=[A.type,B.type];
  if(ts.includes('router')&&ts.includes('main'))return[pa,pb];
  if(FRONT(A.type)&&FRONT(B.type))return[pa,[pa[0],146],[pb[0],146],pb];
- const L=188+Math.max(A.col||0,B.col||0)*4;return[pa,[pa[0],L],[pb[0],L],pb];}
+ if(A.type==='hub'&&B.type==='hub')return[pa,[pa[0],pb[1]],pb];
+ const h=A.type==='hub'?A:B,ph=A.type==='hub'?pa:pb,pf=A.type==='hub'?pb:pa,tx=34+h.line*6,L=198+h.line*4;
+ return[pf,[pf[0],L],[tx,L],[tx,ph[1]],ph];}
 function routes(N,edges){const{P}=portMap(N,edges),R={};edges.forEach(k=>R[k]=route(N,k,P));return R;}
 const polyLen=pts=>pts.reduce((s,p,i)=>i?s+Math.hypot(p[0]-pts[i-1][0],p[1]-pts[i-1][1]):0,0);
 function sortKeys(N,keys){const ix=Object.keys(N);const f=k=>k.split('|').map(id=>ix.indexOf(id)).sort((x,y)=>x-y);return keys.slice().sort((a,b)=>{const A=f(a),B=f(b);return A[0]-B[0]||A[1]-B[1];});}
 function cableName(N,k){const ix=Object.keys(N);const p=k.split('|').sort((a,b)=>ix.indexOf(a)-ix.indexOf(b));return N[p[0]].name+' ─ '+N[p[1]].name;}
 
 /* ---- 見取り図の描画 ---- */
-function roomSVG(o){let h='<rect x="20" y="20" width="960" height="660" rx="6" fill="#EFE6D5"/>';
- for(let y=64;y<680;y+=44)h+=`<line x1="22" y1="${y}" x2="978" y2="${y}" stroke="#E3D6BF"/>`;
- if(o.hatch)h+='<rect x="34" y="156" width="790" height="512" rx="8" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
+function roomSVG(o){let h='<rect x="20" y="20" width="960" height="750" rx="6" fill="#EFE6D5"/>';
+ for(let y=64;y<770;y+=44)h+=`<line x1="22" y1="${y}" x2="978" y2="${y}" stroke="#E3D6BF"/>`;
+ if(o.hatch)h+='<rect x="30" y="226" width="930" height="536" rx="8" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
  h+='<rect x="832" y="22" width="146" height="126" fill="#E5E0D6"/><path d="M830 20V150H980" fill="none" stroke="#4D4136" stroke-width="4"/>';
  h+='<text x="820" y="44" text-anchor="end" class="lbl" style="font-size:15px;fill:#566070">準備室 ▸</text>';
- [230,360,490].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="2" fill="#BCD6E4" stroke="#8FB2C6"/>`);
+ [256,386,516,646].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="2" fill="#BCD6E4" stroke="#8FB2C6"/>`);
  h+='<rect x="330" y="24" width="300" height="22" rx="3" fill="#2F4F46"/><rect x="342" y="46" width="276" height="4" rx="1" fill="#A98A60"/><text x="480" y="40" text-anchor="middle" style="font-size:14px;fill:#E7F0EC;font-weight:600">黒板</text>';
- h+='<rect x="975" y="596" width="8" height="66" rx="2" fill="#8C6B45"/><text x="966" y="672" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
- h+='<rect x="20" y="20" width="960" height="660" rx="6" fill="none" stroke="#4D4136" stroke-width="6"/>';
- if(o.hatch)h+='<text x="46" y="176" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
+ h+='<rect x="975" y="682" width="8" height="66" rx="2" fill="#8C6B45"/><text x="966" y="762" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
+ h+='<rect x="20" y="20" width="960" height="750" rx="6" fill="none" stroke="#4D4136" stroke-width="6"/>';
+ if(o.hatch)h+='<text x="42" y="246" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
  return h;}
 const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80,52],printer:[80,64]};
 function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
@@ -303,7 +307,7 @@ function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<circle cx="${px}" cy="${py}" r="3.6" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
  if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
  else{let lx=n.x,ly=n.y+n.h/2+19,an='middle';
-  if(n.type==='hub'){lx=n.x+34;ly=n.y+5;an='start';}
+  if(n.type==='hub'){lx=n.x;ly=n.y-20;an='middle';}
   else if(n.type==='main'&&n.x<800){lx=n.x+38;ly=n.y+5;an='start';}
   else if(n.type==='main'||n.type==='router'){lx=n.x-n.w/2-6;ly=n.y+5;an='end';}
   h+=`<text class="lbl${an==='end'?' sm':''}" x="${lx}" y="${ly+(an==='end'?1:2)}" text-anchor="${an}">${n.name}</text>`;}
@@ -312,7 +316,7 @@ function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<circle class="lamp" cx="${n.x+n.w/2-3}" cy="${n.y-n.h/2+3}" r="11" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
  return h+'</g>';}
 function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
- let h=`<svg viewBox="0 0 1000 700" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
+ let h=`<svg viewBox="0 0 1000 ${VH}" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
  const R={};st.edges.forEach(k=>R[k]=route(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
  st.edges.forEach(k=>{let c=st.locked.has(k)?'locked':'';if(st.bad.has(k))c='bad';if(st.marks.has(k)||st.selCable===k)c+=' mark';h+=`<polyline class="cab ${c}" points="${R[k]}"/>`;});
  if(st.flow)st.edges.forEach(k=>{if(!st.bad.has(k))h+=`<polyline class="flowline" points="${R[k]}"/>`;});
@@ -379,23 +383,23 @@ function Editor(el,N,o){
 function diagramSVG(counts,edges,label){
  const HX=[62,172,282,392],pos={R:[220,22],M:[220,66],T:[70,66],P:[370,66]};
  HX.forEach((x,i)=>{pos['H'+(i+1)]=[x,116];for(let r=1;r<=counts[i];r++)pos['D'+(i+1)+r]=[x+12,154+(r-1)*30];});
- const nm=id=>id==='R'?'ルータ':id==='M'?'主ハブ':id==='T'?'教師用PC':id==='P'?'プリンタ':id[0]==='H'?'列ハブ'+id[1]:id[1]+'-'+id[2];
- const w=id=>({R:64,M:64,T:72,P:64})[id]||(id[0]==='H'?66:44);
+ const nm=id=>id==='R'?'ルータ':id==='M'?'主ハブ':id==='T'?'教師用PC':id==='P'?'プリンタ':id[0]==='H'?id[1]+'列目ハブ':id[1]+'-'+id[2];
+ const w=id=>({R:64,M:64,T:72,P:64})[id]||(id[0]==='H'?80:44);
  let lines='',boxes='';
  edges.forEach(k=>{const[a,b]=k.split('|'),da=a[0]==='D',db=b[0]==='D';
-  if(da||db){const d=da?a:b,h=da?b:a,[dx,dy]=pos[d],[hx,hy]=pos[h];lines+=h==='H'+d[1]?`<path d="M${hx-26} ${hy+11}V${dy}H${dx-22}"/>`:`<path d="M${hx} ${hy}L${dx} ${dy}"/>`;}
+  if(da||db){const d=da?a:b,h=da?b:a,[dx,dy]=pos[d],[hx,hy]=pos[h];lines+=h==='H'+d[1]?`<path d="M${hx-30} ${hy+11}V${dy}H${dx-22}"/>`:`<path d="M${hx} ${hy}L${dx} ${dy}"/>`;}
   else{const[x1,y1]=pos[a],[x2,y2]=pos[b];lines+=`<path d="M${x1} ${y1}L${x2} ${y2}"/>`;}});
  for(const id in pos){const[x,y]=pos[id],ww=w(id),hb=id==='M'||id[0]==='H';boxes+=`<rect x="${x-ww/2}" y="${y-11}" width="${ww}" height="22" rx="5"${hb?' class="hb"':''}/><text x="${x}" y="${y+4}">${nm(id)}</text>`;}
  return `<svg class="dg" viewBox="0 0 440 ${146+30*Math.max(...counts)}" role="img" aria-label="${esc(label||'ネットワーク図')}"><g class="dl">${lines}</g>${boxes}<text x="258" y="26" class="ann">→ インターネット</text></svg>`;}
-function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 104" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="102" rx="6" fill="#EFE6D5" stroke="#4D4136" stroke-width="2"/><rect x="50" y="6" width="50" height="5" rx="1" fill="#2F4F46"/>`;
- counts.forEach((n,i)=>{for(let r=0;r<3;r++){const x=12+i*34,y=19+r*27,on=r<n,isH=hl&&hl[0]===i&&hl[1]===r;h+=`<rect x="${x}" y="${y}" width="24" height="20" rx="3" fill="${on?(isH?'#C8851A':'#D9B98C'):'none'}" stroke="${on?(isH?'#8A5200':'#AF8754'):'#BFB29B'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
+function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="116" rx="6" fill="#EFE6D5" stroke="#4D4136" stroke-width="2"/><rect x="45" y="6" width="60" height="5" rx="1" fill="#2F4F46"/>`;
+ counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="3" fill="${on?(isH?'#C8851A':'#D9B98C'):'none'}" stroke="${on?(isH?'#8A5200':'#AF8754'):'#BFB29B'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
  return h+'</svg>';}
 
 const KEY='pcroom.kaishuu.v2';
 const K=Object.assign({step:0,done:[false,false,false],tries1:0,e2:null,tests2:0,design:null,seq:[],runs:0,res:['','','']},store.get(KEY,{}));
 const save=()=>store.set(KEY,K);
 const STEPS=['弱点の調査','配線の設計','作業の順番','記録'];
-$('layouts').innerHTML=`<figure>${miniLayout([3,2,3,2],[3,1],'今の机の並び 3・2・3・2')}<figcaption>今：3・2・3・2</figcaption></figure><span class="ar">${icon('arrow')}</span><figure>${miniLayout([3,3,3,1],[1,2],'工事後の机の並び 3・3・3・1')}<figcaption>工事後：3・3・3・1</figcaption></figure>`;
+$('layouts').innerHTML=`<figure>${miniLayout([3,2,3,2],[3,1],'今の机の並び 3・2・3・2')}<figcaption>今：前から3・2・3・2</figcaption></figure><span class="ar">${icon('arrow')}</span><figure>${miniLayout([3,3,3,1],[1,2],'工事後の机の並び 3・3・3・1')}<figcaption>工事後：前から3・3・3・1</figcaption></figure>`;
 function tree(counts){const e=[key('R','M'),key('M','T'),key('M','P')];counts.forEach((n,i)=>{const c=i+1;e.push(key('M','H'+c));for(let r=1;r<=n;r++)e.push(key('H'+c,'D'+c+r));});return e;}
 
 /* ---- ステップ1 ---- */
@@ -407,14 +411,14 @@ function fail(id){const st=E1.st;st.failed=st.failed===id?null:id;
  const a=analyze(N1,st.edges,st.failed),dim=new Set();for(const n in N1)if(n!==st.failed&&!a.reach.has(n))dim.add(n);st.dim=dim;
  const s=stopped(N1,a.reach),tot=s.pcs+(s.T?1:0)+(s.P?1:0);
  $('failres').innerHTML=`<b>${N1[id].name}</b>が故障すると、${tot?`${stopText(s)}の<b>合計${tot}台</b>が止まります。`:'止まる機器はありません。'}`;$('unfail').disabled=false;E1.render();}
-function enableFail(){o1.nodeTap=true;E1.render();$('hint1').textContent='ルータ、主ハブ、列ハブをタップすると、故障させて確かめられます。';}
+function enableFail(){o1.nodeTap=true;E1.render();$('hint1').textContent='ルータ、主ハブ、各列のハブをタップすると、故障させて確かめられます。';}
 $('unfail').onclick=()=>{if(E1.st.failed)fail(E1.st.failed);};
 $('check1').innerHTML=icon('check')+'答えを確かめる';
 $('check1').onclick=()=>{let bad=false;const v=[1,2].map(i=>{const el=$('a'+i),x=el.value.trim().replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248));const ok=/^\d+$/.test(x);el.setAttribute('aria-invalid',!ok);$('e'+i).textContent=ok?'':'数を半角または全角の数字で入力してください。';if(!ok)bad=true;return +x;});
  if(bad)return;K.tries1++;const ok1=v[0]===8,ok2=v[1]===42;enableFail();
  let html;
- if(ok1&&ok2){K.done[0]=true;html=resultHTML(true,'2問とも正解です','列ハブ2の故障で止まるのは2列目の机2台（8台）だけですが、主ハブが故障すると42台すべてが止まります。','<b>上流にある機器ほど、故障したときの影響が大きくなります。</b>見取り図のルータをタップして、ルータが故障した場合も確かめてみましょう。',`<button class="btn primary block" data-go="1">${icon('arrow')}ステップ2へ</button>`);}
- else html=resultHTML(false,'もう一度考えましょう',`問1：${ok1?'正解':'違います'}　問2：${ok2?'正解':'違います'}`,'見取り図の列ハブ2や主ハブをタップすると、故障させて止まる機器を確かめられます。机1台にはPCが4台あります。'+(ok2?'':'問2は、教師用PCとプリンタも数えます。'));
+ if(ok1&&ok2){K.done[0]=true;html=resultHTML(true,'2問とも正解です','2列目ハブの故障で止まるのは2列目の机2台（8台）だけですが、主ハブが故障すると42台すべてが止まります。','<b>上流にある機器ほど、故障したときの影響が大きくなります。</b>見取り図のルータをタップして、ルータが故障した場合も確かめてみましょう。',`<button class="btn primary block" data-go="1">${icon('arrow')}ステップ2へ</button>`);}
+ else html=resultHTML(false,'もう一度考えましょう',`問1：${ok1?'正解':'違います'}　問2：${ok2?'正解':'違います'}`,'見取り図の2列目ハブや主ハブをタップすると、故障させて止まる機器を確かめられます。机1台にはPCが4台あります。'+(ok2?'':'問2は、教師用PCとプリンタも数えます。'));
  K.res[0]=html;$('res1').innerHTML=html;save();steps();};
 
 /* ---- ステップ2 ---- */
