@@ -98,7 +98,8 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .node{cursor:pointer;outline:none}
 .node .hit{fill:transparent}
 .node .ring{fill:none;stroke:transparent;stroke-width:3}
-.node.sel .ring{stroke:#C8851A;fill:rgba(200,133,26,.12)}
+.node.cand .ring{stroke:#0E7C7B;stroke-dasharray:7 5;fill:rgba(14,124,123,.06)}
+.node.sel .ring{stroke:#C8851A;stroke-dasharray:none;stroke-width:4;fill:rgba(200,133,26,.12)}
 .node.failed .ring{stroke:#B3261E}
 .node:focus-visible .ring{stroke:#0E7C7B;stroke-width:4}
 .node.fixed{cursor:default}
@@ -112,6 +113,19 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .stoptag rect{fill:#B3261E}
 .stoptag text{fill:#fff;font-size:16px;font-weight:700}
 @media(prefers-reduced-motion:reduce){.flowline,.lamp{animation:none}#toast{transition:none}}
+
+.guide{border:1px solid var(--line2);margin-bottom:10px;background:#fff}
+.guide ol{display:flex;margin:0;padding:0;list-style:none;border-bottom:1px solid var(--line2)}
+.guide li{flex:1 1 0;display:flex;gap:8px;align-items:center;padding:8px 10px;font-size:13px;line-height:1.45;color:var(--sub);border-left:1px solid var(--line2)}
+.guide li:first-child{border-left:0}
+.guide li .k{flex:none;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--line2);font-weight:700;font-size:12px;background:#fff}
+.guide li.on{background:var(--navy);color:#fff;font-weight:600}
+.guide li.on .k{color:var(--navy);border-color:#fff}
+.guide .hint{padding:9px 12px;font-size:14px;color:var(--ink);min-height:calc(3.2em + 18px);box-sizing:border-box;background:#F8F9FA;line-height:1.6}
+.todo{margin:8px 0 0;padding-left:0;list-style:none;counter-reset:t}
+.todo li{counter-increment:t;position:relative;padding:6px 0 6px 34px;border-top:1px solid var(--line);font-size:14px;line-height:1.6}
+.todo li:first-child{border-top:0}
+.todo li::before{content:counter(t);position:absolute;left:0;top:7px;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--navy);color:var(--navy);font-weight:700;font-size:12px}
 
 .brief{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-top:10px}
 @media(max-width:760px){.brief{grid-template-columns:1fr}}
@@ -191,16 +205,17 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 
  <section id="s1" class="hidden">
   <div class="work">
-   <section class="card mapcard"><div class="cardhead"><h2>工事後のPC教室（3・3・3・1）</h2><div class="chips" id="stats2"></div></div><div id="map2" class="map"></div>
-    <div class="toolbar"><span class="hint" id="hint2" aria-live="polite"></span><button class="btn" id="undo2"></button><button class="btn" id="cut2"></button></div>
+   <section class="card mapcard"><div class="cardhead"><h2>工事後のPC教室（3・3・3・1）</h2><div class="chips" id="stats2"></div></div><div class="guide"><div id="guide2"></div><p class="hint" id="hint2" aria-live="polite"></p></div><div id="map2" class="map"></div>
+    <div class="toolbar"><button class="btn" id="undo2"></button><button class="btn hidden" id="desel2">選択を解除</button><button class="btn hidden" id="cut2"></button></div>
     <div class="legend"><span><i style="background:#6E7986;border-color:#6E7986"></i>灰色：工事で敷設済みのケーブル</span><span><i style="background:#0E7C7B;border-color:#0E7C7B"></i>使用中のポート</span><span><i style="background:#fff;border-color:#9AA3AD"></i>空きポート</span></div></section>
    <div class="stack"><section class="card">
     <div class="eyebrow">ステップ2</div><h2>新しい配線を設計する</h2>
     <ul class="notes" style="margin-top:6px">
      <li>主ハブは準備室のラックへ移しました。ルータ、教師用PC、プリンタとのケーブルは敷設済みです。</li>
      <li>列ハブは横列ごとのハブです。差し込み口は、列ハブが5つ、主ハブが8つです。<b>列ハブは使わなくてもかまいません。</b></li>
-     <li>すべての机をインターネットにつなぎましょう。つなぎ方は一つではありません。</li>
+     <li>全ての机をインターネットに接続しましょう。接続の仕方は一つではありません。</li>
     </ul>
+    <h3 style="margin-top:12px">やること</h3><ol class="todo"><li>見取り図で<b>接続元</b>（主ハブ・列ハブなど、点線の枠の機器）をタップする</li><li><b>接続先</b>（机やハブ）をタップする。同じハブから続けて接続できる</li><li>全ての机を接続したら「通電テスト」を押す</li></ol>
     <div class="actions"><button class="btn primary block" id="test2"></button><button class="btn block" id="reset2"></button></div><div id="res2" aria-live="polite"></div>
    </section>
    <details class="card"><summary><h2>ケーブル一覧</h2><span class="chip num" id="cabcount2"></span></summary><ul class="list" id="cables2"></ul></details></div>
@@ -298,9 +313,9 @@ const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80
 function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  const tap=o.nodeTap&&(!o.tapTypes||o.tapTypes.includes(n.type));
  const free=n.ports-used;
- const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'');
+ const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'')+(st.cand&&st.cand.has(id)?(st.sel?'（接続先にできます）':'（接続元にできます）'):'');
  const pressed=o.pressed?` aria-pressed="${st.failed===id}"`:(o.mode==='wire'?` aria-pressed="${st.sel===id}"`:'');
- let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
+ let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.cand&&st.cand.has(id)?' cand':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
  h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="0"/>`;
  h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="0"/>`;
  h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
@@ -324,7 +339,7 @@ function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
  for(const id in N)h+=nodeSVG(N,id,st,o,cnt[id]);
  return h+'</svg>';}
 
-/* ---- つながり方の分析 ---- */
+/* ---- 接続の分析 ---- */
 function analyze(N,edges,failed){const adj={};for(const id in N)adj[id]=[];
  edges.forEach(k=>{const[a,b]=k.split('|');if(a===failed||b===failed)return;adj[a].push(b);adj[b].push(a);});
  const depth={};if(failed!=='R'){depth.R=0;const q=['R'];while(q.length){const n=q.shift();for(const m of adj[n])if(!(m in depth)){depth[m]=depth[n]+1;q.push(m);}}}
@@ -346,12 +361,15 @@ function Editor(el,N,o){
  const fire=n=>o[n]&&o[n]();
  function clearTest(){st.lamps=null;st.flow=false;st.bad=new Set();}
  function snap(){hist.push([...st.edges]);if(hist.length>80)hist.shift();}
- function render(){el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
+ // 机と列ハブは同じ横列どうしだけを候補として示す（接続そのものは制限しない）
+ function offRow(A,B){const d=A.type==='desk'?A:B.type==='desk'?B:null,h=A.type==='hub'&&A.line?A:B.type==='hub'&&B.line?B:null;return !!(d&&h&&d!==h&&d.line!==h.line);}
+ function cands(){const s=new Set();if(o.mode!=='wire'||!o.nodeTap)return s;for(const id in N){if(st.sel){if(id!==st.sel&&!check(st.sel,id,key(st.sel,id))&&!(o.sameRow&&offRow(N[st.sel],N[id])))s.add(id);}else if(N[id].ports>1&&deg(id)<N[id].ports)s.add(id);}return s;}
+ function render(){st.cand=cands();el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
  function hint(t){o.onHint&&o.onHint(t);}
- function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}。つなぐ相手をタップしてください。もう一度タップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}`);else hint(o.defaultHint||'');}
+ function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}です。点線の枠の中から、接続先をタップしてください。何もない所をタップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}。「選んだケーブルを外す」で外せます。`);else hint(o.defaultHint||'');}
  function check(a,b,k){const A=N[a],B=N[b];
-  if(st.edges.has(k))return 'その2台は、すでにケーブルでつながっています。';
-  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを通してつなぎましょう。`;
+  if(st.edges.has(k))return 'その2台は、既にケーブルで接続されています。';
+  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを経由して接続しましょう。`;
   if(deg(a)>=A.ports)return `${A.name}には、空いている差し込み口（ポート）がありません。`;
   if(deg(b)>=B.ports)return `${B.name}には、空いている差し込み口（ポート）がありません。`;
   return '';}
@@ -362,14 +380,16 @@ function Editor(el,N,o){
   if(!st.sel)st.sel=id;
   else if(st.sel===id)st.sel=null;
   else{const a=st.sel,k=key(a,id);st.sel=null;const err=check(a,id,k);
-   if(err)toast(err);else{snap();st.edges.add(k);clearTest();fire('onChange');}}
+   if(err)toast(err);else{snap();st.edges.add(k);clearTest();const keep=N[a].ports>1&&deg(a)<N[a].ports;if(keep)st.sel=a;toast(`${N[a].name} と ${N[id].name} を接続しました。`+(keep?`続けて${N[a].name}の接続先を選べます。`:''));fire('onChange');}}
   render();hintSel();fire('onSelect');}
  function onCable(k){
   if(o.mode==='mark'){st.marks.has(k)?st.marks.delete(k):st.marks.add(k);render();fire('onChange');return;}
   if(o.mode==='wire'){st.sel=null;st.selCable=st.selCable===k?null:k;render();hintSel();fire('onSelect');}}
- el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed'))onNode(g.dataset.id);});
+ function clearSel(){if(!st.sel&&!st.selCable)return;st.sel=null;st.selCable=null;render();hintSel();fire('onSelect');}
+ el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){onNode(g.dataset.id);return;}if(!g&&o.mode==='wire')clearSel();});
+ el.addEventListener('keydown',e=>{if(e.key==='Escape')clearSel();});
  el.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){e.preventDefault();focusId=g.dataset.id;onNode(g.dataset.id);}});
- return{st,N,render,deg,hintSel,clearTest,
+ return{st,N,render,deg,hintSel,clearTest,clearSel,
   canUndo:()=>hist.length>0,
   undo(){if(!hist.length)return;st.edges=new Set(hist.pop());st.sel=null;st.selCable=null;clearTest();render();hintSel();fire('onChange');fire('onSelect');},
   remove(k){if(st.locked.has(k)){toast('工事で敷設済みのケーブルは外せません。');return;}if(!st.edges.has(k))return;snap();st.edges.delete(k);if(st.selCable===k)st.selCable=null;st.marks.delete(k);clearTest();render();hintSel();fire('onChange');fire('onSelect');},
@@ -394,6 +414,8 @@ function diagramSVG(counts,edges,label){
 function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="116" rx="0" fill="#F6F7F9" stroke="#5A6472" stroke-width="2"/><rect x="45" y="6" width="60" height="5" rx="0" fill="#4A5A63"/>`;
  counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="0" fill="${on?(isH?'#C8851A':'#FFFFFF'):'none'}" stroke="${on?(isH?'#8A5200':'#9AA3AD'):'#C9CED4'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
  return h+'</svg>';}
+
+function guideHTML(steps,on){return '<ol>'+steps.map((s,i)=>`<li class="${i===on?'on':''}"${i===on?' aria-current="step"':''}><span class="k">${i+1}</span><span>${s}</span></li>`).join('')+'</ol>';}
 
 const KEY='pcroom.kaishuu.v2';
 const K=Object.assign({step:0,done:[false,false,false],tries1:0,e2:null,tests2:0,design:null,seq:[],runs:0,res:['','','']},store.get(KEY,{}));
@@ -423,11 +445,13 @@ $('check1').onclick=()=>{let bad=false;const v=[1,2].map(i=>{const el=$('a'+i),x
 
 /* ---- ステップ2 ---- */
 const N2=makeNodes([3,3,3,1],true),LOCK2=[key('R','M'),key('M','T'),key('M','P')];
-const o2={mode:'wire',nodeTap:true,cableTap:true,locked:LOCK2,title:'工事後のPC教室の見取り図',defaultHint:'機器をタップして選び、つなぐ相手をタップするとケーブルを敷けます。',onHint:t=>$('hint2').textContent=t,onChange:ch2,onSelect:tb2};
+const o2={mode:'wire',nodeTap:true,cableTap:true,locked:LOCK2,title:'工事後のPC教室の見取り図',defaultHint:'見取り図で、接続元のハブ（点線の枠）をタップしてください。',onHint:t=>$('hint2').textContent=t,onChange:ch2,onSelect:tb2};
 const E2=Editor($('map2'),N2,o2);E2.setEdges(K.e2||[]);
 $('undo2').innerHTML=icon('undo')+'元に戻す';$('cut2').innerHTML=icon('cut')+'選んだケーブルを外す';$('test2').innerHTML=icon('bolt')+'通電テスト';$('reset2').innerHTML=icon('reset')+'最初からやり直す';
 function ch2(){K.e2=[...E2.st.edges].filter(k=>!E2.st.locked.has(k));$('res2').innerHTML='';save();side2();}
-function tb2(){$('undo2').disabled=!E2.canUndo();$('cut2').disabled=!E2.st.selCable;}
+function tb2(){$('undo2').disabled=!E2.canUndo();$('cut2').classList.toggle('hidden',!E2.st.selCable);$('desel2').classList.toggle('hidden',!E2.st.sel);
+ const all=Object.keys(N2).filter(id=>N2[id].type==='desk').every(d=>E2.deg(d)>0),on=E2.st.sel?1:(all?2:0),h=all?'全ての机が接続されました。「通電テスト」を押しましょう。':'見取り図で、接続元のハブ（点線の枠）をタップしてください。';
+ o2.defaultHint=h;$('guide2').innerHTML=guideHTML(['接続元を選ぶ','接続先を選ぶ','通電テストを押す'],on);if(!E2.st.sel&&!E2.st.selCable)$('hint2').textContent=h;}
 function side2(){const ks=sortKeys(N2,[...E2.st.edges]);$('cabcount2').textContent=ks.length+'本';
  $('stats2').innerHTML=`<span class="chip num">敷いたケーブル ${ks.length-LOCK2.length}本</span><span class="chip num">通電テスト ${K.tests2}回</span>`;
  $('cables2').innerHTML=ks.map(k=>{const nm=esc(cableName(N2,k));return `<li><span>${nm}</span>${E2.st.locked.has(k)?'<span class="lock">敷設済み</span>':`<button class="btn" data-cut="${k}" aria-label="${nm}を外す">外す</button>`}</li>`;}).join('');tb2();}
@@ -437,21 +461,21 @@ function evaluate(edges){const es=new Set(edges),deg=id=>[...es].filter(k=>k.spl
  const maxHub=Math.max(0,...rows.filter(r=>r.h!=='M').map(r=>r.pcs));
  const R=routes(N2,es);let len=0;es.forEach(k=>{if(!LOCK2.includes(k))len+=polyLen(R[k]);});
  const notes=[];const hubE=[...es].filter(k=>{const[a,b]=k.split('|');return a[0]==='H'&&b[0]==='H';});
- if(hubE.length)notes.push('列ハブどうしをつないだ区間があります。上流の列ハブが故障すると、下流の机もまとめて止まります。');
+ if(hubE.length)notes.push('列ハブ同士を接続した区間があります。上流の列ハブが故障すると、下流の机もまとめて止まります。');
  const direct=[...es].filter(k=>{const[a,b]=k.split('|');return (a==='M'&&b[0]==='D')||(b==='M'&&a[0]==='D');});
- if(direct.length)notes.push('主ハブに机を直接つないでいます。列ハブを減らせますが、主ハブの空きポートが減ります。');
+ if(direct.length)notes.push('主ハブに机を直接接続しています。列ハブを減らせますが、主ハブの空きポートが減ります。');
  const cross=[...es].filter(k=>{const[a,b]=k.split('|');const d=a[0]==='D'?a:b[0]==='D'?b:null,h=d===a?b:a;return d&&h[0]==='H'&&h[1]!==d[1];});
- if(cross.length)notes.push('別の列の列ハブにつないだ机があります。ケーブルが長くなります。');
+ if(cross.length)notes.push('別の列の列ハブに接続した机があります。ケーブルが長くなります。');
  const lone=used.filter(h=>[...es].filter(k=>k.split('|').includes(h)&&k.includes('D')).length===1);
  if(lone.length)notes.push(lone.map(h=>N2[h].name).join('、')+'には机が1台だけです。空いている差し込み口は、将来の増設に使えます。');
  if(!notes.length)notes.push('各列の机を、その列の列ハブにまとめています。');
  return{hubs:used.length,maxHub,len:Math.round(len*M_PER_PX),rows,notes};}
 $('test2').onclick=()=>{const a=analyze(N2,E2.st.edges),s=stopped(N2,a.reach),un=s.pcs||s.T||s.P;K.tests2++;let html,ok=false;
- if(a.loop)html=resultHTML(false,'通信が止まりました','ハブとハブが輪の形（ループ）につながっている区間があります。輪を作っているケーブルを外しましょう。');
- else if(un)html=resultHTML(false,'つながらない机があります',`${stopText(s)}がインターネットにつながりません。ランプが赤の机から、主ハブまでの経路を考えましょう。`);
- else if(a.loopAny)html=resultHTML(false,'輪の形が残っています','どこにもつながっていない機器どうしで、輪の形（ループ）ができています。');
+ if(a.loop)html=resultHTML(false,'通信が止まりました','ハブ同士が輪の形（ループ）に接続されている区間があります。輪を作っているケーブルを外しましょう。');
+ else if(un)html=resultHTML(false,'接続できない机があります',`${stopText(s)}がインターネットに接続できません。ランプが赤の机から、主ハブまでの経路を考えましょう。`);
+ else if(a.loopAny)html=resultHTML(false,'輪の形が残っています','どこにも接続されていない機器同士で、輪の形（ループ）ができています。');
  else{ok=true;const v=evaluate([...E2.st.edges]);K.design={hubs:v.hubs,maxHub:v.maxHub,len:v.len};K.done[1]=true;
-  html=resultHTML(true,'開通しました','すべての机がインターネットにつながりました。あなたの設計の特徴です。',
+  html=resultHTML(true,'開通しました','全ての机がインターネットに接続できました。あなたの設計の特徴です。',
    `<div class="tiles"><div class="tile"><span class="k">使った列ハブ</span><span class="v num">${v.hubs}<small>台</small></span></div><div class="tile"><span class="k">列ハブ1台の故障で止まる<br>生徒用PC（最大）</span><span class="v num">${v.maxHub}<small>台</small></span></div><div class="tile"><span class="k">敷いたケーブルの長さ（概算）</span><span class="v num">約${v.len}<small>m</small></span></div></div>
    <table class="tbl"><thead><tr><th>故障したハブ</th><th style="text-align:right">止まる生徒用PC</th></tr></thead><tbody>${v.rows.map(r=>`<tr class="${r.h!=='M'&&r.pcs===v.maxHub&&v.maxHub>0?'max':''}"><td>${N2[r.h].name}</td><td class="n num">${r.pcs}台</td></tr>`).join('')}</tbody></table>
    <ul class="notes">${v.notes.map(t=>`<li>${t}</li>`).join('')}</ul><p style="margin-top:8px"><b>隣の人の設計と比べてみましょう。</b>ハブの台数、故障の影響、ケーブルの長さはどう違いますか。</p>`,
@@ -459,27 +483,28 @@ $('test2').onclick=()=>{const a=analyze(N2,E2.st.edges),s=stopped(N2,a.reach),un
  E2.setTest(a,{flow:ok});K.res[1]=ok?html:'';$('res2').innerHTML=html;save();side2();steps();};
 $('reset2').onclick=()=>{E2.setEdges([],true);ch2();toast('最初の状態に戻しました。「元に戻す」で取り消せます。');};
 $('undo2').onclick=()=>E2.undo();
+$('desel2').onclick=()=>E2.clearSel();
 $('cut2').onclick=()=>{if(E2.st.selCable)E2.remove(E2.st.selCable);};
 $('cables2').addEventListener('click',e=>{const c=e.target.closest('[data-cut]');if(c)E2.remove(c.dataset.cut);});
 
 /* ---- ステップ3 ---- */
 const TASKS={
- t1:{img:'rack',t:'準備室のラックに新しい主ハブを置き、ルータとつなぐ',ok:'新しい主ハブがインターネットにつながりました。'},
- t2:{img:'pc_teacher',t:'教師用PCとプリンタを、新しい主ハブにつなぎ替える',ok:'教師用PCとプリンタは、新しい経路で使えています。'},
+ t1:{img:'rack',t:'準備室のラックに新しい主ハブを置き、ルータに接続する',ok:'新しい主ハブがインターネットに接続できました。'},
+ t2:{img:'pc_teacher',t:'教師用PCとプリンタを、新しい主ハブに接続し直す',ok:'教師用PCとプリンタは、新しい経路で使えています。'},
  t3:{img:'toolbox',t:'古い主ハブと床下のケーブルを撤去する',ok:'撤去しました。生徒用PCは工事の間使えません（依頼書で認められています）。'},
  t4:{img:'desk_line',t:'机を教室の外へ運び出す',ok:'机を運び出しました。'},
  t5:{img:'cone',t:'床の張り替え工事を行う',ok:'床を張り替えました。'},
  t6:{img:'desk_line',t:'新しい並び（3・3・3・1）に机を置く',ok:'机を新しい並びに置きました。'},
- t7:{img:'reel',t:'設計どおりにケーブルを敷き、つなぐ',ok:'新しい配線をつなぎました。'},
- t8:{img:'tester',t:'通電テストを行い、図面を更新する',ok:'すべての機器がつながり、図面も新しくなりました。'}};
+ t7:{img:'reel',t:'設計どおりにケーブルを敷き、接続する',ok:'新しい配線を接続しました。'},
+ t8:{img:'tester',t:'通電テストを行い、図面を更新する',ok:'全ての機器が接続でき、図面も新しくなりました。'}};
 const SHOW=['t4','t1','t6','t3','t8','t2','t5','t7'];
 function rule(t,d){switch(t){
- case 't2':return d.has('t1')?'':'つなぎ替え先の新しい主ハブがまだありません。古いケーブルを抜いた時点で、教師用PCとプリンタが止まりました。';
- case 't3':return d.has('t2')?'':'教師用PCとプリンタは、まだ古い主ハブにつながっていました。撤去した時点で止まりました。';
+ case 't2':return d.has('t1')?'':'接続し直す先の新しい主ハブがまだありません。古いケーブルを抜いた時点で、教師用PCとプリンタが止まりました。';
+ case 't3':return d.has('t2')?'':'教師用PCとプリンタは、まだ古い主ハブに接続されていました。撤去した時点で止まりました。';
  case 't5':return !d.has('t3')?'床下にケーブルが残ったままです。ケーブルを傷つけるおそれがあり、張り替えを始められません。':!d.has('t4')?'教室に机が残っているため、床を張り替えられません。':'';
  case 't6':return d.has('t5')?'':'まだ床を張り替えていません。机を置いても、工事のときにもう一度運び出すことになります。';
  case 't7':return d.has('t6')?'':'机がまだ置かれていないため、ケーブルを敷く位置が決まりません。';
- case 't8':return d.has('t7')?'':'まだ新しい配線をつないでいないため、テストできません。';
+ case 't8':return d.has('t7')?'':'まだ新しい配線を接続していないため、テストできません。';
  default:return '';}}
 function runOrder(seq){const d=new Set(),log=[];for(const t of seq){const r=rule(t,d);if(r){log.push({t,bad:r});return{ok:false,log,fail:t,msg:r};}d.add(t);log.push({t,ok:TASKS[t].ok});}return{ok:true,log};}
 $('run3').innerHTML=icon('bolt')+'この順番で工事する';$('pop3').innerHTML=icon('undo')+'1つ戻す';$('clr3').innerHTML=icon('reset')+'決め直す';

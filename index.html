@@ -98,7 +98,8 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .node{cursor:pointer;outline:none}
 .node .hit{fill:transparent}
 .node .ring{fill:none;stroke:transparent;stroke-width:3}
-.node.sel .ring{stroke:#C8851A;fill:rgba(200,133,26,.12)}
+.node.cand .ring{stroke:#0E7C7B;stroke-dasharray:7 5;fill:rgba(14,124,123,.06)}
+.node.sel .ring{stroke:#C8851A;stroke-dasharray:none;stroke-width:4;fill:rgba(200,133,26,.12)}
 .node.failed .ring{stroke:#B3261E}
 .node:focus-visible .ring{stroke:#0E7C7B;stroke-width:4}
 .node.fixed{cursor:default}
@@ -112,6 +113,19 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .stoptag rect{fill:#B3261E}
 .stoptag text{fill:#fff;font-size:16px;font-weight:700}
 @media(prefers-reduced-motion:reduce){.flowline,.lamp{animation:none}#toast{transition:none}}
+
+.guide{border:1px solid var(--line2);margin-bottom:10px;background:#fff}
+.guide ol{display:flex;margin:0;padding:0;list-style:none;border-bottom:1px solid var(--line2)}
+.guide li{flex:1 1 0;display:flex;gap:8px;align-items:center;padding:8px 10px;font-size:13px;line-height:1.45;color:var(--sub);border-left:1px solid var(--line2)}
+.guide li:first-child{border-left:0}
+.guide li .k{flex:none;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--line2);font-weight:700;font-size:12px;background:#fff}
+.guide li.on{background:var(--navy);color:#fff;font-weight:600}
+.guide li.on .k{color:var(--navy);border-color:#fff}
+.guide .hint{padding:9px 12px;font-size:14px;color:var(--ink);min-height:calc(3.2em + 18px);box-sizing:border-box;background:#F8F9FA;line-height:1.6}
+.todo{margin:8px 0 0;padding-left:0;list-style:none;counter-reset:t}
+.todo li{counter-increment:t;position:relative;padding:6px 0 6px 34px;border-top:1px solid var(--line);font-size:14px;line-height:1.6}
+.todo li:first-child{border-top:0}
+.todo li::before{content:counter(t);position:absolute;left:0;top:7px;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--navy);color:var(--navy);font-weight:700;font-size:12px}
 
 .hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
 @media(max-width:720px){.hero{grid-template-columns:1fr}}
@@ -130,7 +144,7 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
  <section class="card hero"><div><div class="eyebrow">業務案内</div><h1 style="margin-top:4px">ネットワーク工事の担当者として、PC教室の配線を整える</h1><p class="sub" style="margin-top:8px">ある学校のPC教室（架空の教室）が舞台です。図面を読んで施工し、工事に合わせて作り替えます。どちらからでも、何回に分けても取り組めます。</p></div>
   <div class="layouts" id="lay"></div></section>
  <div class="cards">
-  <a class="card lesson" href="sekou.html"><div class="eyebrow">図面を読む</div><h2>施工と検査</h2><div class="pics"><img src="images/blueprint.svg" alt=""><img src="images/desk4.svg" alt=""><img src="images/clipboard.svg" alt=""></div><p class="sub">図面どおりにケーブルをつなぐ。他の業者の施工を検査する。つながらない原因を調べて直す。</p><span class="go">始める<span id="g1"></span></span></a>
+  <a class="card lesson" href="sekou.html"><div class="eyebrow">図面を読む</div><h2>施工と検査</h2><div class="pics"><img src="images/blueprint.svg" alt=""><img src="images/desk4.svg" alt=""><img src="images/clipboard.svg" alt=""></div><p class="sub">図面どおりにケーブルで接続する。他の業者の施工を検査する。接続できない原因を調べて直す。</p><span class="go">始める<span id="g1"></span></span></a>
   <a class="card lesson" href="kaishuu.html"><div class="eyebrow">作り替える</div><h2>改修の設計</h2><div class="pics"><img src="images/cone.svg" alt=""><img src="images/hubtop.svg" alt=""><img src="images/reel.svg" alt=""></div><p class="sub">床の工事と机の移動に合わせて、配線を設計し直す。故障の影響を調べ、工事の順番を決める。</p><span class="go">始める<span id="g2"></span></span></a>
  </div>
 </main>
@@ -206,9 +220,9 @@ const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80
 function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  const tap=o.nodeTap&&(!o.tapTypes||o.tapTypes.includes(n.type));
  const free=n.ports-used;
- const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'');
+ const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'')+(st.cand&&st.cand.has(id)?(st.sel?'（接続先にできます）':'（接続元にできます）'):'');
  const pressed=o.pressed?` aria-pressed="${st.failed===id}"`:(o.mode==='wire'?` aria-pressed="${st.sel===id}"`:'');
- let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
+ let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.cand&&st.cand.has(id)?' cand':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
  h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="0"/>`;
  h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="0"/>`;
  h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
@@ -232,7 +246,7 @@ function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
  for(const id in N)h+=nodeSVG(N,id,st,o,cnt[id]);
  return h+'</svg>';}
 
-/* ---- つながり方の分析 ---- */
+/* ---- 接続の分析 ---- */
 function analyze(N,edges,failed){const adj={};for(const id in N)adj[id]=[];
  edges.forEach(k=>{const[a,b]=k.split('|');if(a===failed||b===failed)return;adj[a].push(b);adj[b].push(a);});
  const depth={};if(failed!=='R'){depth.R=0;const q=['R'];while(q.length){const n=q.shift();for(const m of adj[n])if(!(m in depth)){depth[m]=depth[n]+1;q.push(m);}}}
@@ -254,12 +268,15 @@ function Editor(el,N,o){
  const fire=n=>o[n]&&o[n]();
  function clearTest(){st.lamps=null;st.flow=false;st.bad=new Set();}
  function snap(){hist.push([...st.edges]);if(hist.length>80)hist.shift();}
- function render(){el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
+ // 机と列ハブは同じ横列どうしだけを候補として示す（接続そのものは制限しない）
+ function offRow(A,B){const d=A.type==='desk'?A:B.type==='desk'?B:null,h=A.type==='hub'&&A.line?A:B.type==='hub'&&B.line?B:null;return !!(d&&h&&d!==h&&d.line!==h.line);}
+ function cands(){const s=new Set();if(o.mode!=='wire'||!o.nodeTap)return s;for(const id in N){if(st.sel){if(id!==st.sel&&!check(st.sel,id,key(st.sel,id))&&!(o.sameRow&&offRow(N[st.sel],N[id])))s.add(id);}else if(N[id].ports>1&&deg(id)<N[id].ports)s.add(id);}return s;}
+ function render(){st.cand=cands();el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
  function hint(t){o.onHint&&o.onHint(t);}
- function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}。つなぐ相手をタップしてください。もう一度タップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}`);else hint(o.defaultHint||'');}
+ function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}です。点線の枠の中から、接続先をタップしてください。何もない所をタップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}。「選んだケーブルを外す」で外せます。`);else hint(o.defaultHint||'');}
  function check(a,b,k){const A=N[a],B=N[b];
-  if(st.edges.has(k))return 'その2台は、すでにケーブルでつながっています。';
-  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを通してつなぎましょう。`;
+  if(st.edges.has(k))return 'その2台は、既にケーブルで接続されています。';
+  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを経由して接続しましょう。`;
   if(deg(a)>=A.ports)return `${A.name}には、空いている差し込み口（ポート）がありません。`;
   if(deg(b)>=B.ports)return `${B.name}には、空いている差し込み口（ポート）がありません。`;
   return '';}
@@ -270,14 +287,16 @@ function Editor(el,N,o){
   if(!st.sel)st.sel=id;
   else if(st.sel===id)st.sel=null;
   else{const a=st.sel,k=key(a,id);st.sel=null;const err=check(a,id,k);
-   if(err)toast(err);else{snap();st.edges.add(k);clearTest();fire('onChange');}}
+   if(err)toast(err);else{snap();st.edges.add(k);clearTest();const keep=N[a].ports>1&&deg(a)<N[a].ports;if(keep)st.sel=a;toast(`${N[a].name} と ${N[id].name} を接続しました。`+(keep?`続けて${N[a].name}の接続先を選べます。`:''));fire('onChange');}}
   render();hintSel();fire('onSelect');}
  function onCable(k){
   if(o.mode==='mark'){st.marks.has(k)?st.marks.delete(k):st.marks.add(k);render();fire('onChange');return;}
   if(o.mode==='wire'){st.sel=null;st.selCable=st.selCable===k?null:k;render();hintSel();fire('onSelect');}}
- el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed'))onNode(g.dataset.id);});
+ function clearSel(){if(!st.sel&&!st.selCable)return;st.sel=null;st.selCable=null;render();hintSel();fire('onSelect');}
+ el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){onNode(g.dataset.id);return;}if(!g&&o.mode==='wire')clearSel();});
+ el.addEventListener('keydown',e=>{if(e.key==='Escape')clearSel();});
  el.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){e.preventDefault();focusId=g.dataset.id;onNode(g.dataset.id);}});
- return{st,N,render,deg,hintSel,clearTest,
+ return{st,N,render,deg,hintSel,clearTest,clearSel,
   canUndo:()=>hist.length>0,
   undo(){if(!hist.length)return;st.edges=new Set(hist.pop());st.sel=null;st.selCable=null;clearTest();render();hintSel();fire('onChange');fire('onSelect');},
   remove(k){if(st.locked.has(k)){toast('工事で敷設済みのケーブルは外せません。');return;}if(!st.edges.has(k))return;snap();st.edges.delete(k);if(st.selCable===k)st.selCable=null;st.marks.delete(k);clearTest();render();hintSel();fire('onChange');fire('onSelect');},
@@ -302,6 +321,8 @@ function diagramSVG(counts,edges,label){
 function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="116" rx="0" fill="#F6F7F9" stroke="#5A6472" stroke-width="2"/><rect x="45" y="6" width="60" height="5" rx="0" fill="#4A5A63"/>`;
  counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="0" fill="${on?(isH?'#C8851A':'#FFFFFF'):'none'}" stroke="${on?(isH?'#8A5200':'#9AA3AD'):'#C9CED4'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
  return h+'</svg>';}
+
+function guideHTML(steps,on){return '<ol>'+steps.map((s,i)=>`<li class="${i===on?'on':''}"${i===on?' aria-current="step"':''}><span class="k">${i+1}</span><span>${s}</span></li>`).join('')+'</ol>';}
 
 $('lay').innerHTML=`<figure>${miniLayout([3,2,3,2],null,'施工と検査の机の並び 3・2・3・2')}<figcaption>施工と検査：前から3・2・3・2</figcaption></figure><figure>${miniLayout([3,3,3,1],null,'改修の設計の机の並び 3・3・3・1')}<figcaption>改修の設計：前から3・3・3・1</figcaption></figure>`;
 $('g1').innerHTML=icon('arrow');$('g2').innerHTML=icon('arrow');
