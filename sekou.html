@@ -28,7 +28,7 @@ h3{font-size:14px;color:var(--navy);font-weight:600}
 p{margin:0}
 .eyebrow{font-size:12px;letter-spacing:.08em;color:var(--teal);font-weight:600}
 .sub{color:var(--sub);font-size:13px}
-.work{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start}
 @media(max-width:960px){.work{grid-template-columns:1fr}}
 .stack{display:flex;flex-direction:column;gap:14px}
 .mapcard{padding:10px}
@@ -126,6 +126,24 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .todo li{counter-increment:t;position:relative;padding:6px 0 6px 34px;border-top:1px solid var(--line);font-size:14px;line-height:1.6}
 .todo li:first-child{border-top:0}
 .todo li::before{content:counter(t);position:absolute;left:0;top:7px;width:24px;height:24px;display:grid;place-items:center;border:1px solid var(--navy);color:var(--navy);font-weight:700;font-size:12px}
+
+/* 1画面に収める工夫 */
+.narrow-only{display:none}
+@media(min-width:961px){.stack.sticky{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow:auto;scrollbar-width:thin}}
+@media(max-width:960px){.narrow-only{display:inline-flex;margin-left:auto}
+ body.m-mark #dgcard{order:-1}
+ .stack .dg{max-width:460px;margin-left:auto;margin-right:auto}}
+.list.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));column-gap:16px}
+.list.cols li:last-child{border-bottom:1px solid #EEF0F3}
+@media(min-width:961px){.guide .hint{min-height:calc(1.6em + 18px)}
+ .mapcard .map svg{max-height:calc(100vh - 340px);min-height:420px;width:auto;max-width:100%;margin:0 auto}}
+body.m-mark .legend{display:none}
+body.m-mark .guide .hint{min-height:0}
+@media(max-width:960px){body.m-mark .mapcard .map svg{max-height:calc(100vh - 680px);min-height:440px;width:auto;max-width:100%;margin:0 auto}}
+/* 練習中は、次にタップする機器をゆっくり点滅させて強調する */
+body.m-practice .node.cand .ring{stroke-width:4;animation:candblink 1.4s ease-in-out infinite}
+@keyframes candblink{50%{stroke-opacity:.25}}
+@media(prefers-reduced-motion:reduce){body.m-practice .node.cand .ring{animation:none}}
 </style></head><body>
 <header class="appbar">
  <a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>施工と検査</span></div></a>
@@ -143,13 +161,15 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
     <button class="btn hidden" id="desel">選択を解除</button>
     <button class="btn hidden" id="cut"></button>
     <button class="btn hidden" id="clearMarks">印をすべて消す</button>
+    <button class="btn hidden" id="skip2">練習をスキップ</button>
+    <button class="btn primary narrow-only" id="act2"></button>
    </div>
    <div class="legend"><span><i style="background:#0E7C7B;border-color:#0E7C7B"></i>使用中のポート</span><span><i style="background:#fff;border-color:#9AA3AD"></i>空きポート</span><span><i style="background:#2C7A4B;border-color:#2C7A4B"></i>接続できた</span><span><i style="background:#B3261E;border-color:#B3261E"></i>接続できない</span><span>列ハブは横列ごとのハブです。机の番号は「横列-左からの順」です。机の中の小さなハブで、PC4台を机の配線口にまとめてあります。</span></div>
   </section>
-  <div class="stack">
+  <div class="stack sticky">
    <section class="card" id="mission"></section>
-   <section class="card" aria-labelledby="dgh"><h2 id="dgh">ネットワーク図（図面）</h2><div id="diagram"></div><p class="sub" style="margin-top:6px">線は、LANケーブルで直接接続する機器同士を表します。</p></section>
-   <details class="card" id="cabcard"><summary><h2>ケーブル一覧</h2><span class="chip num" id="cabcount"></span></summary><p class="sub" style="margin-top:6px" id="cabnote"></p><ul class="list" id="cables"></ul></details>
+   <section class="card" id="dgcard" aria-labelledby="dgh"><h2 id="dgh">ネットワーク図（図面）</h2><div id="diagram"></div><p class="sub" style="margin-top:6px">線は、LANケーブルで直接接続する機器同士を表します。</p></section>
+   <details class="card" id="cabcard"><summary><h2>ケーブル一覧</h2><span class="chip num" id="cabcount"></span></summary><p class="sub" style="margin-top:6px" id="cabnote"></p><ul class="list cols" id="cables"></ul></details>
   </div>
  </div>
  <section class="card" id="done" style="margin-top:16px" aria-labelledby="doneh"><div class="eyebrow">学習の記録</div><h2 id="doneh"></h2><pre class="record" id="rec"></pre><button class="btn primary" id="copy"></button></section>
@@ -278,10 +298,10 @@ function Editor(el,N,o){
  function snap(){hist.push([...st.edges]);if(hist.length>80)hist.shift();}
  // 机と列ハブは同じ横列どうしだけを候補として示す（接続そのものは制限しない）
  function offRow(A,B){const d=A.type==='desk'?A:B.type==='desk'?B:null,h=A.type==='hub'&&A.line?A:B.type==='hub'&&B.line?B:null;return !!(d&&h&&d!==h&&d.line!==h.line);}
- function cands(){const s=new Set();if(o.mode!=='wire'||!o.nodeTap)return s;for(const id in N){if(st.sel){if(id!==st.sel&&!check(st.sel,id,key(st.sel,id))&&!(o.sameRow&&offRow(N[st.sel],N[id])))s.add(id);}else if(N[id].ports>1&&deg(id)<N[id].ports)s.add(id);}return s;}
+ function cands(){const s=new Set();if(o.mode!=='wire'||!o.nodeTap)return s;for(const id in N){if(st.sel){if(id!==st.sel&&!check(st.sel,id,key(st.sel,id))&&!(o.sameRow&&offRow(N[st.sel],N[id])))s.add(id);}else if(N[id].ports>1&&deg(id)<N[id].ports)s.add(id);}if(o.only)for(const id of [...s])if(!o.only(id))s.delete(id);return s;}
  function render(){st.cand=cands();el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
  function hint(t){o.onHint&&o.onHint(t);}
- function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}です。点線の枠の中から、接続先をタップしてください。何もない所をタップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}。「選んだケーブルを外す」で外せます。`);else hint(o.defaultHint||'');}
+ function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}。点線の枠の中から、接続先をタップしてください。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}。「選んだケーブルを外す」で外せます。`);else hint(o.defaultHint||'');}
  function check(a,b,k){const A=N[a],B=N[b];
   if(st.edges.has(k))return 'その2台は、既にケーブルで接続されています。';
   if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを経由して接続しましょう。`;
@@ -291,6 +311,7 @@ function Editor(el,N,o){
  function onNode(id){
   if(o.mode==='fail'){o.onFail&&o.onFail(id);return;}
   if(o.mode!=='wire')return;
+  if(o.only&&id!==st.sel&&!o.only(id)){toast(o.onlyMsg||'点線の枠の機器をタップしてください。');return;}
   st.selCable=null;
   if(!st.sel)st.sel=id;
   else if(st.sel===id)st.sel=null;
@@ -341,55 +362,74 @@ const pre3=()=>base().filter(k=>k!==key('R','M')&&k!==key('M','T')).concat([key(
 const M=[
  {short:'施工',title:'図面どおりに施工する',mode:'wire',init:()=>[],diag:()=>[...TARGET],action:'通電テスト',
   guide:['接続元を選ぶ','接続先を選ぶ','通電テストを押す'],
-  todo:['右下の図面で、どの機器同士を接続するか確かめる','見取り図で<b>接続元</b>（主ハブ・列ハブなど、点線の枠の機器）をタップする','<b>接続先</b>（机やハブ）をタップする。同じハブから続けて接続できる','全て接続したら「通電テスト」を押す'],
+  todo:['ネットワーク図（図面）で、どの機器同士を接続するか確かめる','見取り図で<b>接続元</b>（主ハブ・列ハブなど、点線の枠の機器）をタップする','<b>接続先</b>（机やハブ）をタップする。同じハブから続けて接続できる','全て接続したら「通電テスト」を押す'],
   cond:'机1台は、ケーブル1本で、その横列の列ハブに接続します。合格の条件：図面と同じ接続の仕方で、全ての機器がインターネットに接続できること。'},
  {short:'検査',title:'他の業者の施工を検査する',mode:'mark',init:pre2,diag:()=>[...TARGET],action:'検査結果を提出する',
   guide:['見比べる','違うケーブルに印を付ける','提出する'],
-  todo:['右下の図面と、見取り図の配線を見比べる','図面と違うケーブルをタップして、印を付ける（ケーブル一覧からも選べる）','3本見つけたら「検査結果を提出する」を押す'],
+  todo:['ネットワーク図（図面）と、見取り図の配線を見比べる','図面と違うケーブルをタップして、印を付ける（ケーブル一覧からも選べる）','3本見つけたら「検査結果を提出する」を押す'],
   cond:'全ての機器はインターネットに接続されていますが、図面と違うケーブルが3本あります。'},
  {short:'不具合の調査',title:'接続できない原因を調べて直す',mode:'wire',init:pre3,diag:pre3,action:'通電テスト',
   guide:['通電テストで確かめる','配線を直す','もう一度テストする'],
   todo:['まず「通電テスト」を押して、接続できない機器を確かめる','図面の誤りを見つけ、ケーブルを外したり接続したりして直す','直したら、もう一度「通電テスト」を押す'],
   cond:'業者は図面どおりに施工しましたが、ほとんどの機器がインターネットに接続できません。図面そのものに誤りがあります。'}];
+const PD=['D11','D12','D13'];
+const P={short:'練習',title:'まず操作を練習しよう',mode:'wire',init:()=>base().filter(k=>!PD.some(d=>k===key('H1',d))),diag:()=>[...TARGET],action:'通電テスト',
+ guide:['1列目ハブを選ぶ','机を選ぶ','通電テストを押す'],
+ todo:['見取り図の<b>1列目ハブ</b>（点線の枠）をタップする','点線の枠になった<b>机1-1</b>をタップする。続けて<b>1-2</b>、<b>1-3</b>もタップする','「通電テスト」を押す'],
+ cond:'1列目の机3台だけ、まだケーブルが接続されていません。ケーブルは、ハブ（接続元）から机（接続先）へ向かって敷きます。'};
+const cm=()=>S.cur<0?P:M[S.cur];
+const premain=()=>PD.filter(d=>ed.deg(d)===0);
+function pAllow(id){const rem=premain();if(!rem.length)return false;return ed.st.sel==='H1'?rem.includes(id):id==='H1';}
 const KEY='pcroom.sekou.v2';
-const S=Object.assign({cur:0,done:[false,false,false],edges:[null,null,null],marks:[],tests:[0,0,0],submits:0,fails2:0,res:['','','']},store.get(KEY,{}));
+const S=Object.assign({cur:-1,practiced:false,pskip:false,ptests:0,done:[false,false,false],edges:[null,null,null],marks:[],tests:[0,0,0],submits:0,fails2:0,res:['','','']},store.get(KEY,{}));
 const save=()=>store.set(KEY,S);
-const opts={mode:'wire',sameRow:true,nodeTap:true,cableTap:true,defaultHint:'',onHint:t=>$('hint').textContent=t,onChange:changed,onSelect:toolbar};
+const opts={mode:'wire',sameRow:true,nodeTap:true,cableTap:true,defaultHint:'',onHint:t=>$('hint').textContent=t,onChange:changed,onSelect:toolbar,only:id=>S.cur>=0||pAllow(id),onlyMsg:'練習では、点線の枠の機器をタップしてください。'};
 const ed=Editor($('room'),N,opts);
 $('undo').innerHTML=icon('undo')+'元に戻す';$('cut').innerHTML=icon('cut')+'選んだケーブルを外す';$('copy').innerHTML=icon('copy')+'記録をコピー';
 
-function changed(){S.dirty=true;S.edges[S.cur]=[...ed.st.edges];if(S.cur===1)S.marks=[...ed.st.marks];$('result').innerHTML='';save();side();}
+function changed(){S.dirty=true;if(S.cur>=0)S.edges[S.cur]=[...ed.st.edges];if(S.cur===1)S.marks=[...ed.st.marks];$('result').innerHTML='';save();side();}
 function toolbar(){const w=opts.mode==='wire';$('undo').classList.toggle('hidden',!w);$('cut').classList.toggle('hidden',!(w&&ed.st.selCable));$('desel').classList.toggle('hidden',!(w&&ed.st.sel));$('clearMarks').classList.toggle('hidden',w);
  $('undo').disabled=!ed.canUndo();$('clearMarks').disabled=!ed.st.marks.size;guide();}
-function guide(){const m=M[S.cur],st=ed.st;let on=0,h='';
+function guide(){const m=cm(),st=ed.st;let on=0,h='';
  const desks=Object.keys(N).filter(id=>N[id].type==='desk'),all=desks.every(d=>ed.deg(d)>0);
- if(S.cur===0){on=st.sel?1:(all?2:0);h=all?'全ての机が接続されました。図面と見比べてから「通電テスト」を押しましょう。':'見取り図で、接続元のハブ（点線の枠）をタップしてください。';}
+ if(S.cur<0){const rem=premain();on=!rem.length?2:(st.sel==='H1'?1:0);
+  h=!rem.length?'3台とも接続できました。最後に、「通電テスト」を押してください。':st.sel!=='H1'?(rem.length<3?'もう一度、1列目ハブをタップしてから、残りの机をタップしてください。':'まず、1列目ハブ（点線の枠）をタップしてください。ケーブルを差す側（接続元）を先に選びます。'):(rem.length===3?'1列目ハブを選びました。次に、机1-1（点線の枠）をタップしてください。':`接続できました。1列目ハブを選んだままなので、続けて机${N[rem[0]].label}をタップしてください。`);}
+ else if(S.cur===0){on=st.sel?1:(all?2:0);h=all?'全ての机が接続されました。図面と見比べてから「通電テスト」を押しましょう。':'見取り図で、接続元のハブ（点線の枠）をタップしてください。';}
  else if(S.cur===1){on=st.marks.size===0?0:(st.marks.size>=3?2:1);h=st.marks.size>=3?'印を付け終えたら「検査結果を提出する」を押しましょう。':'図面と違うと思うケーブルをタップすると、橙色の印が付きます。もう一度タップすると外れます。';}
- else{on=S.tests[2]===0?0:(st.sel||st.selCable||!S.dirty?1:2);h=S.tests[2]===0?'まず右の「通電テスト」を押して、今の状態を確かめましょう。':(S.dirty?'直し終えたら、もう一度「通電テスト」を押しましょう。':'ケーブルをタップすると外せます。機器をタップすると接続できます。');}
- opts.defaultHint=h;$('guideSteps').innerHTML=guideHTML(m.guide,on);if(!st.sel&&!st.selCable)$('hint').textContent=h;}
+ else{on=S.tests[2]===0?0:(st.sel||st.selCable||!S.dirty?1:2);h=S.tests[2]===0?'まず「通電テスト」を押して、今の状態を確かめましょう。':(S.dirty?'直し終えたら、もう一度「通電テスト」を押しましょう。':'ケーブルをタップすると外せます。機器をタップすると接続できます。');}
+ opts.defaultHint=h;$('guideSteps').innerHTML=guideHTML(m.guide,on);if(S.cur<0&&!st.selCable||!st.sel&&!st.selCable)$('hint').textContent=h;}
 function side(){const ks=sortKeys(N,[...ed.st.edges]);
- $('stats').innerHTML=`<span class="chip num">ケーブル ${ks.length}本</span>`+(M[S.cur].mode==='wire'?`<span class="chip num">通電テスト ${S.tests[S.cur]}回</span>`:`<span class="chip num">印 ${ed.st.marks.size}本</span>`);
+ $('stats').innerHTML=`<span class="chip num">ケーブル ${ks.length}本</span>`+(cm().mode==='wire'?`<span class="chip num">通電テスト ${S.cur<0?S.ptests:S.tests[S.cur]}回</span>`:`<span class="chip num">印 ${ed.st.marks.size}本</span>`);
  $('cabcount').textContent=ks.length+'本';
- $('cabnote').textContent=opts.mode==='mark'?'図面と違うと思うケーブルに印を付けます。':'見取り図で線を選びにくいときは、ここから外せます。';
+ $('cabnote').textContent=opts.mode==='mark'?'見取り図で線を選びにくいときは、ここから印を付けられます。':'見取り図で線を選びにくいときは、ここから外せます。';
  $('cables').innerHTML=ks.map(k=>{const nm=esc(cableName(N,k));return `<li><span>${nm}</span>${opts.mode==='mark'?`<button class="btn" data-mark="${k}" aria-pressed="${ed.st.marks.has(k)}" aria-label="${nm}に印を付ける">${ed.st.marks.has(k)?'印あり':'印'}</button>`:`<button class="btn" data-cut="${k}" aria-label="${nm}を外す">外す</button>`}</li>`;}).join('');
  toolbar();}
-function steps(){$('steps').innerHTML=M.map((m,i)=>`<button data-m="${i}" class="${S.done[i]?'done':''}"${S.cur===i?' aria-current="step"':''}><span class="n">${S.done[i]?icon('check'):i+1}</span>${m.short}${S.done[i]?'<span class="sr">（完了）</span>':''}</button>`).join('');record();}
-function card(){const m=M[S.cur];
- $('mission').innerHTML=`<div class="eyebrow">仕事${S.cur+1}／3</div><h2>${m.title}</h2><p class="sub" style="margin-top:6px">${m.cond}</p><h3 style="margin-top:12px">やること</h3><ol class="todo">${m.todo.map(t=>`<li>${t}</li>`).join('')}</ol>
- <div class="actions"><button class="btn primary block" id="act">${icon(m.mode==='mark'?'flag':'bolt')}${m.action}</button><button class="btn block" id="reset">${icon('reset')}最初からやり直す</button></div><div id="result" aria-live="polite">${S.done[S.cur]?S.res[S.cur]:''}</div>`;
- $('act').onclick=m.mode==='mark'?submit:test;
+function steps(){$('steps').innerHTML=`<button data-m="-1" class="${S.practiced?'done':''}"${S.cur<0?' aria-current="step"':''}><span class="n">${S.practiced?icon('check'):'練'}</span>練習</button>`+M.map((m,i)=>`<button data-m="${i}" class="${S.done[i]?'done':''}"${S.cur===i?' aria-current="step"':''}><span class="n">${S.done[i]?icon('check'):i+1}</span>${m.short}${S.done[i]?'<span class="sr">（完了）</span>':''}</button>`).join('');record();}
+function card(){const m=cm();
+ $('mission').innerHTML=`<div class="eyebrow">${S.cur<0?'操作の練習（約1分）':`仕事${S.cur+1}／3`}</div><h2>${m.title}</h2><p class="sub" style="margin-top:6px">${m.cond}</p><h3 style="margin-top:12px">やること</h3><ol class="todo">${m.todo.map(t=>`<li>${t}</li>`).join('')}</ol>
+ <div class="actions"><button class="btn primary block" id="act">${icon(m.mode==='mark'?'flag':'bolt')}${m.action}</button>${S.cur<0?`<button class="btn block" id="skip">${icon('arrow')}練習をスキップして仕事1へ</button>`:''}<button class="btn block" id="reset">${icon('reset')}最初からやり直す</button></div><div id="result" aria-live="polite">${S.done[S.cur]?S.res[S.cur]:''}</div>`;
+ $('act').onclick=S.cur<0?ptest:m.mode==='mark'?submit:test;
+ $('act2').onclick=()=>{$('act').click();$('result').scrollIntoView({behavior:'smooth',block:'nearest'});};
+ $('skip2').classList.toggle('hidden',S.cur>=0);if(S.cur<0)$('skip2').onclick=()=>$('skip').click();
+ if(S.cur<0)$('skip').onclick=()=>{if(!S.practiced)S.pskip=true;S.practiced=true;load(0);toast('練習をスキップしました。「練習」はいつでも上から選べます。');};
  $('reset').onclick=()=>{ed.setEdges(m.init(),true);if(S.cur===1){S.marks=[];}$('result').innerHTML='';changed();toast('最初の状態に戻しました。「元に戻す」で取り消せます。');};
  bindNext();}
 function bindNext(){const b=$('next');if(b)b.onclick=()=>{const n=S.done.findIndex(d=>!d);if(n<0){$('done').scrollIntoView({behavior:'smooth'});}else load(n);};}
-function load(i){if(i!==S.cur)S.edges[S.cur]=[...ed.st.edges];S.cur=i;const m=M[i];
+function load(i){if(i!==S.cur&&S.cur>=0)S.edges[S.cur]=[...ed.st.edges];S.cur=i;const m=cm();
  opts.mode=m.mode;opts.nodeTap=m.mode==='wire';opts.cableTap=true;
  S.dirty=false;
- ed.setEdges(S.edges[i]||m.init());if(i===1){ed.st.marks=new Set(S.marks);ed.render();}
- $('cabcard').open=m.mode==='mark';
- $('diagram').innerHTML=diagramSVG(COUNTS,m.diag(),'仕事'+(i+1)+'のネットワーク図');
+ ed.setEdges(i<0?m.init():S.edges[i]||m.init());if(i===1){ed.st.marks=new Set(S.marks);ed.render();}
+ $('cabcard').open=false;document.body.classList.toggle('m-mark',m.mode==='mark');document.body.classList.toggle('m-practice',i<0);
+ $('act2').innerHTML=icon(m.mode==='mark'?'flag':'bolt')+m.action;
+ $('diagram').innerHTML=diagramSVG(COUNTS,m.diag(),i<0?'練習のネットワーク図':'仕事'+(i+1)+'のネットワーク図');
  card();side();steps();save();window.scrollTo({top:0});}
 function finish(html){S.done[S.cur]=true;const last=S.done.every(d=>d);
  html=html.replace('</div></div>',`</div></div>`);S.res[S.cur]=html;$('result').innerHTML=html+`<button class="btn primary block" id="next">${icon('arrow')}${last?'学習の記録を見る':'次の仕事へ'}</button>`;S.res[S.cur]=$('result').innerHTML;bindNext();steps();save();}
+function ptest(){const a=analyze(N,ed.st.edges),s=stopped(N,a.reach),rem=premain();S.ptests++;S.dirty=false;
+ if(rem.length){ed.setTest(a);$('result').innerHTML=resultHTML(false,'まだ接続できない机があります',`ランプが赤の机（${rem.map(d=>N[d].label).join('・')}）は、ケーブルが接続されていません。1列目ハブをタップしてから、机をタップしましょう。`);side();return;}
+ ed.setTest(a,{flow:!(s.pcs||s.T||s.P)});const first=!S.practiced;S.practiced=true;S.pskip=false;
+ $('result').innerHTML=resultHTML(true,'練習完了','全ての機器のランプが緑になり、インターネットに接続できました。','操作は「接続元のハブ → 接続先の机」の順にタップするだけです。間違えたときは「元に戻す」、ケーブルを外すときはケーブルをタップします。')+`<button class="btn primary block" id="next">${icon('arrow')}仕事1へ進む</button>`;
+ $('next').onclick=()=>load(S.done.findIndex(d=>!d)<0?0:S.done.findIndex(d=>!d));steps();save();side();}
 function test(){const i=S.cur,a=analyze(N,ed.st.edges),s=stopped(N,a.reach),unreached=s.pcs||s.T||s.P;S.tests[i]++;S.dirty=false;let html,ok=false,bad=[];
  if(a.loop)html=resultHTML(false,'通信が止まりました',i===0?'ハブ同士が輪の形（ループ）に接続されている区間があり、データが回り続けています。輪を作っているケーブルを探して外しましょう。':'ルータまでの経路は接続できましたが、輪の形（ループ）になっている区間があります。同じデータがハブの間を回り続けています。輪を作っているケーブルを外しましょう。');
  else if(unreached)html=resultHTML(false,'接続できない機器があります',`${stopText(s)}がインターネットに接続できません。`+(i===0?'ランプが赤の機器から、ルータまでの経路を順に確かめましょう。':'ランプが緑の機器と赤の機器の違いは何でしょうか。ルータから順に順に確かめましょう。'));
@@ -407,7 +447,7 @@ function submit(){const mk=ed.st.marks;if(!mk.size){toast('図面と違うと思
  side();}
 function record(){const n=S.done.filter(d=>d).length;$('doneh').textContent=n===3?'3つの仕事をすべて終えました':`仕事 ${n}／3 が完了しています`;
  const st=i=>S.done[i]?'完了':'未完了';
- $('rec').textContent=`施工と検査（PC教室の配線）\n仕事1　施工：${st(0)}（通電テスト ${S.tests[0]}回）\n仕事2　検査：${st(1)}（提出 ${S.submits}回）\n仕事3　不具合の調査：${st(2)}（通電テスト ${S.tests[2]}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
+ $('rec').textContent=`施工と検査（PC教室の配線）\n操作の練習：${S.practiced?(S.pskip?'スキップ':'完了'):'未実施'}\n仕事1　施工：${st(0)}（通電テスト ${S.tests[0]}回）\n仕事2　検査：${st(1)}（提出 ${S.submits}回）\n仕事3　不具合の調査：${st(2)}（通電テスト ${S.tests[2]}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
  $('q').classList.toggle('hidden',n<3);}
 $('steps').addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(b)load(+b.dataset.m);});
 $('cables').addEventListener('click',e=>{const c=e.target.closest('[data-cut]');if(c){ed.remove(c.dataset.cut);return;}const m=e.target.closest('[data-mark]');if(m)ed.toggleMark(m.dataset.mark);});
@@ -416,6 +456,6 @@ $('desel').onclick=()=>ed.clearSel();
 $('cut').onclick=()=>{if(ed.st.selCable)ed.remove(ed.st.selCable);};
 $('clearMarks').onclick=()=>{ed.st.marks=new Set();ed.render();changed();};
 $('copy').onclick=()=>copyText($('rec').textContent,$('rec'));
-load(S.cur);
+load(!S.practiced&&!S.done.some(d=>d)?-1:Math.max(0,S.cur));
 window.__app={N,TARGET,ed,S};
 </script></body></html>
