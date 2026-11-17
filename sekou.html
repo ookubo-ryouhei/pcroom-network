@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第1時　施工と検査｜PC教室の配線</title>
+<style>:root{--ink:#1B2430;--sub:#566070;--muted:#7D8693;--line:#E4DFD6;--line2:#D3CCC0;--bg:#F5F3EE;--card:#fff;--navy:#17324E;--teal:#0E7C7B;--teal-bg:#E3F1F0;--amber:#C8851A;--amber-t:#8A5200;--amber-bg:#FBF0DC;--red:#B3261E;--red-bg:#FBEAE8;--green:#2C7A4B;--green-bg:#E4F2E9;--r:16px;--sh:0 1px 2px rgba(23,50,78,.05),0 6px 20px rgba(23,50,78,.06)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;font-size:15px;line-height:1.75;font-feature-settings:"palt" 1}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--navy)}
+.appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none;color:inherit}
+.brand img{width:34px;height:34px;flex:none}
+.brand b{display:block;font-size:16px;color:var(--navy);line-height:1.3;letter-spacing:.02em}
+.brand span{font-size:12px;color:var(--sub)}
+.steps{display:flex;gap:6px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.steps button{display:flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:5px 14px 5px 5px;min-height:42px;font-size:14px;color:var(--ink)}
+.steps .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#EEF0F2;color:var(--sub);font-size:13px;font-weight:600}
+.steps .n svg{width:16px;height:16px}
+.steps button.done .n{background:var(--green);color:#fff}
+.steps button[aria-current=step]{border-color:var(--navy);background:var(--navy);color:#fff}
+.steps button[aria-current=step] .n{background:#fff;color:var(--navy)}
+main{max-width:1280px;margin:0 auto;padding:18px 20px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+h1,h2,h3{margin:0;line-height:1.45}
+h1{font-size:22px;color:var(--navy)}
+h2{font-size:16px;color:var(--navy);font-weight:600}
+h3{font-size:14px;color:var(--navy);font-weight:600}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--teal);font-weight:600}
+.sub{color:var(--sub);font-size:13px}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+@media(max-width:960px){.work{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:14px}
+.mapcard{padding:10px}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 10px;flex-wrap:wrap}
+.map svg{display:block;width:100%;height:auto;border-radius:12px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px;border-radius:12px;background:#F3F1EC}
+.toolbar .hint{flex:1 1 220px;font-size:13px;color:var(--sub);padding:0 6px;min-height:1.7em}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding:0 6px;font-size:12px;color:var(--sub)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:4px;border:1.5px solid}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:12px;border:1px solid var(--line2);background:#fff;color:var(--ink);font-size:14px;font-weight:500;text-decoration:none}
+.btn:hover:not(:disabled){border-color:var(--navy)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover:not(:disabled){background:#0F2740}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--navy)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn svg{width:18px;height:18px;flex:none}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:999px;background:#F0EEE8;color:var(--sub)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.result{border-radius:12px;padding:14px 16px;margin-top:14px;border:1px solid}
+.result.ok{background:var(--green-bg);border-color:#BFDFCB}
+.result.ng{background:var(--red-bg);border-color:#F0C9C4}
+.result .rh{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.result .rh svg{width:20px;height:20px;flex:none}
+.result.ok .rh{color:var(--green)}
+.result.ng .rh{color:var(--red)}
+.result .rb{margin-top:4px;font-size:14px}
+.result .btn{margin-top:12px}
+.point{margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.8);font-size:13.5px}
+.point b{color:var(--navy)}
+.list{list-style:none;margin:10px 0 0;padding:0}
+.list li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #EFEBE4;font-size:13.5px}
+.list li:last-child{border-bottom:0}
+.list .lock{color:var(--muted);font-size:12px;white-space:nowrap}
+.list .btn{min-height:38px;padding:4px 12px;border-radius:10px;font-size:13px}
+.list .btn[aria-pressed=true]{background:var(--amber-bg);border-color:var(--amber);color:var(--amber-t)}
+details.card>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:32px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin:0 4px 4px auto}
+details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
+.question{margin-top:18px;border-radius:var(--r);padding:22px 24px;background:var(--navy);color:#fff}
+.question .lb{font-size:12px;letter-spacing:.1em;opacity:.8}
+.question .q{font-size:19px;font-weight:600;margin-top:4px;line-height:1.6}
+.record{white-space:pre-wrap;font-family:inherit;font-size:13px;background:#F7F5F0;border-radius:10px;padding:12px 14px;border:1px solid var(--line);margin:10px 0 12px}
+.dg{width:100%;height:auto;display:block;margin-top:8px}
+.dg .dl path{fill:none;stroke:#5A6472;stroke-width:1.3}
+.dg rect{fill:#fff;stroke:#5A6472;stroke-width:1.2}
+.dg rect.hb{fill:#E3F1F0;stroke:#0E7C7B}
+.dg text{font-size:11px;text-anchor:middle;fill:#1B2430}
+.dg .ann{text-anchor:start;fill:#566070;font-size:10.5px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* 見取り図 */
+.cab{fill:none;stroke:#0E7C7B;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.cab.locked{stroke:#6E7986}
+.cab.mark{stroke:#C8851A;stroke-width:7}
+.cab.bad{stroke:#B3261E;stroke-width:6;stroke-dasharray:10 7}
+.flowline{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:2 16;animation:flow 1.4s linear infinite;opacity:.95;pointer-events:none}
+@keyframes flow{to{stroke-dashoffset:-36}}
+.cabhit{fill:none;stroke:transparent;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+.node{cursor:pointer;outline:none}
+.node .hit{fill:transparent}
+.node .ring{fill:none;stroke:transparent;stroke-width:3}
+.node.sel .ring{stroke:#C8851A;fill:rgba(200,133,26,.12)}
+.node.failed .ring{stroke:#B3261E}
+.node:focus-visible .ring{stroke:#0E7C7B;stroke-width:4}
+.node.fixed{cursor:default}
+.lbl{font-size:19px;font-weight:600;fill:#1B2430;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}
+.lbl.sm{font-size:16px}
+.pill rect{fill:#fff;stroke:#AF8754}
+.pill text{font-size:17px;font-weight:700;fill:#5B4632}
+.lamp{stroke:#fff;stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:pop .35s both;animation-delay:var(--d,0ms)}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+.dimmed{fill:#F5F3EE;opacity:.8}
+.stoptag rect{fill:#B3261E}
+.stoptag text{fill:#fff;font-size:16px;font-weight:700}
+@media(prefers-reduced-motion:reduce){.flowline,.lamp{animation:none}#toast{transition:none}}
+</style></head><body>
+<header class="appbar">
+ <a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>第1時　施工と検査</span></div></a>
+ <nav class="steps" id="steps" aria-label="仕事の一覧"></nav>
+ <a class="btn ghost" href="#done">学習の記録</a>
+</header>
+<main>
+ <div class="work">
+  <section class="card mapcard" aria-labelledby="maph">
+   <div class="cardhead"><h2 id="maph">PC教室の見取り図（架空の教室）</h2><div class="chips" id="stats"></div></div>
+   <div id="room" class="map"></div>
+   <div class="toolbar">
+    <span class="hint" id="hint" aria-live="polite"></span>
+    <button class="btn" id="undo"></button>
+    <button class="btn" id="cut"></button>
+    <button class="btn hidden" id="clearMarks">印をすべて消す</button>
+   </div>
+   <div class="legend"><span><i style="background:#0E7C7B;border-color:#0E7C7B"></i>使用中のポート</span><span><i style="background:#fff;border-color:#9AA3AD"></i>空きポート</span><span><i style="background:#2C7A4B;border-color:#2C7A4B"></i>つながった</span><span><i style="background:#B3261E;border-color:#B3261E"></i>つながらない</span><span>机の中の小さなハブで、PC4台を机の配線口にまとめてあります。</span></div>
+  </section>
+  <div class="stack">
+   <section class="card" id="mission"></section>
+   <section class="card" aria-labelledby="dgh"><h2 id="dgh">ネットワーク図（図面）</h2><div id="diagram"></div><p class="sub" style="margin-top:6px">線は、LANケーブルで直接つなぐ機器同士を表します。</p></section>
+   <details class="card" id="cabcard"><summary><h2>ケーブル一覧</h2><span class="chip num" id="cabcount"></span></summary><p class="sub" style="margin-top:6px" id="cabnote"></p><ul class="list" id="cables"></ul></details>
+  </div>
+ </div>
+ <section class="card" id="done" style="margin-top:16px" aria-labelledby="doneh"><div class="eyebrow">学習の記録</div><h2 id="doneh"></h2><pre class="record" id="rec"></pre><button class="btn primary" id="copy"></button></section>
+ <section class="question hidden" id="q"><div class="lb">最後の問い</div><div class="q">図面が正しいかどうかは、誰がどうやって確かめればよいのだろうか。</div></section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const key=(a,b)=>a<b?a+'|'+b:b+'|'+a;
+const COLS=[140,345,615,820],ROWS=[305,445,585],HUBY=206,M_PER_PX=12/940;
+const ICONS={
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+ alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+ cut:'<path d="M6 6l12 12M18 6L6 18"/>',
+ bolt:'<path d="M13 3L5 13.5h6L10 21l9-11.5h-6L13 3z"/>',
+ reset:'<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/>',
+ copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ back:'<path d="M15 6l-6 6 6 6"/>'};
+const icon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
+let toastTimer;
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3400);}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+function resultHTML(ok,title,body,point,extra){return `<div class="result ${ok?'ok':'ng'}" role="status"><div class="rh">${icon(ok?'check':'alert')}<span>${title}</span></div><div class="rb">${body}</div>${point?`<div class="point">${point}</div>`:''}${extra||''}</div>`;}
+async function copyText(text,el){try{await navigator.clipboard.writeText(text);toast('記録をコピーしました。');}catch(e){try{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('記録を選択しました。長押しでコピーしてください。');}catch(e2){toast('コピーできませんでした。記録を長押ししてコピーしてください。');}}}
+
+/* ---- 機器の配置 ---- */
+function makeNodes(counts,rack){
+ const N={
+  R:{x:915,y:rack?56:74,type:'router',name:'ルータ',ports:4,w:56,h:34,img:'router'},
+  M:rack?{x:915,y:116,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'}:{x:480,y:166,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'},
+  T:{x:480,y:86,type:'teacher',name:'教師用PC',ports:1,w:150,h:46,img:'teacherdesk'},
+  P:{x:92,y:86,type:'printer',name:'プリンタ',ports:1,w:56,h:42,img:'printer'}};
+ COLS.forEach((cx,i)=>{const c=i+1;N['H'+c]={x:cx,y:HUBY,type:'hub',name:'列ハブ'+c,ports:5,w:60,h:20,img:'hubtop',col:c};
+  for(let r=1;r<=counts[i];r++)N['D'+c+r]={x:cx,y:ROWS[r-1],type:'desk',name:'机'+c+'-'+r,label:c+'-'+r,ports:1,w:150,h:96,img:'desk4',row:r-1,col:c,pcs:4};});
+ return N;}
+function portPos(n,i){
+ if(n.type==='desk')return[n.x-75,n.y];
+ if(n.type==='teacher')return[n.x,n.y+23];
+ if(n.type==='printer')return[n.x+28,n.y+6];
+ const sp=n.type==='main'?7.5:9,x0=n.x-(n.ports-1)*sp/2;return[x0+Math.min(i,n.ports-1)*sp,n.y+n.h/2+6];}
+const FRONT=t=>t==='router'||t==='main'||t==='teacher'||t==='printer';
+function portMap(N,edges){const P={},cnt={};for(const id in N){P[id]={};cnt[id]=0;}edges.forEach(k=>k.split('|').forEach(id=>{P[id][k]=portPos(N[id],cnt[id]++);}));return{P,cnt};}
+function route(N,k,P){const[a,b]=k.split('|'),A=N[a],B=N[b],pa=P[a][k],pb=P[b][k];
+ if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI];if(N[oI].type==='desk')return[pa,pb];
+  const o=oI===a?pa:pb,r=d.row,ax=d.x-84-r*7,cy=230+r*6;return[o,[o[0],cy],[ax,cy],[ax,d.y],[d.x-75,d.y]];}
+ const ts=[A.type,B.type];
+ if(ts.includes('router')&&ts.includes('main'))return[pa,pb];
+ if(FRONT(A.type)&&FRONT(B.type))return[pa,[pa[0],146],[pb[0],146],pb];
+ const L=188+Math.max(A.col||0,B.col||0)*4;return[pa,[pa[0],L],[pb[0],L],pb];}
+function routes(N,edges){const{P}=portMap(N,edges),R={};edges.forEach(k=>R[k]=route(N,k,P));return R;}
+const polyLen=pts=>pts.reduce((s,p,i)=>i?s+Math.hypot(p[0]-pts[i-1][0],p[1]-pts[i-1][1]):0,0);
+function sortKeys(N,keys){const ix=Object.keys(N);const f=k=>k.split('|').map(id=>ix.indexOf(id)).sort((x,y)=>x-y);return keys.slice().sort((a,b)=>{const A=f(a),B=f(b);return A[0]-B[0]||A[1]-B[1];});}
+function cableName(N,k){const ix=Object.keys(N);const p=k.split('|').sort((a,b)=>ix.indexOf(a)-ix.indexOf(b));return N[p[0]].name+' ─ '+N[p[1]].name;}
+
+/* ---- 見取り図の描画 ---- */
+function roomSVG(o){let h='<rect x="20" y="20" width="960" height="660" rx="6" fill="#EFE6D5"/>';
+ for(let y=64;y<680;y+=44)h+=`<line x1="22" y1="${y}" x2="978" y2="${y}" stroke="#E3D6BF"/>`;
+ if(o.hatch)h+='<rect x="34" y="156" width="790" height="512" rx="8" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
+ h+='<rect x="832" y="22" width="146" height="126" fill="#E5E0D6"/><path d="M830 20V150H980" fill="none" stroke="#4D4136" stroke-width="4"/>';
+ h+='<text x="820" y="44" text-anchor="end" class="lbl" style="font-size:15px;fill:#566070">準備室 ▸</text>';
+ [230,360,490].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="2" fill="#BCD6E4" stroke="#8FB2C6"/>`);
+ h+='<rect x="330" y="24" width="300" height="22" rx="3" fill="#2F4F46"/><rect x="342" y="46" width="276" height="4" rx="1" fill="#A98A60"/><text x="480" y="40" text-anchor="middle" style="font-size:14px;fill:#E7F0EC;font-weight:600">黒板</text>';
+ h+='<rect x="975" y="596" width="8" height="66" rx="2" fill="#8C6B45"/><text x="966" y="672" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
+ h+='<rect x="20" y="20" width="960" height="660" rx="6" fill="none" stroke="#4D4136" stroke-width="6"/>';
+ if(o.hatch)h+='<text x="46" y="176" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
+ return h;}
+const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80,52],printer:[80,64]};
+function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
+ const tap=o.nodeTap&&(!o.tapTypes||o.tapTypes.includes(n.type));
+ const free=n.ports-used;
+ const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'');
+ const pressed=o.pressed?` aria-pressed="${st.failed===id}"`:(o.mode==='wire'?` aria-pressed="${st.sel===id}"`:'');
+ let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
+ h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="10"/>`;
+ h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="9"/>`;
+ h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
+ if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<circle cx="${px}" cy="${py}" r="3.6" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
+ if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
+ else{let lx=n.x,ly=n.y+n.h/2+19,an='middle';
+  if(n.type==='hub'){lx=n.x+34;ly=n.y+5;an='start';}
+  else if(n.type==='main'&&n.x<800){lx=n.x+38;ly=n.y+5;an='start';}
+  else if(n.type==='main'||n.type==='router'){lx=n.x-n.w/2-6;ly=n.y+5;an='end';}
+  h+=`<text class="lbl${an==='end'?' sm':''}" x="${lx}" y="${ly+(an==='end'?1:2)}" text-anchor="${an}">${n.name}</text>`;}
+ if(st.dim&&st.dim.has(id))h+=`<rect class="dimmed" x="${n.x-n.w/2-3}" y="${n.y-n.h/2-3}" width="${n.w+6}" height="${n.h+6}" rx="6"/>`+(n.type==='desk'?`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-13}" width="60" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">停止</text></g>`:'');
+ if(st.failed===id)h+=`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-n.h/2-32}" width="60" height="26" rx="13"/><text x="${n.x}" y="${n.y-n.h/2-13.5}" text-anchor="middle">故障</text></g>`;
+ if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<circle class="lamp" cx="${n.x+n.w/2-3}" cy="${n.y-n.h/2+3}" r="11" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
+ return h+'</g>';}
+function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
+ let h=`<svg viewBox="0 0 1000 700" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
+ const R={};st.edges.forEach(k=>R[k]=route(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
+ st.edges.forEach(k=>{let c=st.locked.has(k)?'locked':'';if(st.bad.has(k))c='bad';if(st.marks.has(k)||st.selCable===k)c+=' mark';h+=`<polyline class="cab ${c}" points="${R[k]}"/>`;});
+ if(st.flow)st.edges.forEach(k=>{if(!st.bad.has(k))h+=`<polyline class="flowline" points="${R[k]}"/>`;});
+ if(o.cableTap)st.edges.forEach(k=>{if(!st.locked.has(k))h+=`<polyline class="cabhit" data-k="${k}" points="${R[k]}"><title>${esc(cableName(N,k))}</title></polyline>`;});
+ for(const id in N)h+=nodeSVG(N,id,st,o,cnt[id]);
+ return h+'</svg>';}
+
+/* ---- つながり方の分析 ---- */
+function analyze(N,edges,failed){const adj={};for(const id in N)adj[id]=[];
+ edges.forEach(k=>{const[a,b]=k.split('|');if(a===failed||b===failed)return;adj[a].push(b);adj[b].push(a);});
+ const depth={};if(failed!=='R'){depth.R=0;const q=['R'];while(q.length){const n=q.shift();for(const m of adj[n])if(!(m in depth)){depth[m]=depth[n]+1;q.push(m);}}}
+ const reach=new Set(Object.keys(depth));let e=0;
+ edges.forEach(k=>{const[a,b]=k.split('|');if(reach.has(a)&&reach.has(b))e++;});
+ const loop=reach.size>0&&e>reach.size-1;
+ const seen=new Set();let loopAny=false;
+ for(const s in N){if(seen.has(s)||s===failed)continue;const comp=[s];seen.add(s);for(let i=0;i<comp.length;i++)for(const m of adj[comp[i]])if(!seen.has(m)){seen.add(m);comp.push(m);}
+  const cs=new Set(comp);let ce=0;edges.forEach(k=>{const[a,b]=k.split('|');if(cs.has(a)&&cs.has(b))ce++;});if(ce>comp.length-1)loopAny=true;}
+ return{reach,depth,loop,loopAny};}
+function stopped(N,reach){let pcs=0,desks=0;for(const id in N)if(N[id].type==='desk'&&!reach.has(id)){pcs+=4;desks++;}return{pcs,desks,T:!reach.has('T'),P:!reach.has('P')};}
+function stopText(s){const a=[];if(s.pcs)a.push(`生徒用PC ${s.pcs}台（机${s.desks}台）`);if(s.T)a.push('教師用PC');if(s.P)a.push('プリンタ');return a.join('、');}
+
+/* ---- 操作できる見取り図 ---- */
+function Editor(el,N,o){
+ const st={edges:new Set(),locked:new Set(o.locked||[]),sel:null,selCable:null,marks:new Set(),bad:new Set(),lamps:null,flow:false,failed:null,dim:null};
+ const hist=[];let focusId=null;
+ const deg=id=>{let n=0;st.edges.forEach(k=>{const[a,b]=k.split('|');if(a===id||b===id)n++;});return n;};
+ const fire=n=>o[n]&&o[n]();
+ function clearTest(){st.lamps=null;st.flow=false;st.bad=new Set();}
+ function snap(){hist.push([...st.edges]);if(hist.length>80)hist.shift();}
+ function render(){el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
+ function hint(t){o.onHint&&o.onHint(t);}
+ function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}。つなぐ相手をタップしてください。もう一度タップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}`);else hint(o.defaultHint||'');}
+ function check(a,b,k){const A=N[a],B=N[b];
+  if(st.edges.has(k))return 'その2台は、すでにケーブルでつながっています。';
+  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを通してつなぎましょう。`;
+  if(deg(a)>=A.ports)return `${A.name}には、空いている差し込み口（ポート）がありません。`;
+  if(deg(b)>=B.ports)return `${B.name}には、空いている差し込み口（ポート）がありません。`;
+  return '';}
+ function onNode(id){
+  if(o.mode==='fail'){o.onFail&&o.onFail(id);return;}
+  if(o.mode!=='wire')return;
+  st.selCable=null;
+  if(!st.sel)st.sel=id;
+  else if(st.sel===id)st.sel=null;
+  else{const a=st.sel,k=key(a,id);st.sel=null;const err=check(a,id,k);
+   if(err)toast(err);else{snap();st.edges.add(k);clearTest();fire('onChange');}}
+  render();hintSel();fire('onSelect');}
+ function onCable(k){
+  if(o.mode==='mark'){st.marks.has(k)?st.marks.delete(k):st.marks.add(k);render();fire('onChange');return;}
+  if(o.mode==='wire'){st.sel=null;st.selCable=st.selCable===k?null:k;render();hintSel();fire('onSelect');}}
+ el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed'))onNode(g.dataset.id);});
+ el.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){e.preventDefault();focusId=g.dataset.id;onNode(g.dataset.id);}});
+ return{st,N,render,deg,hintSel,clearTest,
+  canUndo:()=>hist.length>0,
+  undo(){if(!hist.length)return;st.edges=new Set(hist.pop());st.sel=null;st.selCable=null;clearTest();render();hintSel();fire('onChange');fire('onSelect');},
+  remove(k){if(st.locked.has(k)){toast('工事で敷設済みのケーブルは外せません。');return;}if(!st.edges.has(k))return;snap();st.edges.delete(k);if(st.selCable===k)st.selCable=null;st.marks.delete(k);clearTest();render();hintSel();fire('onChange');fire('onSelect');},
+  toggleMark(k){onCable(k);},
+  setEdges(e,keepHist){if(keepHist)snap();else hist.length=0;st.edges=new Set([...st.locked,...e]);st.sel=null;st.selCable=null;st.marks=new Set();clearTest();render();hintSel();},
+  setTest(a,x){x=x||{};st.lamps={};for(const id in N){const n=N[id];if(n.type==='hub'&&deg(id)===0)continue;st.lamps[id]={on:a.reach.has(id)&&!a.loop,d:(a.depth[id]||0)*90};}
+   st.bad=new Set(x.bad||[]);st.flow=!!x.flow;st.sel=null;st.selCable=null;render();}};
+}
+
+/* ---- ネットワーク図（図面） ---- */
+function diagramSVG(counts,edges,label){
+ const HX=[62,172,282,392],pos={R:[220,22],M:[220,66],T:[70,66],P:[370,66]};
+ HX.forEach((x,i)=>{pos['H'+(i+1)]=[x,116];for(let r=1;r<=counts[i];r++)pos['D'+(i+1)+r]=[x+12,154+(r-1)*30];});
+ const nm=id=>id==='R'?'ルータ':id==='M'?'主ハブ':id==='T'?'教師用PC':id==='P'?'プリンタ':id[0]==='H'?'列ハブ'+id[1]:id[1]+'-'+id[2];
+ const w=id=>({R:64,M:64,T:72,P:64})[id]||(id[0]==='H'?66:44);
+ let lines='',boxes='';
+ edges.forEach(k=>{const[a,b]=k.split('|'),da=a[0]==='D',db=b[0]==='D';
+  if(da||db){const d=da?a:b,h=da?b:a,[dx,dy]=pos[d],[hx,hy]=pos[h];lines+=h==='H'+d[1]?`<path d="M${hx-26} ${hy+11}V${dy}H${dx-22}"/>`:`<path d="M${hx} ${hy}L${dx} ${dy}"/>`;}
+  else{const[x1,y1]=pos[a],[x2,y2]=pos[b];lines+=`<path d="M${x1} ${y1}L${x2} ${y2}"/>`;}});
+ for(const id in pos){const[x,y]=pos[id],ww=w(id),hb=id==='M'||id[0]==='H';boxes+=`<rect x="${x-ww/2}" y="${y-11}" width="${ww}" height="22" rx="5"${hb?' class="hb"':''}/><text x="${x}" y="${y+4}">${nm(id)}</text>`;}
+ return `<svg class="dg" viewBox="0 0 440 ${146+30*Math.max(...counts)}" role="img" aria-label="${esc(label||'ネットワーク図')}"><g class="dl">${lines}</g>${boxes}<text x="258" y="26" class="ann">→ インターネット</text></svg>`;}
+function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 104" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="102" rx="6" fill="#EFE6D5" stroke="#4D4136" stroke-width="2"/><rect x="50" y="6" width="50" height="5" rx="1" fill="#2F4F46"/>`;
+ counts.forEach((n,i)=>{for(let r=0;r<3;r++){const x=12+i*34,y=19+r*27,on=r<n,isH=hl&&hl[0]===i&&hl[1]===r;h+=`<rect x="${x}" y="${y}" width="24" height="20" rx="3" fill="${on?(isH?'#C8851A':'#D9B98C'):'none'}" stroke="${on?(isH?'#8A5200':'#AF8754'):'#BFB29B'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
+ return h+'</svg>';}
+
+const COUNTS=[3,2,3,2],N=makeNodes(COUNTS,false);
+function base(){const e=[key('R','M'),key('M','T'),key('M','P')];COUNTS.forEach((n,i)=>{const c=i+1;e.push(key('M','H'+c));for(let r=1;r<=n;r++)e.push(key('H'+c,'D'+c+r));});return e;}
+const TARGET=new Set(base());
+const WRONG2=[key('H2','D13'),key('H3','D42'),key('H1','T')];
+const pre2=()=>base().filter(k=>![key('H1','D13'),key('H4','D42'),key('M','T')].includes(k)).concat(WRONG2);
+const pre3=()=>base().filter(k=>k!==key('R','M')&&k!==key('M','T')).concat([key('R','T'),key('H1','H2')]);
+const M=[
+ {short:'施工',title:'図面どおりに施工する',mode:'wire',init:()=>[],diag:()=>[...TARGET],action:'通電テスト',
+  text:'ネットワーク図を読み、見取り図の機器をLANケーブルでつなぎます。<b>机1台は、ケーブル1本で列ハブにつなぎます。</b>',cond:'合格の条件：図面と同じつなぎ方で、すべての機器がインターネットにつながること。'},
+ {short:'検査',title:'他の業者の施工を検査する',mode:'mark',init:pre2,diag:()=>[...TARGET],action:'検査結果を提出する',
+  text:'別の業者が施工した配線です。すべての機器はインターネットにつながっていますが、<b>図面と違うケーブルが3本</b>あります。見つけて印を付けてください。',cond:'見取り図のケーブルをタップするか、ケーブル一覧の「印」を押します。'},
+ {short:'不具合の調査',title:'つながらない原因を調べて直す',mode:'wire',init:pre3,diag:pre3,action:'通電テスト',
+  text:'別の教室です。業者は図面どおりに施工しましたが、ほとんどの機器がインターネットにつながりません。<b>図面そのものに誤りがあります。</b>配線を直して、すべての機器をつなげてください。',cond:'まず「通電テスト」で状況を確かめましょう。'}];
+const KEY='pcroom.sekou.v2';
+const S=Object.assign({cur:0,done:[false,false,false],edges:[null,null,null],marks:[],tests:[0,0,0],submits:0,fails2:0,res:['','','']},store.get(KEY,{}));
+const save=()=>store.set(KEY,S);
+const opts={mode:'wire',nodeTap:true,cableTap:true,defaultHint:'',onHint:t=>$('hint').textContent=t,onChange:changed,onSelect:toolbar};
+const ed=Editor($('room'),N,opts);
+$('undo').innerHTML=icon('undo')+'元に戻す';$('cut').innerHTML=icon('cut')+'選んだケーブルを外す';$('copy').innerHTML=icon('copy')+'記録をコピー';
+
+function changed(){S.edges[S.cur]=[...ed.st.edges];if(S.cur===1)S.marks=[...ed.st.marks];$('result').innerHTML='';save();side();}
+function toolbar(){const w=opts.mode==='wire';$('undo').classList.toggle('hidden',!w);$('cut').classList.toggle('hidden',!w);$('clearMarks').classList.toggle('hidden',w);
+ $('undo').disabled=!ed.canUndo();$('cut').disabled=!ed.st.selCable;$('clearMarks').disabled=!ed.st.marks.size;}
+function side(){const ks=sortKeys(N,[...ed.st.edges]);
+ $('stats').innerHTML=`<span class="chip num">ケーブル ${ks.length}本</span>`+(M[S.cur].mode==='wire'?`<span class="chip num">通電テスト ${S.tests[S.cur]}回</span>`:`<span class="chip num">印 ${ed.st.marks.size}本</span>`);
+ $('cabcount').textContent=ks.length+'本';
+ $('cabnote').textContent=opts.mode==='mark'?'図面と違うと思うケーブルに印を付けます。':'見取り図で線を選びにくいときは、ここから外せます。';
+ $('cables').innerHTML=ks.map(k=>{const nm=esc(cableName(N,k));return `<li><span>${nm}</span>${opts.mode==='mark'?`<button class="btn" data-mark="${k}" aria-pressed="${ed.st.marks.has(k)}" aria-label="${nm}に印を付ける">${ed.st.marks.has(k)?'印あり':'印'}</button>`:`<button class="btn" data-cut="${k}" aria-label="${nm}を外す">外す</button>`}</li>`;}).join('');
+ toolbar();}
+function steps(){$('steps').innerHTML=M.map((m,i)=>`<button data-m="${i}" class="${S.done[i]?'done':''}"${S.cur===i?' aria-current="step"':''}><span class="n">${S.done[i]?icon('check'):i+1}</span>${m.short}${S.done[i]?'<span class="sr">（完了）</span>':''}</button>`).join('');record();}
+function card(){const m=M[S.cur];
+ $('mission').innerHTML=`<div class="eyebrow">仕事${S.cur+1}／3</div><h2>${m.title}</h2><p style="margin-top:6px">${m.text}</p><p class="sub" style="margin-top:6px">${m.cond}</p>
+ <div class="actions"><button class="btn primary block" id="act">${icon(m.mode==='mark'?'flag':'bolt')}${m.action}</button><button class="btn block" id="reset">${icon('reset')}最初からやり直す</button></div><div id="result" aria-live="polite">${S.done[S.cur]?S.res[S.cur]:''}</div>`;
+ $('act').onclick=m.mode==='mark'?submit:test;
+ $('reset').onclick=()=>{ed.setEdges(m.init(),true);if(S.cur===1){S.marks=[];}$('result').innerHTML='';changed();toast('最初の状態に戻しました。「元に戻す」で取り消せます。');};
+ bindNext();}
+function bindNext(){const b=$('next');if(b)b.onclick=()=>{const n=S.done.findIndex(d=>!d);if(n<0){$('done').scrollIntoView({behavior:'smooth'});}else load(n);};}
+function load(i){if(i!==S.cur)S.edges[S.cur]=[...ed.st.edges];S.cur=i;const m=M[i];
+ opts.mode=m.mode;opts.nodeTap=m.mode==='wire';opts.cableTap=true;
+ opts.defaultHint=m.mode==='mark'?'図面と違うと思うケーブルをタップして、印を付けます。':'機器をタップして選び、つなぐ相手をタップするとケーブルを敷けます。';
+ ed.setEdges(S.edges[i]||m.init());if(i===1){ed.st.marks=new Set(S.marks);ed.render();}
+ $('cabcard').open=m.mode==='mark';
+ $('diagram').innerHTML=diagramSVG(COUNTS,m.diag(),'仕事'+(i+1)+'のネットワーク図');
+ card();side();steps();save();window.scrollTo({top:0});}
+function finish(html){S.done[S.cur]=true;const last=S.done.every(d=>d);
+ html=html.replace('</div></div>',`</div></div>`);S.res[S.cur]=html;$('result').innerHTML=html+`<button class="btn primary block" id="next">${icon('arrow')}${last?'学習の記録を見る':'次の仕事へ'}</button>`;S.res[S.cur]=$('result').innerHTML;bindNext();steps();save();}
+function test(){const i=S.cur,a=analyze(N,ed.st.edges),s=stopped(N,a.reach),unreached=s.pcs||s.T||s.P;S.tests[i]++;let html,ok=false,bad=[];
+ if(a.loop)html=resultHTML(false,'通信が止まりました',i===0?'ハブとハブが輪の形（ループ）につながっている区間があり、データが回り続けています。輪を作っているケーブルを探して外しましょう。':'ルータまでの経路はつながりましたが、輪の形（ループ）になっている区間があります。同じデータがハブの間を回り続けています。輪を作っているケーブルを外しましょう。');
+ else if(unreached)html=resultHTML(false,'つながらない機器があります',`${stopText(s)}がインターネットにつながりません。`+(i===0?'ランプが赤の機器から、ルータまでの経路をたどってみましょう。':'ランプが緑の機器と赤の機器の違いは何でしょうか。ルータから順にたどってみましょう。'));
+ else if(a.loopAny)html=resultHTML(false,'輪の形が残っています','どこにもつながっていない機器どうしで、輪の形（ループ）ができています。');
+ else if(i===0&&(bad=[...ed.st.edges].filter(k=>!TARGET.has(k))).length)html=resultHTML(false,'図面と違う配線があります',`すべてつながりましたが、図面と違うケーブルが${bad.length}本あります（赤い破線）。図面どおりに直しましょう。`);
+ else{ok=true;html=i===0?resultHTML(true,'施工完了','図面どおりに施工でき、すべての機器がインターネットにつながりました。','<b>ハブ</b>はケーブルの差し込み口を増やし、<b>ルータ</b>は教室の中のネットワークとインターネットをつなぎます。机のPCのデータは、机の配線口 → 列ハブ → 主ハブ → ルータの順に通ってインターネットへ出ていきます。')
+  :resultHTML(true,'復旧完了','すべての機器がインターネットにつながりました。','図面の誤りは2つありました。<b>① 主ハブがルータにつながっておらず</b>、ルータには教師用PCだけがつながっていました。<b>② 列ハブ1と列ハブ2を直接つなぐ線</b>があり、主ハブと合わせて輪の形になっていました。輪があると同じデータが回り続け、ネットワーク全体が止まることがあります。');}
+ ed.setTest(a,{bad,flow:ok});
+ if(ok)finish(html);else{$('result').innerHTML=html;save();}side();}
+function submit(){const mk=ed.st.marks;if(!mk.size){toast('図面と違うと思うケーブルに、印を付けてから提出してください。');return;}
+ S.submits++;const hit=WRONG2.filter(k=>mk.has(k)).length,fp=[...mk].filter(k=>!WRONG2.includes(k)).length;
+ if(hit===3&&fp===0){ed.st.marks=new Set();S.marks=[];ed.setTest({reach:new Set(),depth:{},loop:false},{bad:WRONG2});ed.st.lamps=null;ed.render();
+  finish(resultHTML(true,'検査完了','図面と違う3本をすべて見つけました（赤い破線）。','机1-3と机4-2は、つなぐ列ハブが図面と違いました。教師用PCは、主ハブではなく列ハブ1につながっていました。どれも通信はできますが、<b>図面と違う配線は、故障の原因を探す妨げになります。</b>この配線では、列ハブ1が故障すると教師用PCまで止まってしまいます。'));}
+ else{S.fails2++;$('result').innerHTML=resultHTML(false,'再検査が必要です',`正しく見つけた誤りは3本中${hit}本です。図面と同じなのに印を付けたケーブルが${fp}本あります。`,S.fails2>=3?'<b>ヒント：</b>図面の各列ハブの下にある机の数と、見取り図で各列ハブにつながる机の数を比べましょう。教師用PCがどこにつながっているかも確かめましょう。':'');save();}
+ side();}
+function record(){const n=S.done.filter(d=>d).length;$('doneh').textContent=n===3?'3つの仕事をすべて終えました':`仕事 ${n}／3 が完了しています`;
+ const st=i=>S.done[i]?'完了':'未完了';
+ $('rec').textContent=`第1時　施工と検査（PC教室の配線）\n仕事1　施工：${st(0)}（通電テスト ${S.tests[0]}回）\n仕事2　検査：${st(1)}（提出 ${S.submits}回）\n仕事3　不具合の調査：${st(2)}（通電テスト ${S.tests[2]}回）\n記録日時：${new Date().toLocaleString('ja-JP',{dateStyle:'medium',timeStyle:'short'})}`;
+ $('q').classList.toggle('hidden',n<3);}
+$('steps').addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(b)load(+b.dataset.m);});
+$('cables').addEventListener('click',e=>{const c=e.target.closest('[data-cut]');if(c){ed.remove(c.dataset.cut);return;}const m=e.target.closest('[data-mark]');if(m)ed.toggleMark(m.dataset.mark);});
+$('undo').onclick=()=>ed.undo();
+$('cut').onclick=()=>{if(ed.st.selCable)ed.remove(ed.st.selCable);};
+$('clearMarks').onclick=()=>{ed.st.marks=new Set();ed.render();changed();};
+$('copy').onclick=()=>copyText($('rec').textContent,$('rec'));
+load(S.cur);
+window.__app={N,TARGET,ed,S};
+</script></body></html>

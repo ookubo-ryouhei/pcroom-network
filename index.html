@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PC教室の配線</title>
+<style>:root{--ink:#1B2430;--sub:#566070;--muted:#7D8693;--line:#E4DFD6;--line2:#D3CCC0;--bg:#F5F3EE;--card:#fff;--navy:#17324E;--teal:#0E7C7B;--teal-bg:#E3F1F0;--amber:#C8851A;--amber-t:#8A5200;--amber-bg:#FBF0DC;--red:#B3261E;--red-bg:#FBEAE8;--green:#2C7A4B;--green-bg:#E4F2E9;--r:16px;--sh:0 1px 2px rgba(23,50,78,.05),0 6px 20px rgba(23,50,78,.06)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;font-size:15px;line-height:1.75;font-feature-settings:"palt" 1}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--navy)}
+.appbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;text-decoration:none;color:inherit}
+.brand img{width:34px;height:34px;flex:none}
+.brand b{display:block;font-size:16px;color:var(--navy);line-height:1.3;letter-spacing:.02em}
+.brand span{font-size:12px;color:var(--sub)}
+.steps{display:flex;gap:6px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.steps button{display:flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:5px 14px 5px 5px;min-height:42px;font-size:14px;color:var(--ink)}
+.steps .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#EEF0F2;color:var(--sub);font-size:13px;font-weight:600}
+.steps .n svg{width:16px;height:16px}
+.steps button.done .n{background:var(--green);color:#fff}
+.steps button[aria-current=step]{border-color:var(--navy);background:var(--navy);color:#fff}
+.steps button[aria-current=step] .n{background:#fff;color:var(--navy)}
+main{max-width:1280px;margin:0 auto;padding:18px 20px 48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+h1,h2,h3{margin:0;line-height:1.45}
+h1{font-size:22px;color:var(--navy)}
+h2{font-size:16px;color:var(--navy);font-weight:600}
+h3{font-size:14px;color:var(--navy);font-weight:600}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--teal);font-weight:600}
+.sub{color:var(--sub);font-size:13px}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+@media(max-width:960px){.work{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:14px}
+.mapcard{padding:10px}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 10px;flex-wrap:wrap}
+.map svg{display:block;width:100%;height:auto;border-radius:12px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px;border-radius:12px;background:#F3F1EC}
+.toolbar .hint{flex:1 1 220px;font-size:13px;color:var(--sub);padding:0 6px;min-height:1.7em}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding:0 6px;font-size:12px;color:var(--sub)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:4px;border:1.5px solid}
+button{font:inherit;cursor:pointer;touch-action:manipulation}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:12px;border:1px solid var(--line2);background:#fff;color:var(--ink);font-size:14px;font-weight:500;text-decoration:none}
+.btn:hover:not(:disabled){border-color:var(--navy)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover:not(:disabled){background:#0F2740}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--navy)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn svg{width:18px;height:18px;flex:none}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:999px;background:#F0EEE8;color:var(--sub)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.result{border-radius:12px;padding:14px 16px;margin-top:14px;border:1px solid}
+.result.ok{background:var(--green-bg);border-color:#BFDFCB}
+.result.ng{background:var(--red-bg);border-color:#F0C9C4}
+.result .rh{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.result .rh svg{width:20px;height:20px;flex:none}
+.result.ok .rh{color:var(--green)}
+.result.ng .rh{color:var(--red)}
+.result .rb{margin-top:4px;font-size:14px}
+.result .btn{margin-top:12px}
+.point{margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.8);font-size:13.5px}
+.point b{color:var(--navy)}
+.list{list-style:none;margin:10px 0 0;padding:0}
+.list li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #EFEBE4;font-size:13.5px}
+.list li:last-child{border-bottom:0}
+.list .lock{color:var(--muted);font-size:12px;white-space:nowrap}
+.list .btn{min-height:38px;padding:4px 12px;border-radius:10px;font-size:13px}
+.list .btn[aria-pressed=true]{background:var(--amber-bg);border-color:var(--amber);color:var(--amber-t)}
+details.card>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:32px}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin:0 4px 4px auto}
+details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
+.question{margin-top:18px;border-radius:var(--r);padding:22px 24px;background:var(--navy);color:#fff}
+.question .lb{font-size:12px;letter-spacing:.1em;opacity:.8}
+.question .q{font-size:19px;font-weight:600;margin-top:4px;line-height:1.6}
+.record{white-space:pre-wrap;font-family:inherit;font-size:13px;background:#F7F5F0;border-radius:10px;padding:12px 14px;border:1px solid var(--line);margin:10px 0 12px}
+.dg{width:100%;height:auto;display:block;margin-top:8px}
+.dg .dl path{fill:none;stroke:#5A6472;stroke-width:1.3}
+.dg rect{fill:#fff;stroke:#5A6472;stroke-width:1.2}
+.dg rect.hb{fill:#E3F1F0;stroke:#0E7C7B}
+.dg text{font-size:11px;text-anchor:middle;fill:#1B2430}
+.dg .ann{text-anchor:start;fill:#566070;font-size:10.5px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* 見取り図 */
+.cab{fill:none;stroke:#0E7C7B;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.cab.locked{stroke:#6E7986}
+.cab.mark{stroke:#C8851A;stroke-width:7}
+.cab.bad{stroke:#B3261E;stroke-width:6;stroke-dasharray:10 7}
+.flowline{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:2 16;animation:flow 1.4s linear infinite;opacity:.95;pointer-events:none}
+@keyframes flow{to{stroke-dashoffset:-36}}
+.cabhit{fill:none;stroke:transparent;stroke-width:22;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+.node{cursor:pointer;outline:none}
+.node .hit{fill:transparent}
+.node .ring{fill:none;stroke:transparent;stroke-width:3}
+.node.sel .ring{stroke:#C8851A;fill:rgba(200,133,26,.12)}
+.node.failed .ring{stroke:#B3261E}
+.node:focus-visible .ring{stroke:#0E7C7B;stroke-width:4}
+.node.fixed{cursor:default}
+.lbl{font-size:19px;font-weight:600;fill:#1B2430;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}
+.lbl.sm{font-size:16px}
+.pill rect{fill:#fff;stroke:#AF8754}
+.pill text{font-size:17px;font-weight:700;fill:#5B4632}
+.lamp{stroke:#fff;stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:pop .35s both;animation-delay:var(--d,0ms)}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+.dimmed{fill:#F5F3EE;opacity:.8}
+.stoptag rect{fill:#B3261E}
+.stoptag text{fill:#fff;font-size:16px;font-weight:700}
+@media(prefers-reduced-motion:reduce){.flowline,.lamp{animation:none}#toast{transition:none}}
+
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
+@media(max-width:720px){.hero{grid-template-columns:1fr}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:16px}
+.lesson{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;transition:border-color .2s}
+.lesson:hover{border-color:var(--navy)}
+.lesson .pics{display:flex;gap:8px}
+.lesson .pics img{width:72px;height:54px;border-radius:10px;background:#F6F4EF;border:1px solid var(--line);padding:4px}
+.lesson .go{display:inline-flex;align-items:center;gap:6px;color:var(--navy);font-weight:600;font-size:14px;margin-top:auto}
+.lesson .go svg{width:18px;height:18px}
+.layouts{display:flex;gap:10px;align-items:center}
+.layouts figure{margin:0;text-align:center;font-size:12px;color:var(--sub)}
+</style></head><body>
+<header class="appbar"><a class="brand" href="index.html"><img src="images/mark.svg" alt=""><div><b>PC教室の配線</b><span>情報Ⅰ　ネットワーク</span></div></a></header>
+<main>
+ <section class="card hero"><div><div class="eyebrow">業務案内</div><h1 style="margin-top:4px">ネットワーク工事の担当者として、PC教室の配線を整える</h1><p class="sub" style="margin-top:8px">ある学校のPC教室（架空の教室）が舞台です。図面を読んで施工し、工事に合わせて作り替えます。</p></div>
+  <div class="layouts" id="lay"></div></section>
+ <div class="cards">
+  <a class="card lesson" href="sekou.html"><div class="eyebrow">第1時</div><h2>施工と検査</h2><div class="pics"><img src="images/blueprint.svg" alt=""><img src="images/desk4.svg" alt=""><img src="images/clipboard.svg" alt=""></div><p class="sub">図面どおりにケーブルをつなぐ。他の業者の施工を検査する。つながらない原因を調べて直す。</p><span class="go">始める<span id="g1"></span></span></a>
+  <a class="card lesson" href="kaishuu.html"><div class="eyebrow">第2時</div><h2>改修の設計</h2><div class="pics"><img src="images/cone.svg" alt=""><img src="images/hubtop.svg" alt=""><img src="images/reel.svg" alt=""></div><p class="sub">床の工事と机の移動に合わせて、配線を設計し直す。故障の影響を調べ、工事の順番を決める。</p><span class="go">始める<span id="g2"></span></span></a>
+ </div>
+</main>
+<script>'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const key=(a,b)=>a<b?a+'|'+b:b+'|'+a;
+const COLS=[140,345,615,820],ROWS=[305,445,585],HUBY=206,M_PER_PX=12/940;
+const ICONS={
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+ alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+ cut:'<path d="M6 6l12 12M18 6L6 18"/>',
+ bolt:'<path d="M13 3L5 13.5h6L10 21l9-11.5h-6L13 3z"/>',
+ reset:'<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/>',
+ copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ back:'<path d="M15 6l-6 6 6 6"/>'};
+const icon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]}</svg>`;
+let toastTimer;
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3400);}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+function resultHTML(ok,title,body,point,extra){return `<div class="result ${ok?'ok':'ng'}" role="status"><div class="rh">${icon(ok?'check':'alert')}<span>${title}</span></div><div class="rb">${body}</div>${point?`<div class="point">${point}</div>`:''}${extra||''}</div>`;}
+async function copyText(text,el){try{await navigator.clipboard.writeText(text);toast('記録をコピーしました。');}catch(e){try{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('記録を選択しました。長押しでコピーしてください。');}catch(e2){toast('コピーできませんでした。記録を長押ししてコピーしてください。');}}}
+
+/* ---- 機器の配置 ---- */
+function makeNodes(counts,rack){
+ const N={
+  R:{x:915,y:rack?56:74,type:'router',name:'ルータ',ports:4,w:56,h:34,img:'router'},
+  M:rack?{x:915,y:116,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'}:{x:480,y:166,type:'main',name:'主ハブ',ports:8,w:66,h:22,img:'hub8top'},
+  T:{x:480,y:86,type:'teacher',name:'教師用PC',ports:1,w:150,h:46,img:'teacherdesk'},
+  P:{x:92,y:86,type:'printer',name:'プリンタ',ports:1,w:56,h:42,img:'printer'}};
+ COLS.forEach((cx,i)=>{const c=i+1;N['H'+c]={x:cx,y:HUBY,type:'hub',name:'列ハブ'+c,ports:5,w:60,h:20,img:'hubtop',col:c};
+  for(let r=1;r<=counts[i];r++)N['D'+c+r]={x:cx,y:ROWS[r-1],type:'desk',name:'机'+c+'-'+r,label:c+'-'+r,ports:1,w:150,h:96,img:'desk4',row:r-1,col:c,pcs:4};});
+ return N;}
+function portPos(n,i){
+ if(n.type==='desk')return[n.x-75,n.y];
+ if(n.type==='teacher')return[n.x,n.y+23];
+ if(n.type==='printer')return[n.x+28,n.y+6];
+ const sp=n.type==='main'?7.5:9,x0=n.x-(n.ports-1)*sp/2;return[x0+Math.min(i,n.ports-1)*sp,n.y+n.h/2+6];}
+const FRONT=t=>t==='router'||t==='main'||t==='teacher'||t==='printer';
+function portMap(N,edges){const P={},cnt={};for(const id in N){P[id]={};cnt[id]=0;}edges.forEach(k=>k.split('|').forEach(id=>{P[id][k]=portPos(N[id],cnt[id]++);}));return{P,cnt};}
+function route(N,k,P){const[a,b]=k.split('|'),A=N[a],B=N[b],pa=P[a][k],pb=P[b][k];
+ if(A.type==='desk'||B.type==='desk'){const dI=A.type==='desk'?a:b,oI=dI===a?b:a,d=N[dI];if(N[oI].type==='desk')return[pa,pb];
+  const o=oI===a?pa:pb,r=d.row,ax=d.x-84-r*7,cy=230+r*6;return[o,[o[0],cy],[ax,cy],[ax,d.y],[d.x-75,d.y]];}
+ const ts=[A.type,B.type];
+ if(ts.includes('router')&&ts.includes('main'))return[pa,pb];
+ if(FRONT(A.type)&&FRONT(B.type))return[pa,[pa[0],146],[pb[0],146],pb];
+ const L=188+Math.max(A.col||0,B.col||0)*4;return[pa,[pa[0],L],[pb[0],L],pb];}
+function routes(N,edges){const{P}=portMap(N,edges),R={};edges.forEach(k=>R[k]=route(N,k,P));return R;}
+const polyLen=pts=>pts.reduce((s,p,i)=>i?s+Math.hypot(p[0]-pts[i-1][0],p[1]-pts[i-1][1]):0,0);
+function sortKeys(N,keys){const ix=Object.keys(N);const f=k=>k.split('|').map(id=>ix.indexOf(id)).sort((x,y)=>x-y);return keys.slice().sort((a,b)=>{const A=f(a),B=f(b);return A[0]-B[0]||A[1]-B[1];});}
+function cableName(N,k){const ix=Object.keys(N);const p=k.split('|').sort((a,b)=>ix.indexOf(a)-ix.indexOf(b));return N[p[0]].name+' ─ '+N[p[1]].name;}
+
+/* ---- 見取り図の描画 ---- */
+function roomSVG(o){let h='<rect x="20" y="20" width="960" height="660" rx="6" fill="#EFE6D5"/>';
+ for(let y=64;y<680;y+=44)h+=`<line x1="22" y1="${y}" x2="978" y2="${y}" stroke="#E3D6BF"/>`;
+ if(o.hatch)h+='<rect x="34" y="156" width="790" height="512" rx="8" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
+ h+='<rect x="832" y="22" width="146" height="126" fill="#E5E0D6"/><path d="M830 20V150H980" fill="none" stroke="#4D4136" stroke-width="4"/>';
+ h+='<text x="820" y="44" text-anchor="end" class="lbl" style="font-size:15px;fill:#566070">準備室 ▸</text>';
+ [230,360,490].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="2" fill="#BCD6E4" stroke="#8FB2C6"/>`);
+ h+='<rect x="330" y="24" width="300" height="22" rx="3" fill="#2F4F46"/><rect x="342" y="46" width="276" height="4" rx="1" fill="#A98A60"/><text x="480" y="40" text-anchor="middle" style="font-size:14px;fill:#E7F0EC;font-weight:600">黒板</text>';
+ h+='<rect x="975" y="596" width="8" height="66" rx="2" fill="#8C6B45"/><text x="966" y="672" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
+ h+='<rect x="20" y="20" width="960" height="660" rx="6" fill="none" stroke="#4D4136" stroke-width="6"/>';
+ if(o.hatch)h+='<text x="46" y="176" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
+ return h;}
+const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80,52],printer:[80,64]};
+function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
+ const tap=o.nodeTap&&(!o.tapTypes||o.tapTypes.includes(n.type));
+ const free=n.ports-used;
+ const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'');
+ const pressed=o.pressed?` aria-pressed="${st.failed===id}"`:(o.mode==='wire'?` aria-pressed="${st.sel===id}"`:'');
+ let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
+ h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="10"/>`;
+ h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="9"/>`;
+ h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
+ if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<circle cx="${px}" cy="${py}" r="3.6" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
+ if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
+ else{let lx=n.x,ly=n.y+n.h/2+19,an='middle';
+  if(n.type==='hub'){lx=n.x+34;ly=n.y+5;an='start';}
+  else if(n.type==='main'&&n.x<800){lx=n.x+38;ly=n.y+5;an='start';}
+  else if(n.type==='main'||n.type==='router'){lx=n.x-n.w/2-6;ly=n.y+5;an='end';}
+  h+=`<text class="lbl${an==='end'?' sm':''}" x="${lx}" y="${ly+(an==='end'?1:2)}" text-anchor="${an}">${n.name}</text>`;}
+ if(st.dim&&st.dim.has(id))h+=`<rect class="dimmed" x="${n.x-n.w/2-3}" y="${n.y-n.h/2-3}" width="${n.w+6}" height="${n.h+6}" rx="6"/>`+(n.type==='desk'?`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-13}" width="60" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">停止</text></g>`:'');
+ if(st.failed===id)h+=`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-n.h/2-32}" width="60" height="26" rx="13"/><text x="${n.x}" y="${n.y-n.h/2-13.5}" text-anchor="middle">故障</text></g>`;
+ if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<circle class="lamp" cx="${n.x+n.w/2-3}" cy="${n.y-n.h/2+3}" r="11" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
+ return h+'</g>';}
+function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
+ let h=`<svg viewBox="0 0 1000 700" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
+ const R={};st.edges.forEach(k=>R[k]=route(N,k,P).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' '));
+ st.edges.forEach(k=>{let c=st.locked.has(k)?'locked':'';if(st.bad.has(k))c='bad';if(st.marks.has(k)||st.selCable===k)c+=' mark';h+=`<polyline class="cab ${c}" points="${R[k]}"/>`;});
+ if(st.flow)st.edges.forEach(k=>{if(!st.bad.has(k))h+=`<polyline class="flowline" points="${R[k]}"/>`;});
+ if(o.cableTap)st.edges.forEach(k=>{if(!st.locked.has(k))h+=`<polyline class="cabhit" data-k="${k}" points="${R[k]}"><title>${esc(cableName(N,k))}</title></polyline>`;});
+ for(const id in N)h+=nodeSVG(N,id,st,o,cnt[id]);
+ return h+'</svg>';}
+
+/* ---- つながり方の分析 ---- */
+function analyze(N,edges,failed){const adj={};for(const id in N)adj[id]=[];
+ edges.forEach(k=>{const[a,b]=k.split('|');if(a===failed||b===failed)return;adj[a].push(b);adj[b].push(a);});
+ const depth={};if(failed!=='R'){depth.R=0;const q=['R'];while(q.length){const n=q.shift();for(const m of adj[n])if(!(m in depth)){depth[m]=depth[n]+1;q.push(m);}}}
+ const reach=new Set(Object.keys(depth));let e=0;
+ edges.forEach(k=>{const[a,b]=k.split('|');if(reach.has(a)&&reach.has(b))e++;});
+ const loop=reach.size>0&&e>reach.size-1;
+ const seen=new Set();let loopAny=false;
+ for(const s in N){if(seen.has(s)||s===failed)continue;const comp=[s];seen.add(s);for(let i=0;i<comp.length;i++)for(const m of adj[comp[i]])if(!seen.has(m)){seen.add(m);comp.push(m);}
+  const cs=new Set(comp);let ce=0;edges.forEach(k=>{const[a,b]=k.split('|');if(cs.has(a)&&cs.has(b))ce++;});if(ce>comp.length-1)loopAny=true;}
+ return{reach,depth,loop,loopAny};}
+function stopped(N,reach){let pcs=0,desks=0;for(const id in N)if(N[id].type==='desk'&&!reach.has(id)){pcs+=4;desks++;}return{pcs,desks,T:!reach.has('T'),P:!reach.has('P')};}
+function stopText(s){const a=[];if(s.pcs)a.push(`生徒用PC ${s.pcs}台（机${s.desks}台）`);if(s.T)a.push('教師用PC');if(s.P)a.push('プリンタ');return a.join('、');}
+
+/* ---- 操作できる見取り図 ---- */
+function Editor(el,N,o){
+ const st={edges:new Set(),locked:new Set(o.locked||[]),sel:null,selCable:null,marks:new Set(),bad:new Set(),lamps:null,flow:false,failed:null,dim:null};
+ const hist=[];let focusId=null;
+ const deg=id=>{let n=0;st.edges.forEach(k=>{const[a,b]=k.split('|');if(a===id||b===id)n++;});return n;};
+ const fire=n=>o[n]&&o[n]();
+ function clearTest(){st.lamps=null;st.flow=false;st.bad=new Set();}
+ function snap(){hist.push([...st.edges]);if(hist.length>80)hist.shift();}
+ function render(){el.innerHTML=mapSVG(N,st,o);if(focusId){const g=el.querySelector(`.node[data-id="${focusId}"]`);if(g)g.focus({preventScroll:true});focusId=null;}}
+ function hint(t){o.onHint&&o.onHint(t);}
+ function hintSel(){if(st.sel){const n=N[st.sel];hint(`${n.name}を選択中${n.ports>1?`（空きポート ${n.ports-deg(st.sel)}）`:''}。つなぐ相手をタップしてください。もう一度タップすると選択を解除します。`);}else if(st.selCable)hint(`選んだケーブル：${cableName(N,st.selCable)}`);else hint(o.defaultHint||'');}
+ function check(a,b,k){const A=N[a],B=N[b];
+  if(st.edges.has(k))return 'その2台は、すでにケーブルでつながっています。';
+  if(A.ports===1&&B.ports===1)return `${A.name}と${B.name}は、どちらも差し込み口が1つしかありません。ハブを通してつなぎましょう。`;
+  if(deg(a)>=A.ports)return `${A.name}には、空いている差し込み口（ポート）がありません。`;
+  if(deg(b)>=B.ports)return `${B.name}には、空いている差し込み口（ポート）がありません。`;
+  return '';}
+ function onNode(id){
+  if(o.mode==='fail'){o.onFail&&o.onFail(id);return;}
+  if(o.mode!=='wire')return;
+  st.selCable=null;
+  if(!st.sel)st.sel=id;
+  else if(st.sel===id)st.sel=null;
+  else{const a=st.sel,k=key(a,id);st.sel=null;const err=check(a,id,k);
+   if(err)toast(err);else{snap();st.edges.add(k);clearTest();fire('onChange');}}
+  render();hintSel();fire('onSelect');}
+ function onCable(k){
+  if(o.mode==='mark'){st.marks.has(k)?st.marks.delete(k):st.marks.add(k);render();fire('onChange');return;}
+  if(o.mode==='wire'){st.sel=null;st.selCable=st.selCable===k?null:k;render();hintSel();fire('onSelect');}}
+ el.addEventListener('click',e=>{const c=e.target.closest('.cabhit');if(c){onCable(c.dataset.k);return;}const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed'))onNode(g.dataset.id);});
+ el.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.node');if(g&&!g.classList.contains('fixed')){e.preventDefault();focusId=g.dataset.id;onNode(g.dataset.id);}});
+ return{st,N,render,deg,hintSel,clearTest,
+  canUndo:()=>hist.length>0,
+  undo(){if(!hist.length)return;st.edges=new Set(hist.pop());st.sel=null;st.selCable=null;clearTest();render();hintSel();fire('onChange');fire('onSelect');},
+  remove(k){if(st.locked.has(k)){toast('工事で敷設済みのケーブルは外せません。');return;}if(!st.edges.has(k))return;snap();st.edges.delete(k);if(st.selCable===k)st.selCable=null;st.marks.delete(k);clearTest();render();hintSel();fire('onChange');fire('onSelect');},
+  toggleMark(k){onCable(k);},
+  setEdges(e,keepHist){if(keepHist)snap();else hist.length=0;st.edges=new Set([...st.locked,...e]);st.sel=null;st.selCable=null;st.marks=new Set();clearTest();render();hintSel();},
+  setTest(a,x){x=x||{};st.lamps={};for(const id in N){const n=N[id];if(n.type==='hub'&&deg(id)===0)continue;st.lamps[id]={on:a.reach.has(id)&&!a.loop,d:(a.depth[id]||0)*90};}
+   st.bad=new Set(x.bad||[]);st.flow=!!x.flow;st.sel=null;st.selCable=null;render();}};
+}
+
+/* ---- ネットワーク図（図面） ---- */
+function diagramSVG(counts,edges,label){
+ const HX=[62,172,282,392],pos={R:[220,22],M:[220,66],T:[70,66],P:[370,66]};
+ HX.forEach((x,i)=>{pos['H'+(i+1)]=[x,116];for(let r=1;r<=counts[i];r++)pos['D'+(i+1)+r]=[x+12,154+(r-1)*30];});
+ const nm=id=>id==='R'?'ルータ':id==='M'?'主ハブ':id==='T'?'教師用PC':id==='P'?'プリンタ':id[0]==='H'?'列ハブ'+id[1]:id[1]+'-'+id[2];
+ const w=id=>({R:64,M:64,T:72,P:64})[id]||(id[0]==='H'?66:44);
+ let lines='',boxes='';
+ edges.forEach(k=>{const[a,b]=k.split('|'),da=a[0]==='D',db=b[0]==='D';
+  if(da||db){const d=da?a:b,h=da?b:a,[dx,dy]=pos[d],[hx,hy]=pos[h];lines+=h==='H'+d[1]?`<path d="M${hx-26} ${hy+11}V${dy}H${dx-22}"/>`:`<path d="M${hx} ${hy}L${dx} ${dy}"/>`;}
+  else{const[x1,y1]=pos[a],[x2,y2]=pos[b];lines+=`<path d="M${x1} ${y1}L${x2} ${y2}"/>`;}});
+ for(const id in pos){const[x,y]=pos[id],ww=w(id),hb=id==='M'||id[0]==='H';boxes+=`<rect x="${x-ww/2}" y="${y-11}" width="${ww}" height="22" rx="5"${hb?' class="hb"':''}/><text x="${x}" y="${y+4}">${nm(id)}</text>`;}
+ return `<svg class="dg" viewBox="0 0 440 ${146+30*Math.max(...counts)}" role="img" aria-label="${esc(label||'ネットワーク図')}"><g class="dl">${lines}</g>${boxes}<text x="258" y="26" class="ann">→ インターネット</text></svg>`;}
+function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 104" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="102" rx="6" fill="#EFE6D5" stroke="#4D4136" stroke-width="2"/><rect x="50" y="6" width="50" height="5" rx="1" fill="#2F4F46"/>`;
+ counts.forEach((n,i)=>{for(let r=0;r<3;r++){const x=12+i*34,y=19+r*27,on=r<n,isH=hl&&hl[0]===i&&hl[1]===r;h+=`<rect x="${x}" y="${y}" width="24" height="20" rx="3" fill="${on?(isH?'#C8851A':'#D9B98C'):'none'}" stroke="${on?(isH?'#8A5200':'#AF8754'):'#BFB29B'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
+ return h+'</svg>';}
+
+$('lay').innerHTML=`<figure>${miniLayout([3,2,3,2],null,'第1時の机の並び 3・2・3・2')}<figcaption>第1時：3・2・3・2</figcaption></figure><figure>${miniLayout([3,3,3,1],null,'第2時の机の並び 3・3・3・1')}<figcaption>第2時：3・3・3・1</figcaption></figure>`;
+$('g1').innerHTML=icon('arrow');$('g2').innerHTML=icon('arrow');
+</script></body></html>
