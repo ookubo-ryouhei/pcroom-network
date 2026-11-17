@@ -1,9 +1,9 @@
 <svg width="300" height="92" viewBox="0 0 300 92" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_4_495)">
-<path d="M287 12H13C11.3431 12 10 13.3431 10 15V79C10 80.6569 11.3431 82 13 82H287C288.657 82 290 80.6569 290 79V15C290 13.3431 288.657 12 287 12Z" fill="#E3E6EA" stroke="#9AA3AD" stroke-width="1.2"/>
-<path d="M287 9H13C11.3431 9 10 10.3431 10 12V75C10 76.6569 11.3431 78 13 78H287C288.657 78 290 76.6569 290 75V12C290 10.3431 288.657 9 287 9Z" fill="#FFFFFF" stroke="#9AA3AD" stroke-width="1.2"/>
+<rect x="10" y="12" width="280" height="70" fill="#E3E6EA" stroke="#9AA3AD" stroke-width="1.2"/>
+<rect x="10" y="9" width="280" height="69" fill="#FFFFFF" stroke="#9AA3AD" stroke-width="1.2"/>
 <path d="M21 19H102M196 19H278M22 68H83M193 68H218" stroke="#E3E6EA" stroke-width="0.7" stroke-linecap="round"/>
-<path d="M182 23H118C116.895 23 116 23.8954 116 25V38C116 39.1046 116.895 40 118 40H182C183.105 40 184 39.1046 184 38V25C184 23.8954 183.105 23 182 23Z" fill="#E6ECF0" stroke="#5A6472" stroke-width="1.2"/>
+<rect x="116" y="23" width="68" height="17" fill="#E6ECF0" stroke="#5A6472" stroke-width="1.2"/>
 <path d="M232 32L264 35L261 60L229 57L232 32Z" fill="#E3E6EA" stroke="#9AA3AD" stroke-width="0.9" stroke-linejoin="round"/>
 <path d="M228 30L260 31L259 57L227 56L228 30Z" fill="#F1F3F5" stroke="#9AA3AD" stroke-width="0.9" stroke-linejoin="round"/>
 <path d="M231 27L263 29L261 54L229 52L231 27Z" fill="#FFFFFF" stroke="#9AA3AD" stroke-width="0.9" stroke-linejoin="round"/>

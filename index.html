@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PC教室の配線</title>
-<style>:root{--ink:#1B2430;--sub:#566070;--muted:#7D8693;--line:#E3E6EA;--line2:#CDD3DA;--bg:#F4F5F7;--card:#fff;--navy:#17324E;--teal:#0E7C7B;--teal-bg:#E3F1F0;--amber:#C8851A;--amber-t:#8A5200;--amber-bg:#FBF0DC;--red:#B3261E;--red-bg:#FBEAE8;--green:#2C7A4B;--green-bg:#E4F2E9;--r:16px;--sh:0 1px 2px rgba(23,50,78,.05),0 6px 20px rgba(23,50,78,.06)}
+<style>:root{--ink:#1B2430;--sub:#566070;--muted:#7D8693;--line:#E3E6EA;--line2:#CDD3DA;--bg:#F4F5F7;--card:#fff;--navy:#17324E;--teal:#0E7C7B;--teal-bg:#E3F1F0;--amber:#C8851A;--amber-t:#8A5200;--amber-bg:#FBF0DC;--red:#B3261E;--red-bg:#FBEAE8;--green:#2C7A4B;--green-bg:#E4F2E9;--r:0;--sh:none}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;font-size:15px;line-height:1.75;font-feature-settings:"palt" 1}
@@ -12,15 +12,15 @@ a{color:var(--navy)}
 .brand img{width:34px;height:34px;flex:none}
 .brand b{display:block;font-size:16px;color:var(--navy);line-height:1.3;letter-spacing:.02em}
 .brand span{font-size:12px;color:var(--sub)}
-.steps{display:flex;gap:6px;margin:0 auto;flex-wrap:wrap;justify-content:center}
-.steps button{display:flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:999px;padding:5px 14px 5px 5px;min-height:42px;font-size:14px;color:var(--ink)}
-.steps .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#EEF0F2;color:var(--sub);font-size:13px;font-weight:600}
+.steps{display:flex;gap:0;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.steps button{margin-left:-1px;display:flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#fff;border-radius:0;padding:5px 14px 5px 5px;min-height:42px;font-size:14px;color:var(--ink)}
+.steps .n{width:28px;height:28px;border-radius:0;display:grid;place-items:center;background:#EEF0F2;color:var(--sub);font-size:13px;font-weight:600}
 .steps .n svg{width:16px;height:16px}
 .steps button.done .n{background:var(--green);color:#fff}
 .steps button[aria-current=step]{border-color:var(--navy);background:var(--navy);color:#fff}
 .steps button[aria-current=step] .n{background:#fff;color:var(--navy)}
 main{max-width:1280px;margin:0 auto;padding:18px 20px 48px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:0;box-shadow:var(--sh);padding:18px 20px}
 h1,h2,h3{margin:0;line-height:1.45}
 h1{font-size:22px;color:var(--navy)}
 h2{font-size:16px;color:var(--navy);font-weight:600}
@@ -32,14 +32,14 @@ p{margin:0}
 @media(max-width:960px){.work{grid-template-columns:1fr}}
 .stack{display:flex;flex-direction:column;gap:14px}
 .mapcard{padding:10px}
-.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 10px;flex-wrap:wrap}
-.map svg{display:block;width:100%;height:auto;border-radius:12px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px;border-radius:12px;background:#F1F3F5}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 10px;margin-bottom:10px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.map svg{display:block;width:100%;height:auto;border-radius:0;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:8px;border-radius:0;background:#F1F3F5;border-top:1px solid var(--line2)}
 .toolbar .hint{flex:1 1 220px;font-size:13px;color:var(--sub);padding:0 6px;min-height:1.7em}
 .legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;padding:0 6px;font-size:12px;color:var(--sub)}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:4px;border:1.5px solid}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:0;vertical-align:-1px;margin-right:4px;border:1.5px solid}
 button{font:inherit;cursor:pointer;touch-action:manipulation}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:12px;border:1px solid var(--line2);background:#fff;color:var(--ink);font-size:14px;font-weight:500;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:2px;border:1px solid var(--line2);background:#fff;color:var(--ink);font-size:14px;font-weight:500;text-decoration:none}
 .btn:hover:not(:disabled){border-color:var(--navy)}
 .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
 .btn.primary:hover:not(:disabled){background:#0F2740}
@@ -50,40 +50,40 @@ button{font:inherit;cursor:pointer;touch-action:manipulation}
 .btn svg{width:18px;height:18px;flex:none}
 :focus-visible{outline:3px solid var(--teal);outline-offset:2px}
 .actions{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:999px;background:#EEF0F3;color:var(--sub)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:3px 10px;border-radius:0;background:#EEF0F3;color:var(--sub)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
-.result{border-radius:12px;padding:14px 16px;margin-top:14px;border:1px solid}
-.result.ok{background:var(--green-bg);border-color:#BFDFCB}
-.result.ng{background:var(--red-bg);border-color:#F0C9C4}
+.result{border-radius:0;padding:14px 16px;margin-top:14px;border:1px solid;border-left-width:4px}
+.result.ok{background:var(--green-bg);border-color:#BFDFCB;border-left-color:var(--green)}
+.result.ng{background:var(--red-bg);border-color:#F0C9C4;border-left-color:var(--red)}
 .result .rh{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
 .result .rh svg{width:20px;height:20px;flex:none}
 .result.ok .rh{color:var(--green)}
 .result.ng .rh{color:var(--red)}
 .result .rb{margin-top:4px;font-size:14px}
 .result .btn{margin-top:12px}
-.point{margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.8);font-size:13.5px}
+.point{margin-top:10px;padding:10px 12px;border-radius:0;background:rgba(255,255,255,.8);font-size:13.5px}
 .point b{color:var(--navy)}
 .list{list-style:none;margin:10px 0 0;padding:0}
 .list li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #EEF0F3;font-size:13.5px}
 .list li:last-child{border-bottom:0}
 .list .lock{color:var(--muted);font-size:12px;white-space:nowrap}
-.list .btn{min-height:38px;padding:4px 12px;border-radius:10px;font-size:13px}
+.list .btn{min-height:38px;padding:4px 12px;border-radius:0;font-size:13px}
 .list .btn[aria-pressed=true]{background:var(--amber-bg);border-color:var(--amber);color:var(--amber-t)}
 details.card>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:32px}
 details.card>summary::-webkit-details-marker{display:none}
 details.card>summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--sub);border-bottom:2px solid var(--sub);transform:rotate(45deg);margin:0 4px 4px auto}
 details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
-.question{margin-top:18px;border-radius:var(--r);padding:22px 24px;background:var(--navy);color:#fff}
+.question{margin-top:18px;border-left:6px solid #0E7C7B;border-radius:0;padding:22px 24px;background:var(--navy);color:#fff}
 .question .lb{font-size:12px;letter-spacing:.1em;opacity:.8}
 .question .q{font-size:19px;font-weight:600;margin-top:4px;line-height:1.6}
-.record{white-space:pre-wrap;font-family:inherit;font-size:13px;background:#F6F7F9;border-radius:10px;padding:12px 14px;border:1px solid var(--line);margin:10px 0 12px}
+.record{white-space:pre-wrap;font-family:inherit;font-size:13px;background:#F6F7F9;border-radius:0;padding:12px 14px;border:1px solid var(--line);margin:10px 0 12px}
 .dg{width:100%;height:auto;display:block;margin-top:8px}
 .dg .dl path{fill:none;stroke:#5A6472;stroke-width:1.3}
 .dg rect{fill:#fff;stroke:#5A6472;stroke-width:1.2}
 .dg rect.hb{fill:#E3F1F0;stroke:#0E7C7B}
 .dg text{font-size:11px;text-anchor:middle;fill:#1B2430}
 .dg .ann{text-anchor:start;fill:#566070;font-size:10.5px}
-#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:0;font-size:14px;opacity:0;pointer-events:none;transition:.25s;max-width:calc(100% - 32px);z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .hidden{display:none!important}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -119,7 +119,7 @@ details.card[open]>summary::after{transform:rotate(-135deg);margin-bottom:-4px}
 .lesson{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;transition:border-color .2s}
 .lesson:hover{border-color:var(--navy)}
 .lesson .pics{display:flex;gap:8px}
-.lesson .pics img{width:72px;height:54px;border-radius:10px;background:#F4F5F7;border:1px solid var(--line);padding:4px}
+.lesson .pics img{width:72px;height:54px;border-radius:0;background:#F4F5F7;border:1px solid var(--line);padding:4px}
 .lesson .go{display:inline-flex;align-items:center;gap:6px;color:var(--navy);font-weight:600;font-size:14px;margin-top:auto}
 .lesson .go svg{width:18px;height:18px}
 .layouts{display:flex;gap:10px;align-items:center}
@@ -146,7 +146,7 @@ const ICONS={
  cut:'<path d="M6 6l12 12M18 6L6 18"/>',
  bolt:'<path d="M13 3L5 13.5h6L10 21l9-11.5h-6L13 3z"/>',
  reset:'<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4.5h4.5"/>',
- copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+ copy:'<rect x="8" y="8" width="12" height="12" rx="0"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
  flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
  back:'<path d="M15 6l-6 6 6 6"/>'};
@@ -191,15 +191,15 @@ function sortKeys(N,keys){const ix=Object.keys(N);const f=k=>k.split('|').map(id
 function cableName(N,k){const ix=Object.keys(N);const p=k.split('|').sort((a,b)=>ix.indexOf(a)-ix.indexOf(b));return N[p[0]].name+' ─ '+N[p[1]].name;}
 
 /* ---- 見取り図の描画 ---- */
-function roomSVG(o){let h='<rect x="20" y="20" width="960" height="750" rx="6" fill="#F6F7F9"/>';
+function roomSVG(o){let h='<rect x="20" y="20" width="960" height="750" rx="0" fill="#F6F7F9"/>';
  for(let y=64;y<770;y+=44)h+=`<line x1="22" y1="${y}" x2="978" y2="${y}" stroke="#ECEEF1"/>`;
- if(o.hatch)h+='<rect x="30" y="226" width="930" height="536" rx="8" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
+ if(o.hatch)h+='<rect x="30" y="226" width="930" height="536" rx="0" fill="url(#hatch)" stroke="#C8851A" stroke-width="2" stroke-dasharray="8 6"/>';
  h+='<rect x="832" y="22" width="146" height="126" fill="#ECEEF1"/><path d="M830 20V150H980" fill="none" stroke="#5A6472" stroke-width="4"/>';
  h+='<text x="820" y="44" text-anchor="end" class="lbl" style="font-size:15px;fill:#566070">準備室 ▸</text>';
- [256,386,516,646].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="2" fill="#D7E6EE" stroke="#A9C3D1"/>`);
- h+='<rect x="330" y="24" width="300" height="22" rx="3" fill="#4A5A63"/><rect x="342" y="46" width="276" height="4" rx="1" fill="#B9C1C9"/><text x="480" y="40" text-anchor="middle" style="font-size:14px;fill:#E7F0EC;font-weight:600">黒板</text>';
- h+='<rect x="975" y="682" width="8" height="66" rx="2" fill="#9AA3AD"/><text x="966" y="762" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
- h+='<rect x="20" y="20" width="960" height="750" rx="6" fill="none" stroke="#5A6472" stroke-width="6"/>';
+ [256,386,516,646].forEach(y=>h+=`<rect x="16" y="${y}" width="8" height="84" rx="0" fill="#D7E6EE" stroke="#A9C3D1"/>`);
+ h+='<rect x="330" y="24" width="300" height="22" rx="0" fill="#4A5A63"/><rect x="342" y="46" width="276" height="4" rx="0" fill="#B9C1C9"/><text x="480" y="40" text-anchor="middle" style="font-size:14px;fill:#E7F0EC;font-weight:600">黒板</text>';
+ h+='<rect x="975" y="682" width="8" height="66" rx="0" fill="#9AA3AD"/><text x="966" y="762" text-anchor="end" style="font-size:14px;fill:#566070">出入口</text>';
+ h+='<rect x="20" y="20" width="960" height="750" rx="0" fill="none" stroke="#5A6472" stroke-width="6"/>';
  if(o.hatch)h+='<text x="42" y="246" class="lbl" style="font-size:15px;fill:#8A5200">床の工事範囲</text>';
  return h;}
 const HIT={desk:[158,104],teacher:[158,54],hub:[110,54],main:[110,54],router:[80,52],printer:[80,64]};
@@ -209,19 +209,19 @@ function nodeSVG(N,id,st,o,used){const n=N[id],hw=HIT[n.type];
  const aria=n.name+(n.ports>1?`（空きポート${free}）`:'')+(st.failed===id?'（故障中）':'');
  const pressed=o.pressed?` aria-pressed="${st.failed===id}"`:(o.mode==='wire'?` aria-pressed="${st.sel===id}"`:'');
  let h=`<g class="node ${n.type}${st.sel===id?' sel':''}${st.failed===id?' failed':''}${tap?'':' fixed'}" data-id="${id}" ${tap?`tabindex="0" role="button" aria-label="${esc(aria)}"${pressed}`:'aria-hidden="true"'}>`;
- h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="10"/>`;
- h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="9"/>`;
+ h+=`<rect class="hit" x="${n.x-hw[0]/2}" y="${n.y-hw[1]/2}" width="${hw[0]}" height="${hw[1]}" rx="0"/>`;
+ h+=`<rect class="ring" x="${n.x-n.w/2-6}" y="${n.y-n.h/2-6}" width="${n.w+12}" height="${n.h+12}" rx="0"/>`;
  h+=`<image href="images/${n.img}.svg" x="${n.x-n.w/2}" y="${n.y-n.h/2}" width="${n.w}" height="${n.h}"/>`;
- if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<circle cx="${px}" cy="${py}" r="3.6" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
- if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
+ if(n.ports>1)for(let i=0;i<n.ports;i++){const[px,py]=portPos(n,i),u=i<used;h+=`<rect x="${px-3.4}" y="${py-3.4}" width="6.8" height="6.8" fill="${u?'#0E7C7B':'#fff'}" stroke="${u?'#0E7C7B':'#9AA3AD'}" stroke-width="1.2"/>`;}
+ if(n.type==='desk')h+=`<g class="pill"><rect x="${n.x-26}" y="${n.y-13}" width="52" height="26" rx="0"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">${n.label}</text></g>`;
  else{let lx=n.x,ly=n.y+n.h/2+19,an='middle';
   if(n.type==='hub'){lx=n.x;ly=n.y-20;an='middle';}
   else if(n.type==='main'&&n.x<800){lx=n.x+38;ly=n.y+5;an='start';}
   else if(n.type==='main'||n.type==='router'){lx=n.x-n.w/2-6;ly=n.y+5;an='end';}
   h+=`<text class="lbl${an==='end'?' sm':''}" x="${lx}" y="${ly+(an==='end'?1:2)}" text-anchor="${an}">${n.name}</text>`;}
- if(st.dim&&st.dim.has(id))h+=`<rect class="dimmed" x="${n.x-n.w/2-3}" y="${n.y-n.h/2-3}" width="${n.w+6}" height="${n.h+6}" rx="6"/>`+(n.type==='desk'?`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-13}" width="60" height="26" rx="13"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">停止</text></g>`:'');
- if(st.failed===id)h+=`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-n.h/2-32}" width="60" height="26" rx="13"/><text x="${n.x}" y="${n.y-n.h/2-13.5}" text-anchor="middle">故障</text></g>`;
- if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<circle class="lamp" cx="${n.x+n.w/2-3}" cy="${n.y-n.h/2+3}" r="11" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
+ if(st.dim&&st.dim.has(id))h+=`<rect class="dimmed" x="${n.x-n.w/2-3}" y="${n.y-n.h/2-3}" width="${n.w+6}" height="${n.h+6}" rx="0"/>`+(n.type==='desk'?`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-13}" width="60" height="26" rx="0"/><text x="${n.x}" y="${n.y+6}" text-anchor="middle">停止</text></g>`:'');
+ if(st.failed===id)h+=`<g class="stoptag"><rect x="${n.x-30}" y="${n.y-n.h/2-32}" width="60" height="26" rx="0"/><text x="${n.x}" y="${n.y-n.h/2-13.5}" text-anchor="middle">故障</text></g>`;
+ if(st.lamps&&st.lamps[id]){const L=st.lamps[id];h+=`<rect class="lamp" x="${n.x+n.w/2-12}" y="${n.y-n.h/2-6}" width="18" height="18" fill="${L.on?'#2C7A4B':'#B3261E'}" style="--d:${L.d}ms"/>`;}
  return h+'</g>';}
 function mapSVG(N,st,o){const{P,cnt}=portMap(N,st.edges);
  let h=`<svg viewBox="0 0 1000 ${VH}" role="group" aria-label="${esc(o.title||'PC教室の見取り図')}"><defs><pattern id="hatch" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="16" stroke="#C8851A" stroke-width="1.5" opacity=".3"/></pattern></defs>`+roomSVG(o);
@@ -297,10 +297,10 @@ function diagramSVG(counts,edges,label){
  edges.forEach(k=>{const[a,b]=k.split('|'),da=a[0]==='D',db=b[0]==='D';
   if(da||db){const d=da?a:b,h=da?b:a,[dx,dy]=pos[d],[hx,hy]=pos[h];lines+=h==='H'+d[1]?`<path d="M${hx-30} ${hy+11}V${dy}H${dx-22}"/>`:`<path d="M${hx} ${hy}L${dx} ${dy}"/>`;}
   else{const[x1,y1]=pos[a],[x2,y2]=pos[b];lines+=`<path d="M${x1} ${y1}L${x2} ${y2}"/>`;}});
- for(const id in pos){const[x,y]=pos[id],ww=w(id),hb=id==='M'||id[0]==='H';boxes+=`<rect x="${x-ww/2}" y="${y-11}" width="${ww}" height="22" rx="5"${hb?' class="hb"':''}/><text x="${x}" y="${y+4}">${nm(id)}</text>`;}
+ for(const id in pos){const[x,y]=pos[id],ww=w(id),hb=id==='M'||id[0]==='H';boxes+=`<rect x="${x-ww/2}" y="${y-11}" width="${ww}" height="22" rx="0"${hb?' class="hb"':''}/><text x="${x}" y="${y+4}">${nm(id)}</text>`;}
  return `<svg class="dg" viewBox="0 0 440 ${146+30*Math.max(...counts)}" role="img" aria-label="${esc(label||'ネットワーク図')}"><g class="dl">${lines}</g>${boxes}<text x="258" y="26" class="ann">→ インターネット</text></svg>`;}
-function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="116" rx="6" fill="#F6F7F9" stroke="#5A6472" stroke-width="2"/><rect x="45" y="6" width="60" height="5" rx="1" fill="#4A5A63"/>`;
- counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="3" fill="${on?(isH?'#C8851A':'#FFFFFF'):'none'}" stroke="${on?(isH?'#8A5200':'#9AA3AD'):'#C9CED4'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
+function miniLayout(counts,hl,label){let h=`<svg viewBox="0 0 150 118" role="img" aria-label="${esc(label)}" style="width:100%;max-width:170px;height:auto"><rect x="1" y="1" width="148" height="116" rx="0" fill="#F6F7F9" stroke="#5A6472" stroke-width="2"/><rect x="45" y="6" width="60" height="5" rx="0" fill="#4A5A63"/>`;
+ counts.forEach((n,r)=>{const y=22+r*23;h+=`<text x="11" y="${y+12}" text-anchor="middle" style="font-size:9px;fill:#566070">${r+1}</text>`;for(let s=0;s<3;s++){const x=22+s*38,on=s<n,isH=hl&&hl[0]===r&&hl[1]===s;h+=`<rect x="${x}" y="${y}" width="30" height="17" rx="0" fill="${on?(isH?'#C8851A':'#FFFFFF'):'none'}" stroke="${on?(isH?'#8A5200':'#9AA3AD'):'#C9CED4'}"${on?'':' stroke-dasharray="3 2"'}/>`;}});
  return h+'</svg>';}
 
 $('lay').innerHTML=`<figure>${miniLayout([3,2,3,2],null,'第1時の机の並び 3・2・3・2')}<figcaption>第1時：前から3・2・3・2</figcaption></figure><figure>${miniLayout([3,3,3,1],null,'第2時の机の並び 3・3・3・1')}<figcaption>第2時：前から3・3・3・1</figcaption></figure>`;
