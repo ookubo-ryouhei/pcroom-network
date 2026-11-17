@@ -488,11 +488,12 @@ const EX=[
 ];
 
 /* ===== 状態 ===== */
-const KEY='pcroom.ex.v1';
+const TEACHER=new URLSearchParams(location.search).has('teacher');
+const KEY=TEACHER?'pcroom.ex.teacher':'pcroom.ex.v1';
 const X=Object.assign({cur:0,e:{},done:[],ok:[],tests:[],ans:{}},store.get(KEY,{}));
 const save=()=>store.set(KEY,X);
 const sDone=(store.get('pcroom.sekou.v2',{}).done||[]),kDone=(store.get('pcroom.kaishuu.v2',{}).done||[]);
-const unlocked=[0,1,2].every(i=>sDone[i])&&[0,1,2].every(i=>kDone[i]);
+const unlocked=TEACHER||[0,1,2].every(i=>sDone[i])&&[0,1,2].every(i=>kDone[i]);
 let N={},ed=null,sc=null,opts=null;
 
 function exRoute(N,k,P){const[a,b]=k.split('|'),pa=P[a][k],pb=P[b][k];let h=0;for(const c of k)h=(h*31+c.charCodeAt(0))%997;
@@ -572,6 +573,7 @@ if(!unlocked){
  <ul class="bul"><li>施工と検査：仕事1〜3 ${[0,1,2].filter(i=>sDone[i]).length}／3 完了</li><li>改修の設計：ステップ1〜3 ${[0,1,2].filter(i=>kDone[i]).length}／3 完了</li></ul>
  <div class="actions" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="sekou.html">施工と検査へ</a><a class="btn" href="kaishuu.html">改修の設計へ</a></div></section>`;
 }else{
+ if(TEACHER)$('exlist').insertAdjacentHTML('beforebegin','<div class="point" style="margin-bottom:12px"><b>先生用の確認表示</b>　ロックを外して全ての場面を開いています。ここでの記録は生徒用とは別に保存され、一覧ページのクリア数にも数えません。</div>');
  $('undo').innerHTML=icon('undo')+'元に戻す';$('cut').innerHTML=icon('cut')+'選んだケーブルを外す';
  $('undo').onclick=()=>ed.undo();$('desel').onclick=()=>ed.clearSel();$('cut').onclick=()=>ed.remove(ed.st.selCable);
  $('act2').onclick=()=>{$('act').click();$('result').scrollIntoView({behavior:'smooth',block:'nearest'});};
